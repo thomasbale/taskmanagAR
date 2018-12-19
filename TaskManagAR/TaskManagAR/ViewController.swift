@@ -19,7 +19,6 @@ class ViewController: UIViewController, ARSCNViewDelegate {
         
         print("\(OpenCVWrapper.openCVVersionString())")
         
-        
         // Set the view's delegate
         sceneView.delegate = self
         

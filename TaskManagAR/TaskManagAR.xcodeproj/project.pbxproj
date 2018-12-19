@@ -16,7 +16,6 @@
 		22174F8F21C923F300F4067C /* TaskManagARTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F8E21C923F300F4067C /* TaskManagARTests.swift */; };
 		22174F9A21C923F300F4067C /* TaskManagARUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F9921C923F300F4067C /* TaskManagARUITests.swift */; };
 		227EE02821C94D89006B19F0 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 227EE02621C94D88006B19F0 /* OpenCVWrapper.mm */; };
-		227EE02B21C94E2F006B19F0 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE02A21C94E2F006B19F0 /* opencv2.framework */; };
 		227EE02D21C94E3A006B19F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE02C21C94E3A006B19F0 /* Foundation.framework */; };
 		227EE02F21C94E42006B19F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE02E21C94E42006B19F0 /* UIKit.framework */; };
 		227EE03121C94E4A006B19F0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03021C94E4A006B19F0 /* QuartzCore.framework */; };
@@ -27,6 +26,7 @@
 		227EE03B21C94E74006B19F0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03A21C94E74006B19F0 /* AVFoundation.framework */; };
 		227EE03D21C94E7B006B19F0 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03C21C94E7B006B19F0 /* AssetsLibrary.framework */; };
 		227EE03F21C94E82006B19F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03E21C94E82006B19F0 /* Accelerate.framework */; };
+		227EEA5921CA6BAE006B19F0 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EEA5821CA6BAD006B19F0 /* opencv2.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,7 +64,6 @@
 		227EE02521C94D87006B19F0 /* TaskManagAR-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TaskManagAR-Bridging-Header.h"; sourceTree = "<group>"; };
 		227EE02621C94D88006B19F0 /* OpenCVWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OpenCVWrapper.mm; path = "../../../../../Desktop/throwaway-arucotest/throwaway-arucotest/OpenCVWrapper.mm"; sourceTree = "<group>"; };
 		227EE02721C94D89006B19F0 /* OpenCVWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenCVWrapper.h; path = "../../../../../Desktop/throwaway-arucotest/throwaway-arucotest/OpenCVWrapper.h"; sourceTree = "<group>"; };
-		227EE02A21C94E2F006B19F0 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = "../../../../Downloads/aruco-arkit-localizer-master 2/opencv2.framework"; sourceTree = "<group>"; };
 		227EE02C21C94E3A006B19F0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		227EE02E21C94E42006B19F0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		227EE03021C94E4A006B19F0 /* QuartzCore.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = QuartzCore.framework; path = System/Library/Frameworks/QuartzCore.framework; sourceTree = SDKROOT; };
@@ -76,6 +75,7 @@
 		227EE03C21C94E7B006B19F0 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		227EE03E21C94E82006B19F0 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		227EE04021C94F07006B19F0 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		227EEA5821CA6BAD006B19F0 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../../../Desktop/Frameworks/Current/opencv2.framework; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -83,6 +83,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				227EEA5921CA6BAE006B19F0 /* opencv2.framework in Frameworks */,
 				227EE03F21C94E82006B19F0 /* Accelerate.framework in Frameworks */,
 				227EE03D21C94E7B006B19F0 /* AssetsLibrary.framework in Frameworks */,
 				227EE03B21C94E74006B19F0 /* AVFoundation.framework in Frameworks */,
@@ -93,7 +94,6 @@
 				227EE03121C94E4A006B19F0 /* QuartzCore.framework in Frameworks */,
 				227EE02F21C94E42006B19F0 /* UIKit.framework in Frameworks */,
 				227EE02D21C94E3A006B19F0 /* Foundation.framework in Frameworks */,
-				227EE02B21C94E2F006B19F0 /* opencv2.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -174,6 +174,7 @@
 		227EE02921C94E2E006B19F0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				227EEA5821CA6BAD006B19F0 /* opencv2.framework */,
 				227EE03E21C94E82006B19F0 /* Accelerate.framework */,
 				227EE03C21C94E7B006B19F0 /* AssetsLibrary.framework */,
 				227EE03A21C94E74006B19F0 /* AVFoundation.framework */,
@@ -184,7 +185,6 @@
 				227EE03021C94E4A006B19F0 /* QuartzCore.framework */,
 				227EE02E21C94E42006B19F0 /* UIKit.framework */,
 				227EE02C21C94E3A006B19F0 /* Foundation.framework */,
-				227EE02A21C94E2F006B19F0 /* opencv2.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -504,7 +504,7 @@
 				DEVELOPMENT_TEAM = 4P6ZYPR98L;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)",
-					/Users/thomasbale/Desktop/Frameworks/legacy,
+					/Users/thomasbale/Desktop/Frameworks/current,
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/PrefixHeader.pch";
 				INFOPLIST_FILE = TaskManagAR/Info.plist;
@@ -530,7 +530,7 @@
 				DEVELOPMENT_TEAM = 4P6ZYPR98L;
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(SRCROOT)",
-					/Users/thomasbale/Desktop/Frameworks/legacy,
+					/Users/thomasbale/Desktop/Frameworks/current,
 				);
 				GCC_PREFIX_HEADER = "$(SRCROOT)/PrefixHeader.pch";
 				INFOPLIST_FILE = TaskManagAR/Info.plist;
