@@ -21,8 +21,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var isLocalized = true
     
     private var captureNextFrameForCV = true; //when set to true, frame is processed by opencv for marker
+    
 
     @IBOutlet var sceneView: ARSCNView!
+    
+    @IBOutlet var buttonpress: [UIButton]!
+    
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +56,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
         // Run the view's session
         sceneView.session.run(configuration)
+    }
+    @IBAction func pressed(_ sender: Any) {
+        print("capture")
+        self.captureNextFrameForCV = true
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -92,9 +100,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if(self.captureNextFrameForCV != false) {
             print("updating frame...")
             updateCameraPose(frame: frame)
-            //self.captureNextFrameForCV = false
+            self.captureNextFrameForCV = false
         }
-    }
+        
+}
     
     
     private func updateCameraPose(frame: ARFrame) {
