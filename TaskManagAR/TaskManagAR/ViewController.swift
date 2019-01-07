@@ -139,7 +139,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         if !sceneView.scene.rootNode.childNodes.contains(localizedContentNode) {
             //let positionVector = SCNVector3(3, 3, 3)
-            //localizedContentNode.position = positionVector
+            localizedContentNode.position = positionFromTransform(float4x4.init(targTransform))
+            
             sceneView.scene.rootNode.addChildNode(localizedContentNode);
             print("added localised content node")
         }
@@ -151,5 +152,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let pngdata = image.pngData()
         fileManager.createFile(atPath: "/Users/thomasbale/Desktop/\(name)", contents: pngdata, attributes: nil)
         
+    }
+    
+    func positionFromTransform(_ transform: matrix_float4x4) -> SCNVector3 {
+        
+        //    column 0  column 1  column 2  column 3
+        //         1        0         0       X    
+        //         0        1         0       Y    
+        //         0        0         1       Z    
+        //         0        0         0       1    
+        
+        return SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
     }
 }
