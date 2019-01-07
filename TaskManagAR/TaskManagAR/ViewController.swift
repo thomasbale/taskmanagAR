@@ -41,8 +41,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         
-        
-        
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         
@@ -117,22 +115,18 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let pixelBuffer = frame.capturedImage
         print(pixelBuffer)
         //this this is matrix from camera to target
-        
         let transMatrix = OpenCVWrapper.transformMatrix(from: pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS));
-        print(transMatrix)
         //quick and dirty error checking. if it's an identity matrix no marker was found.
         if(SCNMatrix4IsIdentity(transMatrix)) {
             print("no marker found")
             return;
         }
-        
+        print("marker found")
         let cameraTransform = SCNMatrix4.init(frame.camera.transform);
         let targTransform = SCNMatrix4Mult(transMatrix, cameraTransform);
-        
         //strange behavior leads me to believe that the scene updates should occur in main dispatch que. (or perhaps I should be using anchors)
         DispatchQueue.main.async {
             self.updateContentNode(targTransform: targTransform)
-
         }
         
         isLocalized = true;
@@ -140,9 +134,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     private func updateContentNode(targTransform: SCNMatrix4) {
+        
         //renderTargetMarkerTest(transform:targTransform, node: sceneView.scene.rootNode);
         
         if !sceneView.scene.rootNode.childNodes.contains(localizedContentNode) {
+            //let positionVector = SCNVector3(3, 3, 3)
+            //localizedContentNode.position = positionVector
             sceneView.scene.rootNode.addChildNode(localizedContentNode);
             print("added localised content node")
         }
