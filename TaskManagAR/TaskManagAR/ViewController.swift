@@ -60,6 +60,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBAction func pressed(_ sender: Any) {
         print("capture")
         self.captureNextFrameForCV = true
+        OpenCVWrapper.detect()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -99,6 +100,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         if(self.captureNextFrameForCV != false) {
             print("updating frame...")
+            print(OpenCVWrapper.openCVVersionString())
             updateCameraPose(frame: frame)
             self.captureNextFrameForCV = false
         }
