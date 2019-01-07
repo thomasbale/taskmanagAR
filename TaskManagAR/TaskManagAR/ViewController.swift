@@ -16,7 +16,7 @@ let MARKER_SIZE_IN_METERS : CGFloat = 0.132953125; //set this to size of physica
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    private var localizedContentNode = SCNNode() //scene node positioned at marker to hold scene contents. Likely should be replaced with setWorldOrigin() in ios 11.3.
+    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)) //scene node positioned at marker to hold scene contents. Likely should be replaced with setWorldOrigin() in ios 11.3.
     
     private var isLocalized = true
     
@@ -60,7 +60,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBAction func pressed(_ sender: Any) {
         print("capture")
         self.captureNextFrameForCV = true
-        OpenCVWrapper.detect()
+        //OpenCVWrapper.detect()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -100,8 +100,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         if(self.captureNextFrameForCV != false) {
             print("updating frame...")
+            
+            
             print(OpenCVWrapper.openCVVersionString())
             updateCameraPose(frame: frame)
+            
+            
+            
             self.captureNextFrameForCV = false
         }
         
@@ -110,8 +115,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     private func updateCameraPose(frame: ARFrame) {
         let pixelBuffer = frame.capturedImage
-        print("Marker check")
+        print(pixelBuffer)
         //this this is matrix from camera to target
+        
         let transMatrix = OpenCVWrapper.transformMatrix(from: pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS));
         print(transMatrix)
         //quick and dirty error checking. if it's an identity matrix no marker was found.
