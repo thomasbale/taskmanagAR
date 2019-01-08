@@ -20,7 +20,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var isLocalized = true
     
     private var captureNextFrameForCV = true; //when set to true, frame is processed by opencv for marker
-    
 
     @IBOutlet var sceneView: ARSCNView!
     
@@ -30,17 +29,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        print("returnval = " + String(OpenCVWrapper.returnstruct().x))
-
         // Set the view's delegate
         sceneView.delegate = self
         sceneView.session.delegate = self
         
-        
         if (sceneView.session.currentFrame != nil){
             updateCameraPose(frame: sceneView.session.currentFrame!)
         }
-        
         
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
@@ -57,14 +52,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.session.run(configuration)
     }
     @IBAction func pressed(_ sender: Any) {
-        print("capture")
+        // to slow down processing only activated on button press
         self.captureNextFrameForCV = true
-        //OpenCVWrapper.detect()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
-        
         // Pause the view's session
         sceneView.session.pause()
     }
@@ -72,14 +65,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // MARK: - ARSCNViewDelegate
     
-/*
-    // Override to create and configure nodes for anchors added to the view's session.
-    func renderer(_ renderer: SCNSceneRenderer, nodeFor anchor: ARAnchor) -> SCNNode? {
-        let node = SCNNode()
-     
-        return node
-    }
-*/
     
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
@@ -99,53 +84,40 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
         if(self.captureNextFrameForCV != false) {
             print("updating frame...")
-            
-            
-            print(OpenCVWrapper.openCVVersionString())
             updateCameraPose(frame: frame)
-            
-            
-            
             self.captureNextFrameForCV = false
         }
-        
 }
-    
     
     private func updateCameraPose(frame: ARFrame) {
         let pixelBuffer = frame.capturedImage
-        print(pixelBuffer)
         //this this is matrix from camera to target
         let transMatrix = OpenCVWrapper.transformMatrix(from: pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS));
-        //quick and dirty error checking. if it's an identity matrix no marker was found.
+        //If it's an identity matrix no marker was found.
+        //Returns a Boolean value that indicates whether the specified matrix is equal to the identity matrix.
         if(SCNMatrix4IsIdentity(transMatrix)) {
             print("no marker found")
             return;
         }
-        print("marker found")
+        // If the matrix is not identity there must be a marker
         let cameraTransform = SCNMatrix4.init(frame.camera.transform);
         let targTransform = SCNMatrix4Mult(transMatrix, cameraTransform);
         //strange behavior leads me to believe that the scene updates should occur in main dispatch que. (or perhaps I should be using anchors)
         DispatchQueue.main.async {
             self.updateContentNode(targTransform: targTransform)
         }
-        
         isLocalized = true;
         //we want to use transMatrix to position arWaypoint anchor on marker.
     }
     
     private func updateContentNode(targTransform: SCNMatrix4) {
-        
-        //renderTargetMarkerTest(transform:targTransform, node: sceneView.scene.rootNode);
-        
+        // Is there already a localised content node?
         if !sceneView.scene.rootNode.childNodes.contains(localizedContentNode) {
-            //let positionVector = SCNVector3(3, 3, 3)
+            // Position is derived from Aruco matrix requires transformation from 4x4 matrix to 3vector
             localizedContentNode.position = positionFromTransform(float4x4.init(targTransform))
-            
             sceneView.scene.rootNode.addChildNode(localizedContentNode);
             print("added localised content node")
         }
-    
 }
     
     func outputImage(name:String,image:UIImage){
@@ -156,7 +128,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func positionFromTransform(_ transform: matrix_float4x4) -> SCNVector3 {
-        
+        // This function performs the following conversion:
         //    column 0  column 1  column 2  column 3
         //         1        0         0       X    
         //         0        1         0       Y    
