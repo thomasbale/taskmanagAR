@@ -92,6 +92,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private func updateCameraPose(frame: ARFrame) {
         let pixelBuffer = frame.capturedImage
         //this this is matrix from camera to target
+
+        
         let transMatrix = OpenCVWrapper.transformMatrix(from: pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS));
         //If it's an identity matrix no marker was found.
         //Returns a Boolean value that indicates whether the specified matrix is equal to the identity matrix.
