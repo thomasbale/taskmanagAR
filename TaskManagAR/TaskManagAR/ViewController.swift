@@ -93,17 +93,18 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let pixelBuffer = frame.capturedImage
         //this this is matrix from camera to target
 
+        let newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))
         
-        let transMatrix = OpenCVWrapper.transformMatrix(from: pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS));
         //If it's an identity matrix no marker was found.
         //Returns a Boolean value that indicates whether the specified matrix is equal to the identity matrix.
-        if(SCNMatrix4IsIdentity(transMatrix)) {
+        if(SCNMatrix4IsIdentity(newframe.extrinsics)) {
             print("no marker found")
             return;
         }
+        
         // If the matrix is not identity there must be a marker
         let cameraTransform = SCNMatrix4.init(frame.camera.transform);
-        let targTransform = SCNMatrix4Mult(transMatrix, cameraTransform);
+        let targTransform = SCNMatrix4Mult(newframe.extrinsics, cameraTransform);
         //strange behavior leads me to believe that the scene updates should occur in main dispatch que. (or perhaps I should be using anchors)
         DispatchQueue.main.async {
             self.updateContentNode(targTransform: targTransform)
