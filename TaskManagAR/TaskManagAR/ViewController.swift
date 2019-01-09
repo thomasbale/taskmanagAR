@@ -121,13 +121,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     private func updateContentNode(targTransform: SCNMatrix4) {
-        // Is there already a localised content node?
-        if !sceneView.scene.rootNode.childNodes.contains(localizedContentNode) {
+        // Is there already a localised content node? Destroy it:
+        if sceneView.scene.rootNode.childNodes.contains(localizedContentNode) {
+            sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+                node.removeFromParentNode() }
+
+        }
+        // Create new:
             // Position is derived from Aruco matrix requires transformation from 4x4 matrix to 3vector
             localizedContentNode.position = positionFromTransform(float4x4.init(targTransform))
             sceneView.scene.rootNode.addChildNode(localizedContentNode);
             print("added localised content node")
-        }
 }
     
     func outputImage(name:String,image:UIImage){
