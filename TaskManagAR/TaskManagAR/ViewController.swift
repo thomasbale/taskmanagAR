@@ -15,7 +15,7 @@ let MARKER_SIZE_IN_METERS : CGFloat = 0.03; //set this to size of physically pri
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.05, height: 0.05, length: 0.005, chamferRadius: 0)) //scene node positioned at marker to hold scene contents. Likely should be replaced with setWorldOrigin() in ios 11.3.
+    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.05, height: 0.05, length: 0.005, chamferRadius: 0))
     
     private var isLocalized = true
     
@@ -26,8 +26,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // Button press used to prevent 
     @IBOutlet var buttonpress: [UIButton]!
     
+    @IBOutlet weak var Debuggingop: UILabel!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        sceneView.preferredFramesPerSecond = 30
+        Debuggingop.text = "localising"
         
         // Set the view's delegate
         sceneView.delegate = self
@@ -66,6 +71,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // MARK: - ARSCNViewDelegate
     
     
+    
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
         
@@ -82,58 +88,66 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        if(self.captureNextFrameForCV != false) {
-            print("updating frame...")
-            updateCameraPose(frame: frame)
-            self.captureNextFrameForCV = false
-        }
+                if(self.captureNextFrameForCV != false) {
+                print("updating frame...")
+                self.Debuggingop.text = "no markers..."
+                self.updateCameraPose(frame: frame)
+                self.captureNextFrameForCV = false // used to limit to button calling
+            }
 }
     
     private func updateCameraPose(frame: ARFrame) {
-        let pixelBuffer = frame.capturedImage
-        //this this is matrix from camera to target
-
-        let newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))
+            
+                let pixelBuffer = frame.capturedImage
+                //this this is matrix from camera to target
+                     let newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))
+                    //quick break
+                    if(newframe.no_markers == 0) {
+                        print("no marker found")
+                        self.Debuggingop.text = "no marker found"
+                        return;
+                    }
         
-        //If it's an identity matrix no marker was found.
-        //Returns a Boolean value that indicates whether the specified matrix is equal to the identity matrix.
-        if(SCNMatrix4IsIdentity(newframe.extrinsics)) {
-            print("no marker found")
-            return;
-        }
+                    DispatchQueue.main.async {
+                    // If the matrix is not identity there must be a marker
+                    let cameraTransform = SCNMatrix4.init(frame.camera.transform);
+                    let targTransform = SCNMatrix4Mult(newframe.extrinsics, cameraTransform);
+                    if newframe.no_markers != 0 {
+                        print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
+                        self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
+                    }
+                    
+                    //set the new world origin to the marker? ToDo: when tray in palce?
+                    //sceneView.session.setWorldOrigin(relativeTransform: simd_float4x4(targTransform))
+                    
+                    //strange behavior leads me to believe that the scene updates should occur in main dispatch que. (or perhaps I should be using anchors)
+                    DispatchQueue.main.async {
+                        self.updateContentNode(targTransform: targTransform)
+                    }
+                    self.isLocalized = true;
+                    //we want to use transMatrix to position arWaypoint anchor on marker.
+                }
+            }
+    
         
-        // If the matrix is not identity there must be a marker
-        let cameraTransform = SCNMatrix4.init(frame.camera.transform);
-        let targTransform = SCNMatrix4Mult(newframe.extrinsics, cameraTransform);
-        
-        //let data = Data(bytes: *newframe.ids, count: newframe.array_size)
-        
-        print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
-        
-        //set the new world origin to the marker? ToDo: when tray in palce?
-        //sceneView.session.setWorldOrigin(relativeTransform: simd_float4x4(targTransform))
-        
-        //strange behavior leads me to believe that the scene updates should occur in main dispatch que. (or perhaps I should be using anchors)
-        DispatchQueue.main.async {
-            self.updateContentNode(targTransform: targTransform)
-        }
-        isLocalized = true;
-        //we want to use transMatrix to position arWaypoint anchor on marker.
-    }
     
     private func updateContentNode(targTransform: SCNMatrix4) {
-        // Is there already a localised content node? Destroy it:
-        if sceneView.scene.rootNode.childNodes.contains(localizedContentNode) {
-            sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-                node.removeFromParentNode() }
-        }
-        // Create new:
-        localizedContentNode.opacity = 0.5
-
+        
+        if self.isLocalized {
+            // Is there already a localised content node? Destroy it:
+            if sceneView.scene.rootNode.childNodes.contains(localizedContentNode) {
+                sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+                    node.removeFromParentNode() }
+            }
+            // Create new:
+            localizedContentNode.opacity = 0.5
+            
             //localizedContentNode.position = positionFromTransform(matrix_float4x4.init(targTransform)) //is there an issue here?
             localizedContentNode.transform = targTransform // apply derived transform to node
             sceneView.scene.rootNode.addChildNode(localizedContentNode);
             print("added localised content node for marker ")
+        }
+        
 }
     
     func outputImage(name:String,image:UIImage){
@@ -153,6 +167,4 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         return SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
     }
-    
-
 }
