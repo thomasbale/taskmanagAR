@@ -15,7 +15,7 @@ let MARKER_SIZE_IN_METERS : CGFloat = 0.03; //set this to size of physically pri
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)) //scene node positioned at marker to hold scene contents. Likely should be replaced with setWorldOrigin() in ios 11.3.
+    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.05, height: 0.05, length: 0.005, chamferRadius: 0)) //scene node positioned at marker to hold scene contents. Likely should be replaced with setWorldOrigin() in ios 11.3.
     
     private var isLocalized = true
     
@@ -110,7 +110,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
         
-        //let array = [UInt32](newframe.ids))
+        //set the new world origin to the marker? ToDo: when tray in palce?
+        //sceneView.session.setWorldOrigin(relativeTransform: simd_float4x4(targTransform))
         
         //strange behavior leads me to believe that the scene updates should occur in main dispatch que. (or perhaps I should be using anchors)
         DispatchQueue.main.async {
@@ -125,13 +126,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if sceneView.scene.rootNode.childNodes.contains(localizedContentNode) {
             sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
                 node.removeFromParentNode() }
-
         }
         // Create new:
-            // Position is derived from Aruco matrix requires transformation from 4x4 matrix to 3vector
-            localizedContentNode.position = positionFromTransform(float4x4.init(targTransform))
+        localizedContentNode.opacity = 0.5
+
+            //localizedContentNode.position = positionFromTransform(matrix_float4x4.init(targTransform)) //is there an issue here?
+            localizedContentNode.transform = targTransform // apply derived transform to node
             sceneView.scene.rootNode.addChildNode(localizedContentNode);
-            print("added localised content node")
+            print("added localised content node for marker ")
 }
     
     func outputImage(name:String,image:UIImage){
@@ -151,4 +153,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         return SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
     }
+    
+
 }
