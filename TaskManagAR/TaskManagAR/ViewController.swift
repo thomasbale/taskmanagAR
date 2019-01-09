@@ -105,6 +105,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // If the matrix is not identity there must be a marker
         let cameraTransform = SCNMatrix4.init(frame.camera.transform);
         let targTransform = SCNMatrix4Mult(newframe.extrinsics, cameraTransform);
+        
+        //let data = Data(bytes: *newframe.ids, count: newframe.array_size)
+        
+        print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
+        
+        //let array = [UInt32](newframe.ids))
+        
         //strange behavior leads me to believe that the scene updates should occur in main dispatch que. (or perhaps I should be using anchors)
         DispatchQueue.main.async {
             self.updateContentNode(targTransform: targTransform)
