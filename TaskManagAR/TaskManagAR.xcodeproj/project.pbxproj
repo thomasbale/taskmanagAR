@@ -27,6 +27,8 @@
 		227EE03D21C94E7B006B19F0 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03C21C94E7B006B19F0 /* AssetsLibrary.framework */; };
 		227EE03F21C94E82006B19F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03E21C94E82006B19F0 /* Accelerate.framework */; };
 		227EEA5921CA6BAE006B19F0 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EEA5821CA6BAD006B19F0 /* opencv2.framework */; };
+		22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C584F821E64C9600ADEAB6 /* Tray.swift */; };
+		22C584FB21E6554600ADEAB6 /* 123.scn in Resources */ = {isa = PBXBuildFile; fileRef = 22C584FA21E6554600ADEAB6 /* 123.scn */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +78,8 @@
 		227EE03E21C94E82006B19F0 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		227EE04021C94F07006B19F0 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		227EEA5821CA6BAD006B19F0 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../../../Desktop/Frameworks/Current/opencv2.framework; sourceTree = "<group>"; };
+		22C584F821E64C9600ADEAB6 /* Tray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tray.swift; sourceTree = "<group>"; };
+		22C584FA21E6554600ADEAB6 /* 123.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = 123.scn; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -144,6 +148,8 @@
 				227EE02721C94D89006B19F0 /* OpenCVWrapper.h */,
 				22174F7921C923F000F4067C /* art.scnassets */,
 				22174F7B21C923F000F4067C /* ViewController.swift */,
+				22C584FC21E655FB00ADEAB6 /* Trays */,
+				22C584F821E64C9600ADEAB6 /* Tray.swift */,
 				22174F7D21C923F000F4067C /* Main.storyboard */,
 				22174F8021C923F200F4067C /* Assets.xcassets */,
 				22174F8221C923F200F4067C /* LaunchScreen.storyboard */,
@@ -187,6 +193,14 @@
 				227EE02C21C94E3A006B19F0 /* Foundation.framework */,
 			);
 			name = Frameworks;
+			sourceTree = "<group>";
+		};
+		22C584FC21E655FB00ADEAB6 /* Trays */ = {
+			isa = PBXGroup;
+			children = (
+				22C584FA21E6554600ADEAB6 /* 123.scn */,
+			);
+			path = Trays;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -296,6 +310,7 @@
 			files = (
 				22174F7A21C923F000F4067C /* art.scnassets in Resources */,
 				22174F8421C923F200F4067C /* LaunchScreen.storyboard in Resources */,
+				22C584FB21E6554600ADEAB6 /* 123.scn in Resources */,
 				22174F8121C923F200F4067C /* Assets.xcassets in Resources */,
 				22174F7F21C923F000F4067C /* Main.storyboard in Resources */,
 			);
@@ -323,6 +338,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22174F7C21C923F000F4067C /* ViewController.swift in Sources */,
+				22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */,
 				22174F7821C923F000F4067C /* AppDelegate.swift in Sources */,
 				227EE02821C94D89006B19F0 /* OpenCVWrapper.mm in Sources */,
 			);

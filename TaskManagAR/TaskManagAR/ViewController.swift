@@ -21,11 +21,27 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     private var captureNextFrameForCV = true; //when set to true, frame is processed by opencv for marker
 
+    let loadedtray = Tray()
+    
+    var targTransform = SCNMatrix4()
+    
     @IBOutlet var sceneView: ARSCNView!
     
-    // Button press used to prevent 
+    // Button press used to prevent process overload & button for loading a tray scene
     @IBOutlet var buttonpress: [UIButton]!
     
+    @IBOutlet weak var loadmodelbutton: UIButton!
+    
+    @IBAction func buttonloadmodel(_ sender: Any){
+        // clean up to prevent issues
+        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+            node.removeFromParentNode() }
+        // call the tray reference scene
+        if isLocalized {
+            sceneView.scene = self.loadedtray.GetObjects(withid: 123, localnode: self.localizedContentNode)
+        }
+        
+    }
     @IBOutlet weak var Debuggingop: UILabel!
     
     override func viewDidLoad() {
@@ -50,8 +66,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        // Create a session configuration
+        // Create a session configuration and apply debug options
         let configuration = ARWorldTrackingConfiguration()
+        configuration.planeDetection = .horizontal
+        configuration.maximumNumberOfTrackedImages = 0
+        // Add feature points debug options (useful for tracking)
+        sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
 
         // Run the view's session
         sceneView.session.run(configuration)
@@ -109,20 +129,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     }
         
                     DispatchQueue.main.async {
-                    // If the matrix is not identity there must be a marker
                     let cameraTransform = SCNMatrix4.init(frame.camera.transform);
-                    let targTransform = SCNMatrix4Mult(newframe.extrinsics, cameraTransform);
-                    if newframe.no_markers != 0 {
-                        print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
-                        self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
-                    }
+                    self.targTransform = SCNMatrix4Mult(newframe.extrinsics, cameraTransform);
+                    // print to debug
+                    print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
+                    self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
+                    
                     
                     //set the new world origin to the marker? ToDo: when tray in palce?
                     //sceneView.session.setWorldOrigin(relativeTransform: simd_float4x4(targTransform))
                     
                     //strange behavior leads me to believe that the scene updates should occur in main dispatch que. (or perhaps I should be using anchors)
                     DispatchQueue.main.async {
-                        self.updateContentNode(targTransform: targTransform)
+                        self.updateContentNode(targTransform: self.targTransform)
                     }
                     self.isLocalized = true;
                     //we want to use transMatrix to position arWaypoint anchor on marker.
@@ -143,7 +162,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             localizedContentNode.opacity = 0.5
             
             //localizedContentNode.position = positionFromTransform(matrix_float4x4.init(targTransform)) //is there an issue here?
-            localizedContentNode.transform = targTransform // apply derived transform to node
+            localizedContentNode.transform = self.targTransform // apply derived transform to node
             sceneView.scene.rootNode.addChildNode(localizedContentNode);
             print("added localised content node for marker ")
         }
