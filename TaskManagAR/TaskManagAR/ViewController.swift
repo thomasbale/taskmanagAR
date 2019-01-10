@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 import GLKit
 
-let MARKER_SIZE_IN_METERS : CGFloat = 0.03; //set this to size of physically printed marker in meters
+let MARKER_SIZE_IN_METERS : CGFloat = 0.028; //set this to size of physically printed marker in meters
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
