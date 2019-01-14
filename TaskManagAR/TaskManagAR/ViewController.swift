@@ -15,7 +15,7 @@ let MARKER_SIZE_IN_METERS : CGFloat = 0.028; //set this to size of physically pr
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.05, height: 0.05, length: 0.005, chamferRadius: 0))
+    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.03, height: 0.03, length: 0.005, chamferRadius: 0))
     
     private var isLocalized = true
     
@@ -117,35 +117,37 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 }
     
     private func updateCameraPose(frame: ARFrame) {
+        let currentstatus = sessionStatus()
+        if (currentstatus == "") {
+            let pixelBuffer = frame.capturedImage
+            //Pixelbuffer is a rectified image
+            // Instrinsics provides a transform from 2d camera space to 3d world coordinate space
             
-                let pixelBuffer = frame.capturedImage
-                //this this is matrix from camera to target
-                     let newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))
-                    //quick break
-                    if(newframe.no_markers == 0) {
-                        print("no marker found")
-                        self.Debuggingop.text = "no marker found"
-                        return;
-                    }
-        
-                    DispatchQueue.main.async {
-                    let cameraTransform = SCNMatrix4.init(frame.camera.transform);
-                    self.targTransform = SCNMatrix4Mult(newframe.extrinsics, cameraTransform);
-                    // print to debug
-                    print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
-                    self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
-                    
-                    
-                    //set the new world origin to the marker? ToDo: when tray in palce?
-                    //sceneView.session.setWorldOrigin(relativeTransform: simd_float4x4(targTransform))
-                    
-                    //strange behavior leads me to believe that the scene updates should occur in main dispatch que. (or perhaps I should be using anchors)
-                    DispatchQueue.main.async {
-                        self.updateContentNode(targTransform: self.targTransform)
-                    }
-                    self.isLocalized = true;
-                    //we want to use transMatrix to position arWaypoint anchor on marker.
-                }
+            // Create a new frame struct for detection
+            var newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))
+            // Save the transform from camera to world space
+            newframe.cameratransform = frame.camera.transform
+            //quick break
+            if(newframe.no_markers == 0) {
+                print("no marker found")
+                self.Debuggingop.text = "no marker found"
+                return;
+            }
+            
+            DispatchQueue.main.async {
+                // Multipy the next transformation matrix by the original camera position at the frame capture point
+                self.targTransform = SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform));
+                // print to debug+
+                print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
+                self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
+                self.updateContentNode(targTransform: self.targTransform)
+                self.isLocalized = true;
+                //we want to use transMatrix to position arWaypoint anchor on marker.
+            }
+            return
+        }
+        self.Debuggingop.text = currentstatus
+        return
             }
     
         
@@ -160,11 +162,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
             // Create new:
             localizedContentNode.opacity = 0.5
-            
-            //localizedContentNode.position = positionFromTransform(matrix_float4x4.init(targTransform)) //is there an issue here?
-            localizedContentNode.transform = self.targTransform // apply derived transform to node
+            localizedContentNode.transform = self.targTransform // apply new transform to node
             sceneView.scene.rootNode.addChildNode(localizedContentNode);
             print("added localised content node for marker ")
+            print(targTransform)
         }
         
 }
@@ -186,4 +187,34 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         return SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
     }
-}
+    
+        
+        /// Returns The Status Of The Current ARSession
+        func sessionStatus() -> String? {
+            
+            //1. Get The Current Frame
+            guard let frame = sceneView.session.currentFrame else { return nil }
+            
+            var status = "Preparing Device.."
+            
+            //1. Return The Current Tracking State & Lighting Conditions
+            switch frame.camera.trackingState {
+                
+            case .normal:                                                   status = ""
+            case .notAvailable:                                             status = "Tracking Unavailable"
+            case .limited(.excessiveMotion):                                status = "Please Slow Your Movement"
+            case .limited(.insufficientFeatures):                           status = "Try To Point At A Flat Surface"
+            case .limited(.initializing):                                   status = "Initializing"
+            case .limited(.relocalizing):                                   status = "Relocalizing"
+                
+            }
+            
+            guard let lightEstimate = frame.lightEstimate?.ambientIntensity else { return nil }
+            
+            if lightEstimate < 100 { status = "Lighting Is Too Dark" }
+            
+            return status
+            
+        }
+        
+    }
