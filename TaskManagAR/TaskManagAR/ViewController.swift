@@ -11,11 +11,11 @@ import SceneKit
 import ARKit
 import GLKit
 
-let MARKER_SIZE_IN_METERS : CGFloat = 0.028; //set this to size of physically printed marker in meters
+let MARKER_SIZE_IN_METERS : CGFloat = 0.00858; //set this to size of physically printed marker in meters
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.03, height: 0.03, length: 0.005, chamferRadius: 0))
+    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.01, length: 0.005, chamferRadius: 0))
     
     private var isLocalized = true
     
@@ -38,9 +38,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             node.removeFromParentNode() }
         // call the tray reference scene
         if isLocalized {
-            sceneView.scene = self.loadedtray.GetObjects(withid: 123, localnode: self.localizedContentNode)
+            sceneView.scene = self.loadedtray.GetObjects(withid: 0, localnode: self.localizedContentNode)
         }
-        
     }
     @IBOutlet weak var Debuggingop: UILabel!
     
@@ -71,7 +70,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         configuration.planeDetection = .horizontal
         configuration.maximumNumberOfTrackedImages = 0
         // Add feature points debug options (useful for tracking)
-        sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints]
+        //sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin, ARSCNDebugOptions.showCameras]
 
         // Run the view's session
         sceneView.session.run(configuration)
@@ -136,11 +135,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
             DispatchQueue.main.async {
                 // Multipy the next transformation matrix by the original camera position at the frame capture point
-                self.targTransform = SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform));
+                self.targTransform = SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(frame.camera.transform));
+                print(self.targTransform)
                 // print to debug+
                 print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
                 self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
-                self.updateContentNode(targTransform: self.targTransform)
+                self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
                 self.isLocalized = true;
                 //we want to use transMatrix to position arWaypoint anchor on marker.
             }
@@ -152,7 +152,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
         
     
-    private func updateContentNode(targTransform: SCNMatrix4) {
+    private func updateContentNode(targTransform: SCNMatrix4, markerid: Int) {
+        //Basic error check before rendering
+        if (applyMatrixThreshold(matrix: targTransform)){
         
         if self.isLocalized {
             // Is there already a localised content node? Destroy it:
@@ -160,14 +162,22 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
                     node.removeFromParentNode() }
             }
-            // Create new:
-            localizedContentNode.opacity = 0.5
-            localizedContentNode.transform = self.targTransform // apply new transform to node
-            sceneView.scene.rootNode.addChildNode(localizedContentNode);
-            print("added localised content node for marker ")
-            print(targTransform)
+            
+            
+            
+                
+                // Create new:
+                localizedContentNode.opacity = 0.5
+                localizedContentNode.transform = targTransform // apply new transform to node
+                let centrepoint = SCNNode(geometry: SCNSphere(radius: 0.01))
+                centrepoint.position = loadedtray.CentrePoint(withid: markerid)
+                localizedContentNode.addChildNode(centrepoint)
+                //localizedContentNode.position = loadedtray.CentrePoint(withid: markerid)
+                sceneView.scene.rootNode.addChildNode(localizedContentNode);
+                print("added localised content node for marker ")
+                
+            }
         }
-        
 }
     
     func outputImage(name:String,image:UIImage){
@@ -216,5 +226,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return status
             
         }
+    
+    func applyMatrixThreshold(matrix: SCNMatrix4)->Bool{
+        
+        if
+            matrix.m31 < -1 || matrix.m32 < -5 || matrix.m24 > 10 || matrix.m34 > 5 {
+            print("*** Error caught ***")
+            return false
+        }
+        
+        return true
+    }
         
     }
