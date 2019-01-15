@@ -162,13 +162,12 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
                     node.removeFromParentNode() }
             }
-            
-            
-            
+
                 
                 // Create new:
                 localizedContentNode.opacity = 0.5
                 localizedContentNode.transform = targTransform // apply new transform to node
+            print(", x:",localizedContentNode.simdEulerAngles.x, ", y:", localizedContentNode.simdEulerAngles.y, ", z:",localizedContentNode.simdEulerAngles.z)
                 let centrepoint = SCNNode(geometry: SCNSphere(radius: 0.01))
                 centrepoint.position = loadedtray.CentrePoint(withid: markerid)
                 localizedContentNode.addChildNode(centrepoint)
