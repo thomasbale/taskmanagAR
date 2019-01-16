@@ -15,7 +15,7 @@ let MARKER_SIZE_IN_METERS : CGFloat = 0.00858; //set this to size of physically 
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.01, length: 0.005, chamferRadius: 0))
+    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
     
     private var isLocalized = true
     
@@ -59,6 +59,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
+        sceneView.preferredFramesPerSecond = 10
         
     }
     
@@ -135,8 +136,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
             DispatchQueue.main.async {
                 // Multipy the next transformation matrix by the original camera position at the frame capture point
-                self.targTransform = SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(frame.camera.transform));
-                print(self.targTransform)
+                self.targTransform = SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform));
+                //print(self.targTransform)
                 // print to debug+
                 print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
                 self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
@@ -167,7 +168,33 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 // Create new:
                 localizedContentNode.opacity = 0.5
                 localizedContentNode.transform = targTransform // apply new transform to node
-            print(", x:",localizedContentNode.simdEulerAngles.x, ", y:", localizedContentNode.simdEulerAngles.y, ", z:",localizedContentNode.simdEulerAngles.z)
+            
+            
+            
+            
+            
+           /*
+            print("euler x, pitch:",localizedContentNode.simdEulerAngles.x) //Pitch
+            print("euler y, yaw:",localizedContentNode.simdEulerAngles.y) //Yaw
+            print("euler z, roll:",localizedContentNode.simdEulerAngles.z) //Roll
+            
+
+                print("rotation w :",localizedContentNode.simdRotation.w)
+                print("rotation x :",localizedContentNode.simdRotation.x)
+                print("rotation y :",localizedContentNode.simdRotation.y)
+                print("rotation z :",localizedContentNode.simdRotation.z)
+                print("orientation :",localizedContentNode.simdOrientation.angle)
+            
+            
+            
+           
+                print("position x :",localizedContentNode.position.x)
+                print("position y:",localizedContentNode.position.y)
+                print("position z:",localizedContentNode.position.z)
+ //
+                print("Pivot :",localizedContentNode.pivot)
+            */
+     
                 let centrepoint = SCNNode(geometry: SCNSphere(radius: 0.01))
                 centrepoint.position = loadedtray.CentrePoint(withid: markerid)
                 localizedContentNode.addChildNode(centrepoint)
@@ -226,10 +253,15 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
         }
     
+    // error checking function to make sure that detected marker is flat to the camera and not
     func applyMatrixThreshold(matrix: SCNMatrix4)->Bool{
+        let throwawaynode = SCNNode()
+        throwawaynode.transform = matrix
+        
+        let orientation = abs(throwawaynode.simdEulerAngles.x)
         
         if
-            matrix.m31 < -1 || matrix.m32 < -5 || matrix.m24 > 10 || matrix.m34 > 5 {
+            matrix.m31 < -1 || matrix.m32 < -5 || matrix.m24 > 10 || matrix.m34 > 5 || !(orientation > 1.3 && orientation < 1.8){
             print("*** Error caught ***")
             return false
         }
