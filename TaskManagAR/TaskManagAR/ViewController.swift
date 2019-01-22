@@ -39,12 +39,23 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     @IBAction func buttonloadmodel(_ sender: Any){
         // clean up to prevent issues
+        
+
+        sceneView.session.add(anchor: ARAnchor(name: "Anchor",transform: simd_float4x4(targets.first!)))
         sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
             node.removeFromParentNode() }
-        // call the tray reference scene
+        /* call the tray reference scene
         if isLocalized {
             sceneView.scene = self.loadedtray.GetObjects(withid: 0, localnode: self.localizedContentNode)
+        }*/
+        
+        if targets.first != nil {
+            
+            localizedContentNode.transform = targets.first!
+            sceneView.scene.rootNode.addChildNode(localizedContentNode)
+            print("loaded")
         }
+        
     }
     @IBOutlet weak var Debuggingop: UILabel!
     
@@ -157,9 +168,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             DispatchQueue.main.async {
                 // Multipy the next transformation matrix by the original camera position at the frame capture point
                 self.targTransform = SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform));
-                //print(self.targTransform)
-                // print to debug+
-                //print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
                 self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
                 self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
                 self.isLocalized = true;
@@ -191,10 +199,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // Calculate the centre of the tray and make child of marker
                 let centrepoint = SCNNode(geometry: SCNSphere(radius: 0.01))
                 centrepoint.position = loadedtray.CentrePoint(withid: markerid)
-            
                 localizedContentNode.addChildNode(centrepoint)
                 sceneView.scene.rootNode.addChildNode(localizedContentNode);
-            
+            // Add centrepoint to the list
                 targets.append(centrepoint.transform)
 
             // Create an anchor at this point
@@ -272,19 +279,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         return true
-    }
-    
-    // Function to manage the averaging of matricies
-    func averagePositionEstimation() -> SCNMatrix4 {
-        
-        var matrix = matricies[0]
-        
-        if matricies.first != nil {
-            //matricies.shuffle()
-            matrix = matricies[0]
-        }
-        
-        return matrix
     }
     
         
