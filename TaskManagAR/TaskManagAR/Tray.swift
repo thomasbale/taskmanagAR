@@ -16,9 +16,11 @@ import SceneKit
 
 
 class Tray{
-    
-    private var markerVerticalSeparation = 0.190 //metres
-    private var markerHorizontalSeparation = 0.27637
+    // Based on A3 dimensions
+    private var markerVerticalSeparation = 0.2463 //metres
+    private var markerHorizontalSeparation = 0.3616
+    private var trayState = "pending" // pending or ready
+    // Marker IDs
     private var marker_0 = 0
     private var marker_1 = 1
     private var marker_2 = 2
@@ -92,6 +94,20 @@ class Tray{
        return SCNVector3()
     }
     
+    func isTrayMarker (withid: Int) -> Bool{
+        // Is the ID a valid tray plane marker?
+        switch withid {
+        case marker_0: // RH
+            return true
+        case marker_1: // boom
+            return true
+        case marker_2: // TL
+            return true
+        case marker_3: // TR
+            return true
+        default:
+            return false
+        }
     
+    }
 }
-

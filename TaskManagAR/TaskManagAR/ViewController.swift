@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 import GLKit
 
-let MARKER_SIZE_IN_METERS : CGFloat = 0.00858; //set this to size of physically printed marker in meters
+let MARKER_SIZE_IN_METERS : CGFloat = 0.01165; //set this to size of physically printed marker in meters
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
@@ -46,6 +46,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        // Limit FPS
         sceneView.preferredFramesPerSecond = 30
         Debuggingop.text = "localising"
         
@@ -59,7 +60,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
-        sceneView.preferredFramesPerSecond = 10
+        sceneView.preferredFramesPerSecond = 30
         
     }
     
@@ -70,8 +71,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .horizontal
         configuration.maximumNumberOfTrackedImages = 0
-        // Add feature points debug options (useful for tracking)
-        //sceneView.debugOptions = [ARSCNDebugOptions.showFeaturePoints, ARSCNDebugOptions.showWorldOrigin, ARSCNDebugOptions.showCameras]
 
         // Run the view's session
         sceneView.session.run(configuration)
@@ -90,8 +89,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // MARK: - ARSCNViewDelegate
     
-    
-    
     func session(_ session: ARSession, didFailWithError error: Error) {
         // Present an error message to the user
         
@@ -107,7 +104,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
     }
     
+    // Calls every time a frame is updated in the session
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
+        
+        // Only run if the button is pressed
                 if(self.captureNextFrameForCV != false) {
                 print("updating frame...")
                 self.Debuggingop.text = "no markers..."
@@ -115,14 +115,15 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 self.captureNextFrameForCV = false // used to limit to button calling
             }
 }
-    
+    // Main calling function: updates pose from passed frame
     private func updateCameraPose(frame: ARFrame) {
+        // Current status contains a string as to the tracking status of the world
         let currentstatus = sessionStatus()
+        // If ready go ahead and pass
         if (currentstatus == "") {
             let pixelBuffer = frame.capturedImage
             //Pixelbuffer is a rectified image
             // Instrinsics provides a transform from 2d camera space to 3d world coordinate space
-            
             // Create a new frame struct for detection
             var newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))
             // Save the transform from camera to world space
@@ -134,12 +135,26 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 return;
             }
             
+            // Need to convert tuple to iteratable type - c++ to swift conversion
+            let tupleMirror = Mirror(reflecting: newframe.ids)
+            let frameIDs = tupleMirror.children.map({ $0.value })
+            print(frameIDs)
+            
+            //Some kind of loop in here through the markers in the frame & check whether they are plane markers
+            var i = 0
+            print("Found ", newframe.no_markers, " markers: ")
+            while i <= newframe.no_markers - 1 {
+                print(" markers: ", frameIDs[i], " ")
+                i = i + 1
+            }
+            
+            // IF a marker is found: transform in the main queue
             DispatchQueue.main.async {
                 // Multipy the next transformation matrix by the original camera position at the frame capture point
                 self.targTransform = SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform));
                 //print(self.targTransform)
                 // print to debug+
-                print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
+                //print("Found ", newframe.no_markers, " markers: ", newframe.ids.0, " ", newframe.ids.1)
                 self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
                 self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
                 self.isLocalized = true;
@@ -151,7 +166,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return
             }
     
-        
     
     private func updateContentNode(targTransform: SCNMatrix4, markerid: Int) {
         //Basic error check before rendering
@@ -163,37 +177,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
                     node.removeFromParentNode() }
             }
-
                 
                 // Create new:
                 localizedContentNode.opacity = 0.5
                 localizedContentNode.transform = targTransform // apply new transform to node
-            
-            
-            
-            
-            
-           /*
-            print("euler x, pitch:",localizedContentNode.simdEulerAngles.x) //Pitch
-            print("euler y, yaw:",localizedContentNode.simdEulerAngles.y) //Yaw
-            print("euler z, roll:",localizedContentNode.simdEulerAngles.z) //Roll
-            
-
-                print("rotation w :",localizedContentNode.simdRotation.w)
-                print("rotation x :",localizedContentNode.simdRotation.x)
-                print("rotation y :",localizedContentNode.simdRotation.y)
-                print("rotation z :",localizedContentNode.simdRotation.z)
-                print("orientation :",localizedContentNode.simdOrientation.angle)
-            
-            
-            
-           
-                print("position x :",localizedContentNode.position.x)
-                print("position y:",localizedContentNode.position.y)
-                print("position z:",localizedContentNode.position.z)
- //
-                print("Pivot :",localizedContentNode.pivot)
-            */
      
                 let centrepoint = SCNNode(geometry: SCNSphere(radius: 0.01))
                 centrepoint.position = loadedtray.CentrePoint(withid: markerid)
@@ -268,5 +255,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         return true
     }
+    
         
     }
