@@ -20,6 +20,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var isLocalized = true
     
     private var captureNextFrameForCV = true; //when set to true, frame is processed by opencv for marker
+    
+    // use for testing accumilation of matricies - each one gets added in turn
+    private var matricies = [SCNMatrix4]()
+    private var targets = [SCNMatrix4]()
+    
 
     let loadedtray = Tray()
     
@@ -177,19 +182,33 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
                     node.removeFromParentNode() }
             }
-                
-                // Create new:
+                // append to global matricies list
+                matricies.append(targTransform)
                 localizedContentNode.opacity = 0.5
                 localizedContentNode.transform = targTransform // apply new transform to node
-     
+                print(localizedContentNode.simdOrientation)
+            
+            // Calculate the centre of the tray and make child of marker
                 let centrepoint = SCNNode(geometry: SCNSphere(radius: 0.01))
                 centrepoint.position = loadedtray.CentrePoint(withid: markerid)
+            
                 localizedContentNode.addChildNode(centrepoint)
-                //localizedContentNode.position = loadedtray.CentrePoint(withid: markerid)
                 sceneView.scene.rootNode.addChildNode(localizedContentNode);
+            
+                targets.append(centrepoint.transform)
+
+            // Create an anchor at this point
+                //let target = ARAnchor(name: "Target", transform: simd_float4x4(centrepoint.transform))
+                //sceneView.session.add(anchor: target)
+
                 print("added localised content node for marker ")
                 
             }
+        }
+        
+        func renderer(_ renderer: SCNSceneRenderer,
+                               nodeFor anchor: ARAnchor) -> SCNNode?{
+            return SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
         }
 }
     
@@ -242,11 +261,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // error checking function to make sure that detected marker is flat to the camera and not
     func applyMatrixThreshold(matrix: SCNMatrix4)->Bool{
+        
         let throwawaynode = SCNNode()
         throwawaynode.transform = matrix
-        
         let orientation = abs(throwawaynode.simdEulerAngles.x)
-        
         if
             matrix.m31 < -1 || matrix.m32 < -5 || matrix.m24 > 10 || matrix.m34 > 5 || !(orientation > 1.3 && orientation < 1.8){
             print("*** Error caught ***")
@@ -254,6 +272,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         return true
+    }
+    
+    // Function to manage the averaging of matricies
+    func averagePositionEstimation() -> SCNMatrix4 {
+        
+        var matrix = matricies[0]
+        
+        if matricies.first != nil {
+            //matricies.shuffle()
+            matrix = matricies[0]
+        }
+        
+        return matrix
     }
     
         
