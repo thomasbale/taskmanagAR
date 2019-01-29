@@ -15,6 +15,7 @@
 		22174F8421C923F200F4067C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22174F8221C923F200F4067C /* LaunchScreen.storyboard */; };
 		22174F8F21C923F300F4067C /* TaskManagARTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F8E21C923F300F4067C /* TaskManagARTests.swift */; };
 		22174F9A21C923F300F4067C /* TaskManagARUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F9921C923F300F4067C /* TaskManagARUITests.swift */; };
+		224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224C07CD220066B50021EBE5 /* Position_estimate.swift */; };
 		227EE02821C94D89006B19F0 /* OpenCVWrapper.mm in Sources */ = {isa = PBXBuildFile; fileRef = 227EE02621C94D88006B19F0 /* OpenCVWrapper.mm */; };
 		227EE02D21C94E3A006B19F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE02C21C94E3A006B19F0 /* Foundation.framework */; };
 		227EE02F21C94E42006B19F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE02E21C94E42006B19F0 /* UIKit.framework */; };
@@ -63,6 +64,7 @@
 		22174F9521C923F300F4067C /* TaskManagARUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskManagARUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22174F9921C923F300F4067C /* TaskManagARUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagARUITests.swift; sourceTree = "<group>"; };
 		22174F9B21C923F300F4067C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		224C07CD220066B50021EBE5 /* Position_estimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position_estimate.swift; sourceTree = "<group>"; };
 		227EE02521C94D87006B19F0 /* TaskManagAR-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TaskManagAR-Bridging-Header.h"; sourceTree = "<group>"; };
 		227EE02621C94D88006B19F0 /* OpenCVWrapper.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; name = OpenCVWrapper.mm; path = "../../../../../Desktop/throwaway-arucotest/throwaway-arucotest/OpenCVWrapper.mm"; sourceTree = "<group>"; };
 		227EE02721C94D89006B19F0 /* OpenCVWrapper.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = OpenCVWrapper.h; path = "../../../../../Desktop/throwaway-arucotest/throwaway-arucotest/OpenCVWrapper.h"; sourceTree = "<group>"; };
@@ -148,6 +150,7 @@
 				227EE02721C94D89006B19F0 /* OpenCVWrapper.h */,
 				22174F7921C923F000F4067C /* art.scnassets */,
 				22174F7B21C923F000F4067C /* ViewController.swift */,
+				224C07CD220066B50021EBE5 /* Position_estimate.swift */,
 				22C584FC21E655FB00ADEAB6 /* Trays */,
 				22C584F821E64C9600ADEAB6 /* Tray.swift */,
 				22174F7D21C923F000F4067C /* Main.storyboard */,
@@ -340,6 +343,7 @@
 				22174F7C21C923F000F4067C /* ViewController.swift in Sources */,
 				22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */,
 				22174F7821C923F000F4067C /* AppDelegate.swift in Sources */,
+				224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */,
 				227EE02821C94D89006B19F0 /* OpenCVWrapper.mm in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

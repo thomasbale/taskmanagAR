@@ -39,12 +39,10 @@ class Tray{
         newScene.rootNode.addChildNode(localnode)
         let material = SCNMaterial()
         material.diffuse.contents = UIColor.red
-        //material.lightingModel = .physicallyBased
     
         let newGeometry = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
         newGeometry.materials = [material]
         
-        //let newGeometry2 = SCNTorus(ringRadius: 0.1, pipeRadius: 0.03)
         let newObject = SCNNode(geometry:newGeometry)
         
         //let newObject2 = SCNNode(geometry:newGeometry2)
@@ -73,18 +71,18 @@ class Tray{
     }
     
     func CentrePoint (withid: Int) -> SCNVector3 {
-        
+        // Function calculates the centrepoint based on tray size
         switch withid {
-        case 3: // RH
+        case 3: // RightHand
             let vector = SCNVector3(self.markerVerticalSeparation/2,self.markerHorizontalSeparation/2, 0)
              return vector
         case 0: // boom
             let vector = SCNVector3(self.markerVerticalSeparation/2,0-(self.markerHorizontalSeparation/2), 0)
              return vector
-        case 1: // TL
+        case 1: // TopLeft
             let vector = SCNVector3(0-(self.markerVerticalSeparation/2),0-(self.markerHorizontalSeparation/2), 0)
              return vector
-        case 2: // TR
+        case 2: // TopRight
             let vector = SCNVector3(0-(self.markerVerticalSeparation/2),self.markerHorizontalSeparation/2, 0)
              return vector
         default:

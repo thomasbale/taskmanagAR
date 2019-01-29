@@ -16,18 +16,14 @@ let MARKER_SIZE_IN_METERS : CGFloat = 0.01165; //set this to size of physically 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
-    
     private var isLocalized = true
-    
     private var captureNextFrameForCV = true; //when set to true, frame is processed by opencv for marker
     
     // use for testing accumilation of matricies - each one gets added in turn
     private var matricies = [SCNMatrix4]()
     private var targets = [SCNMatrix4]()
     
-
     let loadedtray = Tray()
-    
     var targTransform = SCNMatrix4()
     
     @IBOutlet var sceneView: ARSCNView!
@@ -40,7 +36,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBAction func buttonloadmodel(_ sender: Any){
         // clean up to prevent issues
         
-
         sceneView.session.add(anchor: ARAnchor(name: "Anchor",transform: simd_float4x4(targets.first!)))
         sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
             node.removeFromParentNode() }
@@ -55,7 +50,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             sceneView.scene.rootNode.addChildNode(localizedContentNode)
             print("loaded")
         }
-        
     }
     @IBOutlet weak var Debuggingop: UILabel!
     
@@ -91,6 +85,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Run the view's session
         sceneView.session.run(configuration)
     }
+    
     @IBAction func pressed(_ sender: Any) {
         // to slow down processing only activated on button press
         self.captureNextFrameForCV = true
@@ -102,7 +97,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.session.pause()
     }
     
-
     // MARK: - ARSCNViewDelegate
     
     func session(_ session: ARSession, didFailWithError error: Error) {
@@ -192,6 +186,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
                 // append to global matricies list
                 matricies.append(targTransform)
+            
                 localizedContentNode.opacity = 0.5
                 localizedContentNode.transform = targTransform // apply new transform to node
                 print(localizedContentNode.simdOrientation)
@@ -203,7 +198,18 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 sceneView.scene.rootNode.addChildNode(localizedContentNode);
             // Add centrepoint to the list
                 targets.append(centrepoint.transform)
-
+            
+            // Pass centrepoints for analysis
+            
+            var clean_centre = TrayAnchor()
+            
+            // mean centre calculation
+            clean_centre.initialise(targets: targets)
+            
+            if clean_centre.ready{
+                sceneView.scene.rootNode.addChildNode(clean_centre.TrayCentreNode())
+            }
+            
             // Create an anchor at this point
                 //let target = ARAnchor(name: "Target", transform: simd_float4x4(centrepoint.transform))
                 //sceneView.session.add(anchor: target)
