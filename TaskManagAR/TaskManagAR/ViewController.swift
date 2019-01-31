@@ -35,21 +35,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     @IBAction func buttonloadmodel(_ sender: Any){
         // clean up to prevent issues
+        //sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+         //   node.removeFromParentNode() }
         
-        sceneView.session.add(anchor: ARAnchor(name: "Anchor",transform: simd_float4x4(targets.first!)))
-        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-            node.removeFromParentNode() }
-        /* call the tray reference scene
-        if isLocalized {
-            sceneView.scene = self.loadedtray.GetObjects(withid: 0, localnode: self.localizedContentNode)
-        }*/
-        
-        if targets.first != nil {
-            
-            localizedContentNode.transform = targets.first!
-            sceneView.scene.rootNode.addChildNode(localizedContentNode)
-            print("loaded")
+        if let assetScene = SCNScene(named: "Tiles_on_Tyne.DAE") {
+            print("loading 3d model")
+                sceneView.scene = assetScene
         }
+        
     }
     @IBOutlet weak var Debuggingop: UILabel!
     
@@ -71,6 +64,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         sceneView.preferredFramesPerSecond = 30
+        
+
         
     }
     

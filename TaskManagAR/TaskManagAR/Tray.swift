@@ -34,6 +34,7 @@ class Tray{
     // Returns the full tray plane relative to the fudicial marker
     func GetObjects (withid: Int, localnode: SCNNode) -> SCNScene {
         let newScene = SCNScene()
+        
         //let plane = self.GetPlane()
         //plane.position = localnode.position
         newScene.rootNode.addChildNode(localnode)
