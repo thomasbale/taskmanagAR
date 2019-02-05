@@ -16,9 +16,9 @@ import SceneKit
 
 
 class Tray{
-    // Based on A3 dimensions
-    private var markerVerticalSeparation = 0.2463 //metres
-    private var markerHorizontalSeparation = 0.3616
+    // Based on A3 dimensions 29.7 x 42.0cm
+    private var markerVerticalSeparation = 0.297 //metres
+    private var markerHorizontalSeparation = 0.84
     private var trayState = "pending" // pending or ready
     // Marker IDs
     private var marker_0 = 0

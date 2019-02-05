@@ -11,7 +11,7 @@ import SceneKit
 import ARKit
 import GLKit
 
-let MARKER_SIZE_IN_METERS : CGFloat = 0.01165; //set this to size of physically printed marker in meters
+let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically printed marker in meters
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
@@ -35,12 +35,20 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     @IBAction func buttonloadmodel(_ sender: Any){
         // clean up to prevent issues
-        //sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-         //   node.removeFromParentNode() }
+        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+            node.removeFromParentNode() }
+        // Try to load the node assets from the scene
         
-        if let assetScene = SCNScene(named: "Tiles_on_Tyne.DAE") {
+        
+        if let assetScene = SCNScene(named: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn") {
+            
             print("loading 3d model")
-                sceneView.scene = assetScene
+    
+            if let node = assetScene.rootNode.childNode(withName: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", recursively: true) {
+                node.transform = targTransform
+                    sceneView.scene.rootNode.addChildNode(node)
+                print("loading 3d model node")
+            }
         }
         
     }
@@ -64,6 +72,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         sceneView.preferredFramesPerSecond = 30
+        sceneView.debugOptions = .showWorldOrigin
+        sceneView.debugOptions = [.showWireframe, .showBoundingBoxes]
         
 
         
@@ -76,6 +86,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .horizontal
         configuration.maximumNumberOfTrackedImages = 0
+        
 
         // Run the view's session
         sceneView.session.run(configuration)
@@ -127,8 +138,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // If ready go ahead and pass
         if (currentstatus == "") {
             let pixelBuffer = frame.capturedImage
-            //Pixelbuffer is a rectified image
-            // Instrinsics provides a transform from 2d camera space to 3d world coordinate space
+            //Pixelbuffer is a rectified image. Instrinsics provides a transform from 2d camera space to 3d world coordinate space
             // Create a new frame struct for detection
             var newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))
             // Save the transform from camera to world space
@@ -150,6 +160,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             print("Found ", newframe.no_markers, " markers: ")
             while i <= newframe.no_markers - 1 {
                 print(" markers: ", frameIDs[i], " ")
+                
                 i = i + 1
             }
             
@@ -179,25 +190,23 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
                     node.removeFromParentNode() }
             }
-                // append to global matricies list
-                matricies.append(targTransform)
+                // append to global matricies list - not sure this is needed
+                //matricies.append(targTransform)
             
                 localizedContentNode.opacity = 0.5
                 localizedContentNode.transform = targTransform // apply new transform to node
-                print(localizedContentNode.simdOrientation)
+           // self.sceneView.session.setWorldOrigin(relativeTransform: simd_float4x4(targTransform))
             
             // Calculate the centre of the tray and make child of marker
                 let centrepoint = SCNNode(geometry: SCNSphere(radius: 0.01))
+            // Get the offset to the centre of the tray
                 centrepoint.position = loadedtray.CentrePoint(withid: markerid)
                 localizedContentNode.addChildNode(centrepoint)
                 sceneView.scene.rootNode.addChildNode(localizedContentNode);
             // Add centrepoint to the list
                 targets.append(centrepoint.transform)
-            
             // Pass centrepoints for analysis
-            
             var clean_centre = TrayAnchor()
-            
             // mean centre calculation
             clean_centre.initialise(targets: targets)
             

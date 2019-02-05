@@ -30,7 +30,6 @@
 		227EEA5921CA6BAE006B19F0 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EEA5821CA6BAD006B19F0 /* opencv2.framework */; };
 		22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C584F821E64C9600ADEAB6 /* Tray.swift */; };
 		22C584FB21E6554600ADEAB6 /* 123.scn in Resources */ = {isa = PBXBuildFile; fileRef = 22C584FA21E6554600ADEAB6 /* 123.scn */; };
-		22CB05022202FDDC00EBE0F8 /* Tiles_on_Tyne.DAE in Resources */ = {isa = PBXBuildFile; fileRef = 22CB05002202FD8100EBE0F8 /* Tiles_on_Tyne.DAE */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -81,9 +80,9 @@
 		227EE03E21C94E82006B19F0 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		227EE04021C94F07006B19F0 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		227EEA5821CA6BAD006B19F0 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../../../Desktop/Frameworks/Current/opencv2.framework; sourceTree = "<group>"; };
+		22AF035A220881D9009E2D8D /* CVUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; name = CVUtils.h; path = "../../../../../Downloads/ARKitMarkers-master 3/ARKitMarker/Utils/CVUtils.h"; sourceTree = "<group>"; };
 		22C584F821E64C9600ADEAB6 /* Tray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tray.swift; sourceTree = "<group>"; };
 		22C584FA21E6554600ADEAB6 /* 123.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = 123.scn; sourceTree = "<group>"; };
-		22CB05002202FD8100EBE0F8 /* Tiles_on_Tyne.DAE */ = {isa = PBXFileReference; lastKnownFileType = text.xml.dae; path = Tiles_on_Tyne.DAE; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -149,6 +148,7 @@
 			children = (
 				22CB04FF2202FD8100EBE0F8 /* 3d_models */,
 				227EE02621C94D88006B19F0 /* OpenCVWrapper.mm */,
+				22AF035A220881D9009E2D8D /* CVUtils.h */,
 				22174F7721C923F000F4067C /* AppDelegate.swift */,
 				227EE02721C94D89006B19F0 /* OpenCVWrapper.h */,
 				22174F7921C923F000F4067C /* art.scnassets */,
@@ -212,7 +212,6 @@
 		22CB04FF2202FD8100EBE0F8 /* 3d_models */ = {
 			isa = PBXGroup;
 			children = (
-				22CB05002202FD8100EBE0F8 /* Tiles_on_Tyne.DAE */,
 			);
 			path = 3d_models;
 			sourceTree = "<group>";
@@ -322,7 +321,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22CB05022202FDDC00EBE0F8 /* Tiles_on_Tyne.DAE in Resources */,
 				22174F7A21C923F000F4067C /* art.scnassets in Resources */,
 				22174F8421C923F200F4067C /* LaunchScreen.storyboard in Resources */,
 				22C584FB21E6554600ADEAB6 /* 123.scn in Resources */,
