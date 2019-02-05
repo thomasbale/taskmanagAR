@@ -15,7 +15,7 @@ let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically p
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
+    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.1, chamferRadius: 0))
     private var isLocalized = true
     private var captureNextFrameForCV = true; //when set to true, frame is processed by opencv for marker
     
@@ -72,8 +72,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         sceneView.preferredFramesPerSecond = 30
-        sceneView.debugOptions = .showWorldOrigin
-        sceneView.debugOptions = [.showWireframe, .showBoundingBoxes]
+
+        sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showWorldOrigin]
         
 
         
@@ -140,15 +140,26 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             let pixelBuffer = frame.capturedImage
             //Pixelbuffer is a rectified image. Instrinsics provides a transform from 2d camera space to 3d world coordinate space
             // Create a new frame struct for detection
-            var newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))
+            
+            var intrinsics = frame.camera.intrinsics
+            intrinsics.columns.0.z = 0
+            intrinsics.columns.1.z = 0
+            intrinsics.columns.2.z = 1
+            
+            var newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))
             // Save the transform from camera to world space
             newframe.cameratransform = frame.camera.transform
+
             //quick break
             if(newframe.no_markers == 0) {
                 print("no marker found")
                 self.Debuggingop.text = "no marker found"
                 return;
             }
+            
+            
+            
+            
             
             // Need to convert tuple to iteratable type - c++ to swift conversion
             let tupleMirror = Mirror(reflecting: newframe.ids)
@@ -166,8 +177,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
             // IF a marker is found: transform in the main queue
             DispatchQueue.main.async {
+                
                 // Multipy the next transformation matrix by the original camera position at the frame capture point
+                
                 self.targTransform = SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform));
+                
+                //self.targTransform = SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform));
+                
                 self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
                 self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
                 self.isLocalized = true;
@@ -178,6 +194,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.Debuggingop.text = currentstatus
         return
             }
+    
     
     
     private func updateContentNode(targTransform: SCNMatrix4, markerid: Int) {
@@ -193,16 +210,52 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 // append to global matricies list - not sure this is needed
                 //matricies.append(targTransform)
             
-                localizedContentNode.opacity = 0.5
-                localizedContentNode.transform = targTransform // apply new transform to node
-           // self.sceneView.session.setWorldOrigin(relativeTransform: simd_float4x4(targTransform))
+            let newnode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.1, chamferRadius: 0))
+            
+    
+            
+           
+            
+            newnode.transform = targTransform
+            //newnode.convertTransform(targTransform, to: nil)
+            
+            //newnode.eulerAngles.x = .pi / 2
+            //newnode.eulerAngles = SCNVector3Make(0, GLKMathDegreesToRadians(-90), GLKMathDegreesToRadians(-90))
+            
+             //   localizedContentNode.opacity = 0.5
+             //   localizedContentNode.transform = targTransform // apply new transform to node
+            // TRY ROTATIONS: x, y, z - applied in order z,y,x
+             //   localizedContentNode.eulerAngles = SCNVector3Make(0, 0, 0)
+            
+            // try to correct world space
+            
+            
+            let radians = GLKMathDegreesToRadians(-90)
+            let zAxis = float3(0, 0, 1)
+            
+            let rotationMatrix = simd_quatf(angle: radians, axis: zAxis)
+            
+            let originVector = newnode.simdWorldPosition
+            
+            
+            
+            //newnode.position = SCNVector3(rotationMatrix.act(originVector))
+    
+            //self.targTransform = SCNMatrix4Mult(targTransform, rotationMatrix)
+
+    
+            //self.sceneView.session.setWorldOrigin(relativeTransform: simd_float4x4(self.targTransform))
             
             // Calculate the centre of the tray and make child of marker
                 let centrepoint = SCNNode(geometry: SCNSphere(radius: 0.01))
             // Get the offset to the centre of the tray
                 centrepoint.position = loadedtray.CentrePoint(withid: markerid)
-                localizedContentNode.addChildNode(centrepoint)
-                sceneView.scene.rootNode.addChildNode(localizedContentNode);
+            
+                newnode.addChildNode(centrepoint)
+            
+                sceneView.scene.rootNode.addChildNode(newnode);
+           // self.sceneView.session.setWorldOrigin(relativeTransform: simd_float4x4(newnode.transform))
+            
             // Add centrepoint to the list
                 targets.append(centrepoint.transform)
             // Pass centrepoints for analysis
@@ -211,7 +264,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             clean_centre.initialise(targets: targets)
             
             if clean_centre.ready{
-                sceneView.scene.rootNode.addChildNode(clean_centre.TrayCentreNode())
+                newnode.addChildNode(clean_centre.TrayCentreNode(transform: targets.first!))
             }
             
             // Create an anchor at this point
