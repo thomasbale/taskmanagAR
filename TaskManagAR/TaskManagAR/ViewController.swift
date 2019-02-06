@@ -153,7 +153,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // Need to convert tuple to iteratable type - c++ to swift conversion
             let tupleMirror = Mirror(reflecting: newframe.ids)
             let frameIDs = tupleMirror.children.map({ $0.value })
-            print(frameIDs)
+            //print(frameIDs)
             
             //Some kind of loop in here through the markers in the frame & check whether they are plane markers
             var i = 0
