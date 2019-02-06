@@ -11,13 +11,17 @@ import SceneKit
 import ARKit
 import GLKit
 
+
 let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically printed marker in meters
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
-    private var isLocalized = true
+    private var TrayCentrepoint = SCNNode()
+    private var isLocalized = false
     private var captureNextFrameForCV = true; //when set to true, frame is processed by opencv for marker
+    
+
     
     // use for testing accumilation of matricies - each one gets added in turn
     private var matricies = [SCNMatrix4]()
@@ -35,26 +39,44 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     @IBAction func buttonloadmodel(_ sender: Any){
         // clean up to prevent issues
-        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-            node.removeFromParentNode() }
+        //sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+        //    node.removeFromParentNode() }
+        
+        
         // Try to load the node assets from the scene
-        
-        
         if let assetScene = SCNScene(named: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn") {
             
             print("loading 3d model")
     
-            if let node = assetScene.rootNode.childNode(withName: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", recursively: true) {
+            
+            let geo = SCNPyramid(width: 0.2, height: 0.2, length: 0.2/2)
+            let mat = SCNMaterial()
+            mat.diffuse.contents = UIColor.blue
+            geo.materials = [mat]
+            let node = SCNNode(geometry: geo)
+            //node.transform = targTransform
+            // Transform moves from different coodinate spaces
+            node.eulerAngles.y += GLKMathDegreesToRadians(90)
+            node.eulerAngles.z += GLKMathDegreesToRadians(90)
+            TrayCentrepoint.addChildNode(node)
+            //sceneView.scene.rootNode.addChildNode(node)
+            
+            
+            if let node1 = assetScene.rootNode.childNode(withName: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", recursively: true) {
                 
                 let anchor = ARAnchor(transform: simd_float4x4(targTransform))
                 sceneView.session.add(anchor:anchor)
 
+                node1.transform = targTransform
+                //node1.eulerAngles.y += GLKMathDegreesToRadians(90)
+                //node1.eulerAngles.z += GLKMathDegreesToRadians(90)
+                sceneView.scene.rootNode.addChildNode(node1)
                 
-                node.transform = targTransform
-                    sceneView.scene.rootNode.addChildNode(node)
                 print("loading 3d model node")
             }
         }
+        
+        
         
     }
     @IBOutlet weak var Debuggingop: UILabel!
@@ -76,11 +98,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
-        sceneView.preferredFramesPerSecond = 30
-        sceneView.debugOptions = .showWorldOrigin
-        sceneView.debugOptions = [.showWireframe, .showBoundingBoxes]
-        
-
+        sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
         
     }
     
@@ -92,7 +110,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         configuration.planeDetection = .horizontal
         configuration.maximumNumberOfTrackedImages = 0
         
-
         // Run the view's session
         sceneView.session.run(configuration)
     }
@@ -131,7 +148,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Only run if the button is pressed
                 if(self.captureNextFrameForCV != false) {
                 print("updating frame...")
-                self.Debuggingop.text = "no markers..."
+                self.Debuggingop.text = "Find tray markers to start scene"
                 self.updateCameraPose(frame: frame)
                 self.captureNextFrameForCV = false // used to limit to button calling
             }
@@ -150,14 +167,15 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             newframe.cameratransform = frame.camera.transform
             //quick break
             if(newframe.no_markers == 0) {
-                print("no marker found")
-                self.Debuggingop.text = "no marker found"
+                print("no marker found. Keep looking.")
+                self.Debuggingop.text = "no marker found. Keep looking."
                 return;
             }
             
             // Need to convert tuple to iteratable type - c++ to swift conversion
             let tupleMirror = Mirror(reflecting: newframe.ids)
             let frameIDs = tupleMirror.children.map({ $0.value })
+            
             print(frameIDs)
             
             //Some kind of loop in here through the markers in the frame & check whether they are plane markers
@@ -191,33 +209,31 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         if self.isLocalized {
             // Is there already a localised content node? Destroy it:
-            if sceneView.scene.rootNode.childNodes.contains(localizedContentNode) {
                 sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
                     node.removeFromParentNode() }
-            }
-                // append to global matricies list - not sure this is needed
-                //matricies.append(targTransform)
-            
+       
                 localizedContentNode.opacity = 0.5
                 localizedContentNode.transform = targTransform // apply new transform to node
-           // self.sceneView.session.setWorldOrigin(relativeTransform: simd_float4x4(targTransform))
-            
+
             // Calculate the centre of the tray and make child of marker
-                let centrepoint = SCNNode(geometry: SCNSphere(radius: 0.01))
-            // Get the offset to the centre of the tray
-                centrepoint.position = loadedtray.CentrePoint(withid: markerid)
-                localizedContentNode.addChildNode(centrepoint)
-                sceneView.scene.rootNode.addChildNode(localizedContentNode);
-            // Add centrepoint to the list
-                targets.append(centrepoint.transform)
-            // Pass centrepoints for analysis
-            var clean_centre = TrayAnchor()
-            // mean centre calculation
-            clean_centre.initialise(targets: targets)
+            //var clean_centre = TrayAnchor()
+            TrayCentrepoint = loadedtray.TrayCentreNode()
             
-            if clean_centre.ready{
-                sceneView.scene.rootNode.addChildNode(clean_centre.TrayCentreNode())
-            }
+            // Get the offset to the centre of the tray
+                localizedContentNode.addChildNode(TrayCentrepoint)
+                TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid)
+                sceneView.scene.rootNode.addChildNode(localizedContentNode);
+            
+            // Add centrepoint to the list
+             //   targets.append(centrepoint.transform)
+            // Pass centrepoints for analysis
+            
+            // mean centre calculation
+            //clean_centre.initialise(targets: targets)
+            
+            //if clean_centre.ready{
+             //   sceneView.scene.rootNode.addChildNode(centrepoint)
+            //}
             
             // Create an anchor at this point
                 //let target = ARAnchor(name: "Target", transform: simd_float4x4(centrepoint.transform))

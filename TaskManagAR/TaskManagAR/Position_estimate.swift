@@ -10,10 +10,10 @@ import Foundation
 
 
 class TrayAnchor{
-    
+    //Based on A3 dimensions 29.7 x 42.0cm // 0.297 x 0.84
     var ready = false
     var transform = SCNMatrix4()
-    var geometry = SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0)
+    var geometry = SCNBox(width: 0.297, height: 0.84, length: 0.005, chamferRadius: 0)
     var colour = SCNMaterial()
     private var node = SCNNode()
     
@@ -28,7 +28,7 @@ class TrayAnchor{
     }
     
     func TrayCentreNode () -> SCNNode{
-        node.transform = self.transform
+        //node.transform = self.transform
         node.geometry = geometry
         colour.diffuse.contents = UIColor.red
         geometry.materials = [colour]

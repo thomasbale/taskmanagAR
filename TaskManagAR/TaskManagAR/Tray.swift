@@ -26,6 +26,10 @@ class Tray{
     private var marker_2 = 2
     private var marker_3 = 3
     
+    var geometry = SCNBox(width: 0.297, height: 0.84, length: 0.005, chamferRadius: 0)
+    var colour = SCNMaterial()
+    private var node = SCNNode()
+    
     // Returns the full tray plane relative to the fudicial marker
     func GetPlane () -> SCNNode {
         let plane = SCNNode(geometry: SCNBox(width: 0.05, height: 0.005, length: 0.05, chamferRadius: 0))
@@ -108,5 +112,13 @@ class Tray{
             return false
         }
     
+    }
+    
+    func TrayCentreNode () -> SCNNode{
+        //node.transform = self.transform
+        node.geometry = geometry
+        colour.diffuse.contents = UIColor.red
+        geometry.materials = [colour]
+        return node
     }
 }
