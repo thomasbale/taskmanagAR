@@ -15,6 +15,7 @@
 		22174F8421C923F200F4067C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22174F8221C923F200F4067C /* LaunchScreen.storyboard */; };
 		22174F8F21C923F300F4067C /* TaskManagARTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F8E21C923F300F4067C /* TaskManagARTests.swift */; };
 		22174F9A21C923F300F4067C /* TaskManagARUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F9921C923F300F4067C /* TaskManagARUITests.swift */; };
+		223BCCF0220B25A400B62698 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 223BCCEF220B25A300B62698 /* opencv2.framework */; };
 		224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224C07CD220066B50021EBE5 /* Position_estimate.swift */; };
 		227EE02D21C94E3A006B19F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE02C21C94E3A006B19F0 /* Foundation.framework */; };
 		227EE02F21C94E42006B19F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE02E21C94E42006B19F0 /* UIKit.framework */; };
@@ -28,7 +29,6 @@
 		227EE03F21C94E82006B19F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03E21C94E82006B19F0 /* Accelerate.framework */; };
 		22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C584F821E64C9600ADEAB6 /* Tray.swift */; };
 		22C584FB21E6554600ADEAB6 /* 123.scn in Resources */ = {isa = PBXBuildFile; fileRef = 22C584FA21E6554600ADEAB6 /* 123.scn */; };
-		22E25AE2220B219500860734 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 22E25AE1220B219500860734 /* opencv2.framework */; };
 		22E25AE4220B21BB00860734 /* OpenCVWrapper .mm in Sources */ = {isa = PBXBuildFile; fileRef = 22E25AE3220B21BB00860734 /* OpenCVWrapper .mm */; };
 /* End PBXBuildFile section */
 
@@ -64,6 +64,7 @@
 		22174F9521C923F300F4067C /* TaskManagARUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskManagARUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22174F9921C923F300F4067C /* TaskManagARUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagARUITests.swift; sourceTree = "<group>"; };
 		22174F9B21C923F300F4067C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		223BCCEF220B25A300B62698 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../../../Desktop/Frameworks/Current/opencv2.framework; sourceTree = "<group>"; };
 		224C07CD220066B50021EBE5 /* Position_estimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position_estimate.swift; sourceTree = "<group>"; };
 		227EE02521C94D87006B19F0 /* TaskManagAR-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TaskManagAR-Bridging-Header.h"; sourceTree = "<group>"; };
 		227EE02C21C94E3A006B19F0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -79,7 +80,6 @@
 		227EE04021C94F07006B19F0 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		22C584F821E64C9600ADEAB6 /* Tray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tray.swift; sourceTree = "<group>"; };
 		22C584FA21E6554600ADEAB6 /* 123.scn */ = {isa = PBXFileReference; lastKnownFileType = file.bplist; path = 123.scn; sourceTree = "<group>"; };
-		22E25AE1220B219500860734 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../../Desktop/Frameworks/Current/opencv2.framework; sourceTree = "<group>"; };
 		22E25AE3220B21BB00860734 /* OpenCVWrapper .mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "OpenCVWrapper .mm"; sourceTree = "<group>"; };
 		22E25AE5220B21CD00860734 /* OpenCVWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
 		22E25AE6220B21F900860734 /* CVUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CVUtils.h; sourceTree = "<group>"; };
@@ -90,7 +90,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22E25AE2220B219500860734 /* opencv2.framework in Frameworks */,
+				223BCCF0220B25A400B62698 /* opencv2.framework in Frameworks */,
 				227EE03F21C94E82006B19F0 /* Accelerate.framework in Frameworks */,
 				227EE03D21C94E7B006B19F0 /* AssetsLibrary.framework in Frameworks */,
 				227EE03B21C94E74006B19F0 /* AVFoundation.framework in Frameworks */,
@@ -186,7 +186,7 @@
 		227EE02921C94E2E006B19F0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				22E25AE1220B219500860734 /* opencv2.framework */,
+				223BCCEF220B25A300B62698 /* opencv2.framework */,
 				227EE03E21C94E82006B19F0 /* Accelerate.framework */,
 				227EE03C21C94E7B006B19F0 /* AssetsLibrary.framework */,
 				227EE03A21C94E74006B19F0 /* AVFoundation.framework */,

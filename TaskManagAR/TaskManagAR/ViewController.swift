@@ -45,6 +45,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             print("loading 3d model")
     
             if let node = assetScene.rootNode.childNode(withName: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", recursively: true) {
+                
+                let anchor = ARAnchor(transform: simd_float4x4(targTransform))
+                sceneView.session.add(anchor:anchor)
+
+                
                 node.transform = targTransform
                     sceneView.scene.rootNode.addChildNode(node)
                 print("loading 3d model node")
