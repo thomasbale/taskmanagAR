@@ -30,7 +30,8 @@ class TrayAnchor{
     func TrayCentreNode () -> SCNNode{
         //node.transform = self.transform
         node.geometry = geometry
-        colour.diffuse.contents = UIColor.red
+        colour.diffuse.contents = UIColor.blue
+        colour.transparency = 0.5
         geometry.materials = [colour]
         return node
     }

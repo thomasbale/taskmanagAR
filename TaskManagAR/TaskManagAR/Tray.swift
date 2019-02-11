@@ -43,7 +43,8 @@ class Tray{
         //plane.position = localnode.position
         newScene.rootNode.addChildNode(localnode)
         let material = SCNMaterial()
-        material.diffuse.contents = UIColor.red
+        material.diffuse.contents = UIColor.blue
+        material.transparency = 0.5
     
         let newGeometry = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
         newGeometry.materials = [material]
@@ -117,7 +118,8 @@ class Tray{
     func TrayCentreNode () -> SCNNode{
         //node.transform = self.transform
         node.geometry = geometry
-        colour.diffuse.contents = UIColor.red
+        colour.diffuse.contents = UIColor.blue
+        colour.transparency = 0.5
         geometry.materials = [colour]
         return node
     }

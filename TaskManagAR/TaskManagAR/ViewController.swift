@@ -16,11 +16,32 @@ let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically p
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
+    struct TupletoArray {
+        var tuple: (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32)
+        var array: [Int32] {
+            var tmp = self.tuple
+            return [Int32](UnsafeBufferPointer(start: &tmp.0, count: MemoryLayout.size(ofValue: tmp)))
+        }
+    }
+    
     private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
     private var TrayCentrepoint = SCNNode()
     private var isLocalized = false
+    
+    
+    private var validateNextFrame = false
     private var captureNextFrameForCV = true; //when set to true, frame is processed by opencv for marker
     
+    private var status = UIColor.red
+    
+    // Object properties
+    
+    private var assetMark = 4
+    
+    // validation poperties
+    
+    private var visibleObjectIds = [Int]()
+    private var visibleObjectPos = [SCNMatrix4]()
 
     
     // use for testing accumilation of matricies - each one gets added in turn
@@ -46,10 +67,11 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Try to load the node assets from the scene
         if let assetScene = SCNScene(named: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn") {
             
-            print("loading 3d model")
-    
+            sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+            node.removeFromParentNode() }
             
-            let geo = SCNPyramid(width: 0.2, height: 0.2, length: 0.2/2)
+            
+            /*let geo = SCNPyramid(width: 0.2, height: 0.2, length: 0.2/2)
             let mat = SCNMaterial()
             mat.diffuse.contents = UIColor.blue
             geo.materials = [mat]
@@ -60,14 +82,19 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             node.eulerAngles.z += GLKMathDegreesToRadians(90)
             TrayCentrepoint.addChildNode(node)
             //sceneView.scene.rootNode.addChildNode(node)
-            
+            */
             
             if let node1 = assetScene.rootNode.childNode(withName: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", recursively: true) {
                 
                 let anchor = ARAnchor(transform: simd_float4x4(targTransform))
                 sceneView.session.add(anchor:anchor)
+                
+                let mat = SCNMaterial()
+                mat.diffuse.contents = status
+                mat.transparency = 0.8
 
                 node1.transform = targTransform
+                node1.geometry?.materials = [mat]
                 //node1.eulerAngles.y += GLKMathDegreesToRadians(90)
                 //node1.eulerAngles.z += GLKMathDegreesToRadians(90)
                 sceneView.scene.rootNode.addChildNode(node1)
@@ -77,6 +104,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         
+        
+    }
+    @IBOutlet weak var ValidateButton: UIButton!
+    
+    @IBAction func Validate(_ sender: Any) {
+        validateNextFrame = true
+        print("Validation requested")
         
     }
     @IBOutlet weak var Debuggingop: UILabel!
@@ -100,6 +134,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.showsStatistics = true
         sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
         
+        // setup button targets
+
+        
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -117,6 +154,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBAction func pressed(_ sender: Any) {
         // to slow down processing only activated on button press
         self.captureNextFrameForCV = true
+        status = UIColor.red
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -152,9 +190,23 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 self.updateCameraPose(frame: frame)
                 self.captureNextFrameForCV = false // used to limit to button calling
             }
+        // Or if there is a request for scene validation
+        
+        if(self.validateNextFrame != false) {
+            print("validating frame...")
+            self.Debuggingop.text = "Validating scene"
+            status = self.ValidateScene(frame: frame)
+            self.validateNextFrame = false // used to limit to button calling
+        }
+        
+        
 }
+    
+    
+    
     // Main calling function: updates pose from passed frame
     private func updateCameraPose(frame: ARFrame) {
+        
         // Current status contains a string as to the tracking status of the world
         let currentstatus = sessionStatus()
         // If ready go ahead and pass
@@ -176,21 +228,34 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             let tupleMirror = Mirror(reflecting: newframe.ids)
             let frameIDs = tupleMirror.children.map({ $0.value })
             
-            print(frameIDs)
-            
             //Some kind of loop in here through the markers in the frame & check whether they are plane markers
             var i = 0
+            // Reset for validation
+            self.visibleObjectIds.removeAll()
+            self.visibleObjectPos.removeAll()
+            
             print("Found ", newframe.no_markers, " markers: ")
             while i <= newframe.no_markers - 1 {
                 print(" markers: ", frameIDs[i], " ")
+                
+                let array = TupletoArray(tuple: newframe.ids)
+                
+        
+                
+                
+                
+                //visibleObjectIds.append(id!)
+                visibleObjectPos.append(SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
                 
                 i = i + 1
             }
             
             // IF a marker is found: transform in the main queue
             DispatchQueue.main.async {
+                
+                
                 // Multipy the next transformation matrix by the original camera position at the frame capture point
-                self.targTransform = SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform));
+                self.targTransform = self.visibleObjectPos.last!;
                 self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
                 self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
                 self.isLocalized = true;
@@ -311,6 +376,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         return true
     }
-    
+    // Analyse frame for markers and position then return estimate
+    func ValidateScene(frame: ARFrame) -> UIColor{
         
+        
+       // self.sceneView.scene.physicsWorld.rayTestWithSegment(from: <#T##SCNVector3#>, to: <#T##SCNVector3#>, options: ///<#T##[SCNPhysicsWorld.TestOption : Any]?#>)
+        
+        return UIColor.red
+    }
+    
     }
