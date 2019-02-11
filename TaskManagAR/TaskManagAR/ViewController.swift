@@ -30,7 +30,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     
     private var validateNextFrame = false
-    private var captureNextFrameForCV = true; //when set to true, frame is processed by opencv for marker
+    private var captureNextFrameForCV = false; //when set to true, frame is processed by opencv for marker
     
     private var status = UIColor.red
     
@@ -40,7 +40,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // validation poperties
     
-    private var visibleObjectIds = [Int]()
+    private var visibleObjectIds = [Int32]()
     private var visibleObjectPos = [SCNMatrix4]()
 
     
@@ -59,30 +59,20 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet weak var loadmodelbutton: UIButton!
     
     @IBAction func buttonloadmodel(_ sender: Any){
-        // clean up to prevent issues
-        //sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-        //    node.removeFromParentNode() }
         
+        if(isLocalized == false){
+            return
+        }
         
+       TrayCentrepoint.enumerateChildNodes { (node, stop) in
+            node.removeFromParentNode() }
+
+        /*
         // Try to load the node assets from the scene
         if let assetScene = SCNScene(named: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn") {
             
             sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
             node.removeFromParentNode() }
-            
-            
-            /*let geo = SCNPyramid(width: 0.2, height: 0.2, length: 0.2/2)
-            let mat = SCNMaterial()
-            mat.diffuse.contents = UIColor.blue
-            geo.materials = [mat]
-            let node = SCNNode(geometry: geo)
-            //node.transform = targTransform
-            // Transform moves from different coodinate spaces
-            node.eulerAngles.y += GLKMathDegreesToRadians(90)
-            node.eulerAngles.z += GLKMathDegreesToRadians(90)
-            TrayCentrepoint.addChildNode(node)
-            //sceneView.scene.rootNode.addChildNode(node)
-            */
             
             if let node1 = assetScene.rootNode.childNode(withName: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", recursively: true) {
                 
@@ -98,20 +88,34 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 //node1.eulerAngles.y += GLKMathDegreesToRadians(90)
                 //node1.eulerAngles.z += GLKMathDegreesToRadians(90)
                 sceneView.scene.rootNode.addChildNode(node1)
-                
-                print("loading 3d model node")
-            }
-        }
+            }*/
+            
+        let anchor = ARAnchor(transform: simd_float4x4(targTransform))
+        sceneView.session.add(anchor:anchor)
         
+        let mat = SCNMaterial()
+        mat.diffuse.contents = status
+        mat.transparency = 0.8
         
+        let node1 = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
         
+        //node1.position = targTransform
+        node1.position = SCNVector3(0, 0.2, 0)
+        node1.geometry?.materials = [mat]
+        //node1.eulerAngles.y += GLKMathDegreesToRadians(90)
+        //node1.eulerAngles.z += GLKMathDegreesToRadians(90)
+        TrayCentrepoint.addChildNode(node1)
     }
+
     @IBOutlet weak var ValidateButton: UIButton!
     
     @IBAction func Validate(_ sender: Any) {
-        validateNextFrame = true
-        print("Validation requested")
-        
+        if(isLocalized == false){
+            return
+        }
+       self.captureNextFrameForCV = true
+        status = self.ValidateScene(idPresent: 4)
+        //validateNextFrame = true
     }
     @IBOutlet weak var Debuggingop: UILabel!
     
@@ -152,9 +156,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     @IBAction func pressed(_ sender: Any) {
+        self.reset()
         // to slow down processing only activated on button press
         self.captureNextFrameForCV = true
-        status = UIColor.red
+        //status = UIColor.red
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -182,24 +187,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // Calls every time a frame is updated in the session
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        
         // Only run if the button is pressed
                 if(self.captureNextFrameForCV != false) {
-                print("updating frame...")
-                self.Debuggingop.text = "Find tray markers to start scene"
                 self.updateCameraPose(frame: frame)
+                //status = self.ValidateScene()
                 self.captureNextFrameForCV = false // used to limit to button calling
             }
-        // Or if there is a request for scene validation
-        
-        if(self.validateNextFrame != false) {
-            print("validating frame...")
-            self.Debuggingop.text = "Validating scene"
-            status = self.ValidateScene(frame: frame)
-            self.validateNextFrame = false // used to limit to button calling
-        }
-        
-        
+   
 }
     
     
@@ -219,66 +213,52 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             newframe.cameratransform = frame.camera.transform
             //quick break
             if(newframe.no_markers == 0) {
-                print("no marker found. Keep looking.")
                 self.Debuggingop.text = "no marker found. Keep looking."
                 return;
             }
             
             // Need to convert tuple to iteratable type - c++ to swift conversion
-            let tupleMirror = Mirror(reflecting: newframe.ids)
-            let frameIDs = tupleMirror.children.map({ $0.value })
+            //let tupleMirror = Mirror(reflecting: newframe.ids)
+            //let frameIDs = tupleMirror.children.map({ $0.value })
             
             //Some kind of loop in here through the markers in the frame & check whether they are plane markers
-            var i = 0
             // Reset for validation
             self.visibleObjectIds.removeAll()
             self.visibleObjectPos.removeAll()
-            
-            print("Found ", newframe.no_markers, " markers: ")
-            while i <= newframe.no_markers - 1 {
-                print(" markers: ", frameIDs[i], " ")
-                
-                let array = TupletoArray(tuple: newframe.ids)
-                
+            // Copy the found markers in
+
+            self.visibleObjectIds = TupletoArray(tuple: newframe.ids).array
+       
         
-                
-                
-                
-                //visibleObjectIds.append(id!)
-                visibleObjectPos.append(SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
-                
-                i = i + 1
-            }
+            // Copy the transform matrix to the master
+            visibleObjectPos.append(SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
             
             // IF a marker is found: transform in the main queue
-            DispatchQueue.main.async {
-                
-                
-                // Multipy the next transformation matrix by the original camera position at the frame capture point
-                self.targTransform = self.visibleObjectPos.last!;
-                self.Debuggingop.text = "Found " + String(newframe.no_markers) + " markers: " + String(newframe.ids.0)
-                self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
-                self.isLocalized = true;
-                //we want to use transMatrix to position arWaypoint anchor on marker.
+            
+            if(self.isLocalized == false){
+                    DispatchQueue.main.async {
+                    self.targTransform = (SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                    self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
+                return
             }
-            return
+            }
+            
         }
         self.Debuggingop.text = currentstatus
         return
-            }
+    }
     
     
     private func updateContentNode(targTransform: SCNMatrix4, markerid: Int) {
         //Basic error check before rendering
-        if (applyMatrixThreshold(matrix: targTransform)){
         
-        if self.isLocalized {
+        /*if self.isLocalized {
             // Is there already a localised content node? Destroy it:
                 sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-                    node.removeFromParentNode() }
+                    node.removeFromParentNode() }}*/
        
-                localizedContentNode.opacity = 0.5
-                localizedContentNode.transform = targTransform // apply new transform to node
+            localizedContentNode.opacity = 0.5
+            localizedContentNode.transform = targTransform // apply new transform to node
 
             // Calculate the centre of the tray and make child of marker
             //var clean_centre = TrayAnchor()
@@ -288,32 +268,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 localizedContentNode.addChildNode(TrayCentrepoint)
                 TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid)
                 sceneView.scene.rootNode.addChildNode(localizedContentNode);
-            
-            // Add centrepoint to the list
-             //   targets.append(centrepoint.transform)
-            // Pass centrepoints for analysis
-            
-            // mean centre calculation
-            //clean_centre.initialise(targets: targets)
-            
-            //if clean_centre.ready{
-             //   sceneView.scene.rootNode.addChildNode(centrepoint)
-            //}
-            
-            // Create an anchor at this point
-                //let target = ARAnchor(name: "Target", transform: simd_float4x4(centrepoint.transform))
-                //sceneView.session.add(anchor: target)
-
-                print("added localised content node for marker ")
-                
-            }
+            self.isLocalized = true
         }
         
         func renderer(_ renderer: SCNSceneRenderer,
                                nodeFor anchor: ARAnchor) -> SCNNode?{
             return SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
         }
-}
+
     
     func outputImage(name:String,image:UIImage){
         let fileManager = FileManager.default
@@ -370,19 +332,47 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let orientation = abs(throwawaynode.simdEulerAngles.x)
         if
             matrix.m31 < -1 || matrix.m32 < -5 || matrix.m24 > 10 || matrix.m34 > 5 || !(orientation > 1.3 && orientation < 1.8){
-            print("*** Error caught ***")
             return false
         }
         
         return true
     }
     // Analyse frame for markers and position then return estimate
-    func ValidateScene(frame: ARFrame) -> UIColor{
+    func ValidateScene(idPresent: Int) -> UIColor{
         
+        if(self.visibleObjectIds.contains(Int32(idPresent))){
+            return UIColor.green
+        }
         
        // self.sceneView.scene.physicsWorld.rayTestWithSegment(from: <#T##SCNVector3#>, to: <#T##SCNVector3#>, options: ///<#T##[SCNPhysicsWorld.TestOption : Any]?#>)
         
         return UIColor.red
     }
     
+    func reset(){
+        
+        // Is there already a localised content node? Destroy it:
+        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+            node.removeFromParentNode() }
+        
+        self.targTransform = SCNMatrix4()
+        
+        self.localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
+        self.TrayCentrepoint = SCNNode()
+        self.isLocalized = false
+        
+        
+        self.validateNextFrame = false
+        self.captureNextFrameForCV = false; //when set to true, frame is processed by opencv for marker
+        
+        self.status = UIColor.red
+        
+        // validation poperties
+        
+        self.visibleObjectIds = [Int32]()
+        self.visibleObjectPos = [SCNMatrix4]()
     }
+
+    
+    }
+

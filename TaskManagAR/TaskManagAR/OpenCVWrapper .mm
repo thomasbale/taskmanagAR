@@ -186,11 +186,6 @@
         
         cv::Rodrigues(rvecs[0], rotMat); //convert results rotation matrix
         
-        std::cout << "rvecs follows: " << std::endl;
-        std::cout << rvecs.front() << "rvecs end //";
-        std::cout << rotMat.rows << "number rowns rotMat follows: ";
-        std::cout << rotMat << std::endl;
-        std::cout << "Likely error:  " << tvecs[0] << std::endl << std::endl;
         
         cv::Mat extrinsics(4, 4, CV_64FC1);
         
@@ -220,17 +215,17 @@
             for (int col = 0; col < rotMat.rows; col++) {
                 extrinsics.at<double>(row,col) = rotMat.at<double>(row,col); //copy rotation matrix values
                 
-                std::cout << row << col << "  " << rotMat.at<double>(row,col) << std::endl;
+                
             }
             extrinsics.at<double>(row,3) = tvecs[0][row];
-            std::cout << row << "3" << "  " << tvecs[0][row] << std::endl;
+
         }
 
         //The important thing to remember about the extrinsic matrix is that it describes how the world is transformed relative to the camera. This is often counter-intuitive, because we usually want to specify how the camera is transformed relative to the world.
         // Convert coordinate systems of opencv to openGL (ARKIT)
-        std::cout << extrinsics << "extrinsics pre  end: " << std::endl;;
+
         extrinsics = [OpenCVWrapper GetCVToGLMat] * extrinsics;
-        std::cout << extrinsics << "extrinsics end: " << std::endl;;
+
         frame.extrinsics = [OpenCVWrapper transformToSceneKitMatrix:extrinsics];
         
         return frame;
