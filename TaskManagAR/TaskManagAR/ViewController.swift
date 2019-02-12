@@ -32,11 +32,15 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var validateNextFrame = false
     private var captureNextFrameForCV = false; //when set to true, frame is processed by opencv for marker
     
-    private var status = UIColor.red
+    private var status_0 = UIColor.red
+    private var status_1 = UIColor.red
+    private var status_2 = UIColor.red
     
     // Object properties
     
-    private var assetMark = 4
+    private var assetMark_0 = 4
+    private var assetMark_1 = 6
+    private var assetMark_2 = 8
     
     // validation poperties
     
@@ -94,7 +98,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.session.add(anchor:anchor)
         
         let mat = SCNMaterial()
-        mat.diffuse.contents = status
+        mat.diffuse.contents = status_0
         mat.transparency = 0.8
         
         let node1 = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
@@ -114,7 +118,10 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
        self.captureNextFrameForCV = true
-        status = self.ValidateScene(idPresent: 4)
+        status_0 = self.ValidateScene(idPresent: assetMark_0)
+        status_1 = self.ValidateScene(idPresent: assetMark_1)
+        status_2 = self.ValidateScene(idPresent: assetMark_2)
+        
         //validateNextFrame = true
     }
     @IBOutlet weak var Debuggingop: UILabel!
@@ -217,18 +224,16 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 return;
             }
             
-            // Need to convert tuple to iteratable type - c++ to swift conversion
-            //let tupleMirror = Mirror(reflecting: newframe.ids)
-            //let frameIDs = tupleMirror.children.map({ $0.value })
-            
-            //Some kind of loop in here through the markers in the frame & check whether they are plane markers
-            // Reset for validation
             self.visibleObjectIds.removeAll()
             self.visibleObjectPos.removeAll()
-            // Copy the found markers in
+            // Copy the found markers in via a tuple due to Cpp conversion
+            let tempTuple = TupletoArray(tuple: newframe.ids).array
+            let tempNumber = String(newframe.no_markers)
+            let tempIntNumber = Int(tempNumber)
 
-            self.visibleObjectIds = TupletoArray(tuple: newframe.ids).array
-       
+            if(tempIntNumber != nil){
+                visibleObjectIds = Array(tempTuple.prefix(tempIntNumber!))
+            }
         
             // Copy the transform matrix to the master
             visibleObjectPos.append(SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
@@ -340,8 +345,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // Analyse frame for markers and position then return estimate
     func ValidateScene(idPresent: Int) -> UIColor{
         
+        // Quick test is the ID present in the view?
         if(self.visibleObjectIds.contains(Int32(idPresent))){
-            return UIColor.green
+            return UIColor.orange
         }
         
        // self.sceneView.scene.physicsWorld.rayTestWithSegment(from: <#T##SCNVector3#>, to: <#T##SCNVector3#>, options: ///<#T##[SCNPhysicsWorld.TestOption : Any]?#>)
@@ -365,7 +371,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.validateNextFrame = false
         self.captureNextFrameForCV = false; //when set to true, frame is processed by opencv for marker
         
-        self.status = UIColor.red
+        self.status_0 = UIColor.red
+        self.status_1 = UIColor.red
+        self.status_2 = UIColor.red
         
         // validation poperties
         
