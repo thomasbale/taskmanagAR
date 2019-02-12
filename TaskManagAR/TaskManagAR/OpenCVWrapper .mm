@@ -173,6 +173,12 @@
         int i;
         for( i = 0; i < frame.no_markers; i++) {
             frame.ids[i] = (double)ids[i];
+            
+            
+            
+            
+            
+            
         }
         
         std::vector<cv::Vec3d> rvecs, tvecs;
@@ -214,8 +220,6 @@
         for( int row = 0; row < rotMat.rows; row++) {
             for (int col = 0; col < rotMat.rows; col++) {
                 extrinsics.at<double>(row,col) = rotMat.at<double>(row,col); //copy rotation matrix values
-                
-                
             }
             extrinsics.at<double>(row,3) = tvecs[0][row];
 

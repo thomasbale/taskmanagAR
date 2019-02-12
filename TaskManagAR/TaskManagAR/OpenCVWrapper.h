@@ -37,6 +37,7 @@ struct FrameCall {
     SCNMatrix4 extrinsics; //temp
     SCNMatrix4 rotation;
     simd_float4x4 cameratransform;
+    SCNMatrix4 all_extrinsics[10];
     int ids[10];
     int no_markers;
     // Need to have an array of all extrinsincs in here - to iterate through

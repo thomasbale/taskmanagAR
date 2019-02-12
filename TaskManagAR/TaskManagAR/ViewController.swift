@@ -101,14 +101,26 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         mat.diffuse.contents = status_0
         mat.transparency = 0.8
         
+        // For testing creating three demo boxes and applying global materials
+        let node0 = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
         let node1 = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
-        
-        //node1.position = targTransform
+        let node2 = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
+        // Make them both children
+        node0.addChildNode(node1)
+        node0.addChildNode(node2)
+        // centre
+        node0.position = SCNVector3(0, 0, 0.05)
+        node0.geometry?.materials = [mat]
+        // centre
         node1.position = SCNVector3(0, 0.2, 0)
         node1.geometry?.materials = [mat]
+        // right
+        node2.position = SCNVector3(0,-0.2, 0)
+        node2.geometry?.materials = [mat]
+        
         //node1.eulerAngles.y += GLKMathDegreesToRadians(90)
         //node1.eulerAngles.z += GLKMathDegreesToRadians(90)
-        TrayCentrepoint.addChildNode(node1)
+        TrayCentrepoint.addChildNode(node0)
     }
 
     @IBOutlet weak var ValidateButton: UIButton!
