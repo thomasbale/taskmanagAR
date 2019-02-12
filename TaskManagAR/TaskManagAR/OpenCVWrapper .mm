@@ -167,70 +167,71 @@
     frame.no_markers = 0;
     
     //Todo : somehow handle situation with multiple markers - interim solution only grab the last item in the list
-    if(ids.size() > 0) {
+    if(ids.size() > 0 && ids.size() < 10) {
         
         frame.no_markers = (int)ids.size();
         int i;
         for( i = 0; i < frame.no_markers; i++) {
             frame.ids[i] = (double)ids[i];
             
+            std::vector<cv::Vec3d> rvecs, tvecs;
+            cv::Mat distCoeffs = cv::Mat::zeros(8, 1, CV_64FC1); //zero out distortion for now
+            cv::aruco::estimatePoseSingleMarkers(corners, markerSize, intrinMat, distCoeffs, rvecs, tvecs);
+            
+            CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+            
+            // Need to consider an efficient approach as removing first element is inefficient
+            cv::Mat rotMat, tranMat;
+            
+            cv::Rodrigues(rvecs[i], rotMat); //convert results rotation matrix
             
             
+            cv::Mat extrinsics(4, 4, CV_64FC1);
             
+            // Apply identity matrix before setting values .
             
+            extrinsics.at<double>(3,3) = 1.0f;
+            extrinsics.at<double>(3,2) = 0.0f;
+            extrinsics.at<double>(3,1) = 0.0f;
+            extrinsics.at<double>(3,0) = 0.0f;
             
-        }
-        
-        std::vector<cv::Vec3d> rvecs, tvecs;
-        cv::Mat distCoeffs = cv::Mat::zeros(8, 1, CV_64FC1); //zero out distortion for now
-        cv::aruco::estimatePoseSingleMarkers(corners, markerSize, intrinMat, distCoeffs, rvecs, tvecs);
-        
-        CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
-        
-        // Need to consider an efficient approach as removing first element is inefficient
-        cv::Mat rotMat, tranMat;
-        
-        cv::Rodrigues(rvecs[0], rotMat); //convert results rotation matrix
-        
-        
-        cv::Mat extrinsics(4, 4, CV_64FC1);
-        
-        // Apply identity matrix before setting values .
-        
-        extrinsics.at<double>(3,3) = 1.0f;
-        extrinsics.at<double>(3,2) = 0.0f;
-        extrinsics.at<double>(3,1) = 0.0f;
-        extrinsics.at<double>(3,0) = 0.0f;
-        
-        extrinsics.at<double>(2,3) = 0.0f;
-        extrinsics.at<double>(2,2) = 1.0f;
-        extrinsics.at<double>(2,1) = 0.0f;
-        extrinsics.at<double>(2,0) = 0.0f;
-        
-        extrinsics.at<double>(1,3) = 0.0f;
-        extrinsics.at<double>(1,2) = 0.0f;
-        extrinsics.at<double>(1,1) = 1.0f;
-        extrinsics.at<double>(1,0) = 0.0f;
-        
-        extrinsics.at<double>(0,3) = 0.0f;
-        extrinsics.at<double>(0,2) = 0.0f;
-        extrinsics.at<double>(0,1) = 0.0f;
-        extrinsics.at<double>(0,0) = 1.0f;
-        
-        for( int row = 0; row < rotMat.rows; row++) {
-            for (int col = 0; col < rotMat.rows; col++) {
-                extrinsics.at<double>(row,col) = rotMat.at<double>(row,col); //copy rotation matrix values
+            extrinsics.at<double>(2,3) = 0.0f;
+            extrinsics.at<double>(2,2) = 1.0f;
+            extrinsics.at<double>(2,1) = 0.0f;
+            extrinsics.at<double>(2,0) = 0.0f;
+            
+            extrinsics.at<double>(1,3) = 0.0f;
+            extrinsics.at<double>(1,2) = 0.0f;
+            extrinsics.at<double>(1,1) = 1.0f;
+            extrinsics.at<double>(1,0) = 0.0f;
+            
+            extrinsics.at<double>(0,3) = 0.0f;
+            extrinsics.at<double>(0,2) = 0.0f;
+            extrinsics.at<double>(0,1) = 0.0f;
+            extrinsics.at<double>(0,0) = 1.0f;
+            
+            for( int row = 0; row < rotMat.rows; row++) {
+                for (int col = 0; col < rotMat.rows; col++) {
+                    extrinsics.at<double>(row,col) = rotMat.at<double>(row,col); //copy rotation matrix values
+                }
+                extrinsics.at<double>(row,3) = tvecs[0][row];
+                
             }
-            extrinsics.at<double>(row,3) = tvecs[0][row];
-
+            
+            //The important thing to remember about the extrinsic matrix is that it describes how the world is transformed relative to the camera. This is often counter-intuitive, because we usually want to specify how the camera is transformed relative to the world.
+            // Convert coordinate systems of opencv to openGL (ARKIT)
+            
+            extrinsics = [OpenCVWrapper GetCVToGLMat] * extrinsics;
+            
+            frame.extrinsics = [OpenCVWrapper transformToSceneKitMatrix:extrinsics];
+            
+            frame.all_extrinsics[i] = FoundMarker();
+            
+            frame.all_extrinsics[i].extrinsics = frame.extrinsics;
+            
         }
+        
 
-        //The important thing to remember about the extrinsic matrix is that it describes how the world is transformed relative to the camera. This is often counter-intuitive, because we usually want to specify how the camera is transformed relative to the world.
-        // Convert coordinate systems of opencv to openGL (ARKIT)
-
-        extrinsics = [OpenCVWrapper GetCVToGLMat] * extrinsics;
-
-        frame.extrinsics = [OpenCVWrapper transformToSceneKitMatrix:extrinsics];
         
         return frame;
     }

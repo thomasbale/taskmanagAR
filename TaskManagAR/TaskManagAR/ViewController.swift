@@ -97,9 +97,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let anchor = ARAnchor(transform: simd_float4x4(targTransform))
         sceneView.session.add(anchor:anchor)
         
-        let mat = SCNMaterial()
-        mat.diffuse.contents = status_0
-        mat.transparency = 0.8
+        let mat_0 = SCNMaterial()
+        mat_0.diffuse.contents = status_0
+        mat_0.transparency = 0.8
+        
+        let mat_1 = SCNMaterial()
+        mat_1.diffuse.contents = status_1
+        mat_1.transparency = 0.8
+        
+        let mat_2 = SCNMaterial()
+        mat_2.diffuse.contents = status_2
+        mat_2.transparency = 0.8
         
         // For testing creating three demo boxes and applying global materials
         let node0 = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
@@ -110,13 +118,13 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         node0.addChildNode(node2)
         // centre
         node0.position = SCNVector3(0, 0, 0.05)
-        node0.geometry?.materials = [mat]
+        node0.geometry?.materials = [mat_0]
         // centre
         node1.position = SCNVector3(0, 0.2, 0)
-        node1.geometry?.materials = [mat]
+        node1.geometry?.materials = [mat_1]
         // right
         node2.position = SCNVector3(0,-0.2, 0)
-        node2.geometry?.materials = [mat]
+        node2.geometry?.materials = [mat_2]
         
         //node1.eulerAngles.y += GLKMathDegreesToRadians(90)
         //node1.eulerAngles.z += GLKMathDegreesToRadians(90)
@@ -124,15 +132,21 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
 
     @IBOutlet weak var ValidateButton: UIButton!
-    
+    // This is where the validation happens
     @IBAction func Validate(_ sender: Any) {
         if(isLocalized == false){
             return
         }
        self.captureNextFrameForCV = true
-        status_0 = self.ValidateScene(idPresent: assetMark_0)
-        status_1 = self.ValidateScene(idPresent: assetMark_1)
-        status_2 = self.ValidateScene(idPresent: assetMark_2)
+        
+        
+            status_0 = self.ValidateScene(idPresent: assetMark_0)
+            status_1 = self.ValidateScene(idPresent: assetMark_1)
+            status_2 = self.ValidateScene(idPresent: assetMark_2)
+        
+        
+        
+        
         
         //validateNextFrame = true
     }
@@ -248,13 +262,23 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
         
             // Copy the transform matrix to the master
-            visibleObjectPos.append(SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.0.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.1.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.2.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.3.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.4.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.5.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.6.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.7.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.8.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.9.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+            
             
             // IF a marker is found: transform in the main queue
             
             if(self.isLocalized == false){
                     DispatchQueue.main.async {
-                    self.targTransform = (SCNMatrix4Mult(newframe.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                    self.targTransform = self.visibleObjectPos.first!
                     self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
                 return
             }
@@ -359,10 +383,24 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // Quick test is the ID present in the view?
         if(self.visibleObjectIds.contains(Int32(idPresent))){
-            return UIColor.orange
+            var position = self.visibleObjectIds.firstIndex(of: Int32(idPresent))!
+            
+            let node = SCNNode(geometry: SCNBox(width: 0.01, height: 0.05, length: 0.01, chamferRadius: 0))
+            node.transform = visibleObjectPos[position]
+            
+            if(node.rotation.w > 1.5 && node.rotation.w < 1.6){
+                return UIColor.green
+            }
+            
+    
+            
+            return UIColor.black
         }
         
-       // self.sceneView.scene.physicsWorld.rayTestWithSegment(from: <#T##SCNVector3#>, to: <#T##SCNVector3#>, options: ///<#T##[SCNPhysicsWorld.TestOption : Any]?#>)
+        //
+        
+        
+       //self.sceneView.scene.physicsWorld.rayTestWithSegment(from: <#T##SCNVector3#>, to: <#T##SCNVector3#>, options: ///<#T##[SCNPhysicsWorld.TestOption : Any]?#>)
         
         return UIColor.red
     }

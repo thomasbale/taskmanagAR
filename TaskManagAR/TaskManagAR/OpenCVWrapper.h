@@ -28,6 +28,10 @@ typedef struct MarkerPose {
 
 @interface OpenCVWrapper : NSObject
 
+struct FoundMarker {
+    int id;
+    SCNMatrix4 extrinsics;
+};
 
 
 struct FrameCall {
@@ -37,17 +41,14 @@ struct FrameCall {
     SCNMatrix4 extrinsics; //temp
     SCNMatrix4 rotation;
     simd_float4x4 cameratransform;
-    SCNMatrix4 all_extrinsics[10];
+    struct FoundMarker all_extrinsics[10];
     int ids[10];
     int no_markers;
     // Need to have an array of all extrinsincs in here - to iterate through
 
 };
 
-struct FoundMarker {
-    int id;
-    SCNMatrix4 extrinsics;
-};
+
 
 + (NSString *)openCVVersionString;
 + (SCNMatrix4) transformMatrixFromPixelBuffer:(CVPixelBufferRef)pixelBuffer withIntrinsics:(matrix_float3x3)intrinsics andMarkerSize:(Float64)markerSize;
