@@ -36,6 +36,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var status_1 = UIColor.red
     private var status_2 = UIColor.red
     
+    private var ObjectsPlacedDone = [Int]()
+    
     // Object properties
     
     private var assetMark_0 = 4
@@ -381,19 +383,30 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // Analyse frame for markers and position then return estimate
     func ValidateScene(idPresent: Int) -> UIColor{
         
+        if(self.ObjectsPlacedDone.contains(idPresent)){
+            return UIColor.green
+        }
+        
         // Quick test is the ID present in the view?
         if(self.visibleObjectIds.contains(Int32(idPresent))){
-            var position = self.visibleObjectIds.firstIndex(of: Int32(idPresent))!
+            let position = self.visibleObjectIds.firstIndex(of: Int32(idPresent))!
             
-            let node = SCNNode(geometry: SCNBox(width: 0.01, height: 0.05, length: 0.01, chamferRadius: 0))
-            node.transform = visibleObjectPos[position]
+            let node = SCNNode(geometry: SCNBox(width: 0.05, height: 0.05, length: 0.05, chamferRadius: 0))
+            let temp_node = SCNNode(geometry: SCNBox(width: 0.05, height: 0.05, length: 0.05, chamferRadius: 0))
+            temp_node.transform = visibleObjectPos[position]
+            // Node for position analysis
+            node.transform = SCNMatrix4Mult(SCNMatrix4Invert(targTransform),temp_node.transform)
+            // Print position analysis
+    
+            //NodeToBoardPosition(Quaternion: node.orientation)
             
-            if(node.rotation.w > 1.5 && node.rotation.w < 1.6){
+            if(ObjectOrientatedToTray(Quaternion: node.orientation)){
+                self.ObjectsPlacedDone.append(idPresent)
                 return UIColor.green
             }
             
-    
-            
+            sceneView.scene.rootNode.addChildNode(temp_node)
+
             return UIColor.black
         }
         
@@ -429,6 +442,39 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         self.visibleObjectIds = [Int32]()
         self.visibleObjectPos = [SCNMatrix4]()
+        self.ObjectsPlacedDone = [Int]()
+    }
+    
+    func NodeToBoardPosition(Quaternion: SCNQuaternion){
+        
+        if(Quaternion.w > 0.9 && Quaternion.y < 0.1){
+            print("^^")
+            return
+        }
+        if(Quaternion.w < 0.75 && Quaternion.y < -0.6){
+            print("->")
+            return
+        }
+        if(Quaternion.w < 0.1 && Quaternion.y > 0.9){
+            print("||")
+            return
+        }
+        if(Quaternion.w > 0.7 && Quaternion.y > 0.7){
+            print("<-")
+            return
+        }
+        
+        print(" ? ? ?")
+        return
+        
+    }
+    
+    func ObjectOrientatedToTray(Quaternion: SCNQuaternion) -> Bool{
+        if(Quaternion.w > 0.9 && Quaternion.y < 0.1){
+            return true
+        }
+        
+        return false
     }
 
     
