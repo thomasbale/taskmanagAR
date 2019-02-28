@@ -10,10 +10,14 @@ import UIKit
 import SceneKit
 import ARKit
 import GLKit
+import CoreData
 
 let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically printed marker in meters
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
+    
+    // Database
+    var container: NSPersistentContainer!
     
     private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
     private var TrayCentrepoint = SCNNode()
@@ -147,6 +151,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        
+        //check database is connected
+        guard container != nil else {
+            fatalError("This view needs a persistent container.")
+        }
+        
+        
+        
+        
+        // The persistent container is available.
+        
         // Limit FPS
         sceneView.preferredFramesPerSecond = 30
         Debuggingop.text = "localising"
@@ -154,6 +169,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Set the view's delegate
         sceneView.delegate = self
         sceneView.session.delegate = self
+        
         
         if (sceneView.session.currentFrame != nil){
             updateCameraPose(frame: sceneView.session.currentFrame!)
@@ -185,6 +201,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // to slow down processing only activated on button press
         self.captureNextFrameForCV = true
         //status = UIColor.red
+        runDatabase()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

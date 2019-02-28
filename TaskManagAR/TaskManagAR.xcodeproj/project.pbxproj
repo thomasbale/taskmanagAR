@@ -31,6 +31,10 @@
 		22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C584F821E64C9600ADEAB6 /* Tray.swift */; };
 		22E25AE4220B21BB00860734 /* OpenCVWrapper .mm in Sources */ = {isa = PBXBuildFile; fileRef = 22E25AE3220B21BB00860734 /* OpenCVWrapper .mm */; };
 		22F7E2F92227F6960029BAC1 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F7E2F82227F6960029BAC1 /* Utilities.swift */; };
+		22F7E2FD2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */; };
+		22F7E2FE2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */; };
+		22F7E2FF2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */; };
+		22F7E305222805710029BAC1 /* Database-Interface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F7E304222805710029BAC1 /* Database-Interface.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +89,8 @@
 		22E25AE5220B21CD00860734 /* OpenCVWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
 		22E25AE6220B21F900860734 /* CVUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CVUtils.h; sourceTree = "<group>"; };
 		22F7E2F82227F6960029BAC1 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
+		22F7E2FC2227F9A50029BAC1 /* AR-Database.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AR-Database.xcdatamodel"; sourceTree = "<group>"; };
+		22F7E304222805710029BAC1 /* Database-Interface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Database-Interface.swift"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -148,10 +154,12 @@
 		22174F7621C923F000F4067C /* TaskManagAR */ = {
 			isa = PBXGroup;
 			children = (
+				22F7E304222805710029BAC1 /* Database-Interface.swift */,
 				22F7E2FA2227F76C0029BAC1 /* OpenCV */,
 				22174F7721C923F000F4067C /* AppDelegate.swift */,
 				22174F7921C923F000F4067C /* art.scnassets */,
 				22174F7B21C923F000F4067C /* ViewController.swift */,
+				22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */,
 				22F7E2F82227F6960029BAC1 /* Utilities.swift */,
 				223BCCF1220B578100B62698 /* MarkerOrigin.swift */,
 				224C07CD220066B50021EBE5 /* Position_estimate.swift */,
@@ -349,8 +357,10 @@
 				223BCCF2220B578100B62698 /* MarkerOrigin.swift in Sources */,
 				22E25AE4220B21BB00860734 /* OpenCVWrapper .mm in Sources */,
 				22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */,
+				22F7E2FD2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */,
 				22174F7821C923F000F4067C /* AppDelegate.swift in Sources */,
 				224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */,
+				22F7E305222805710029BAC1 /* Database-Interface.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -359,6 +369,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22174F8F21C923F300F4067C /* TaskManagARTests.swift in Sources */,
+				22F7E2FE2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -367,6 +378,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22174F9A21C923F300F4067C /* TaskManagARUITests.swift in Sources */,
+				22F7E2FF2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -694,6 +706,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				22F7E2FC2227F9A50029BAC1 /* AR-Database.xcdatamodel */,
+			);
+			currentVersion = 22F7E2FC2227F9A50029BAC1 /* AR-Database.xcdatamodel */;
+			path = "AR-Database.xcdatamodeld";
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 22174F6C21C923F000F4067C /* Project object */;
 }
