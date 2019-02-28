@@ -201,7 +201,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // to slow down processing only activated on button press
         self.captureNextFrameForCV = true
         //status = UIColor.red
-        runDatabase()
+        //runDatabase()
+        loadDatabase()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
