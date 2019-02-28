@@ -11,18 +11,9 @@ import SceneKit
 import ARKit
 import GLKit
 
-
 let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically printed marker in meters
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
-    
-    struct TupletoArray {
-        var tuple: (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32)
-        var array: [Int32] {
-            var tmp = self.tuple
-            return [Int32](UnsafeBufferPointer(start: &tmp.0, count: MemoryLayout.size(ofValue: tmp)))
-        }
-    }
     
     private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
     private var TrayCentrepoint = SCNNode()
@@ -49,7 +40,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var visibleObjectIds = [Int32]()
     private var visibleObjectPos = [SCNMatrix4]()
 
-    
     // use for testing accumilation of matricies - each one gets added in turn
     private var matricies = [SCNMatrix4]()
     private var targets = [SCNMatrix4]()

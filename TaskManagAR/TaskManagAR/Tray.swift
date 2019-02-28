@@ -12,9 +12,6 @@ import SceneKit
 
 // ToDo define the marker size and dictionary here
 
-
-
-
 class Tray{
     // Based on A3 dimensions 29.7 x 42.0cm
     private var markerVerticalSeparation = 0.297 //metres
@@ -39,8 +36,6 @@ class Tray{
     func GetObjects (withid: Int, localnode: SCNNode) -> SCNScene {
         let newScene = SCNScene()
         
-        //let plane = self.GetPlane()
-        //plane.position = localnode.position
         newScene.rootNode.addChildNode(localnode)
         let material = SCNMaterial()
         material.diffuse.contents = UIColor.blue
@@ -50,19 +45,6 @@ class Tray{
         newGeometry.materials = [material]
         
         let newObject = SCNNode(geometry:newGeometry)
-        
-        //let newObject2 = SCNNode(geometry:newGeometry2)
-        
-        /* Plane coordinates //
-        based on the SCNVector3(x,y,z) in metres
-        Positive values move up and away from the boom on the tray
-         x = horizontal axis
-         y = vertical axis
-         z = height and depth above and below tray
-         
-         0,0 position is boom
-         
-        */
         
         newObject.position = CentrePoint(withid: 2)
         
@@ -95,7 +77,6 @@ class Tray{
             let vector = SCNVector3(0,0,0)
              return vector
         }
-       return SCNVector3()
     }
     
     func isTrayMarker (withid: Int) -> Bool{
