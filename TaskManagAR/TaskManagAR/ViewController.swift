@@ -35,9 +35,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // Object properties
     
-    private var assetMark_0 = 4
+    private var assetMark_0 = 6
     private var assetMark_1 = 6
-    private var assetMark_2 = 8
+    private var assetMark_2 = 6
     
     // validation poperties
     
@@ -67,29 +67,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
        TrayCentrepoint.enumerateChildNodes { (node, stop) in
             node.removeFromParentNode() }
 
-        /*
-        // Try to load the node assets from the scene
-        if let assetScene = SCNScene(named: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn") {
-            
-            sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-            node.removeFromParentNode() }
-            
-            if let node1 = assetScene.rootNode.childNode(withName: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", recursively: true) {
-                
-                let anchor = ARAnchor(transform: simd_float4x4(targTransform))
-                sceneView.session.add(anchor:anchor)
-                
-                let mat = SCNMaterial()
-                mat.diffuse.contents = status
-                mat.transparency = 0.8
 
-                node1.transform = targTransform
-                node1.geometry?.materials = [mat]
-                //node1.eulerAngles.y += GLKMathDegreesToRadians(90)
-                //node1.eulerAngles.z += GLKMathDegreesToRadians(90)
-                sceneView.scene.rootNode.addChildNode(node1)
-            }*/
-            
+         
         let anchor = ARAnchor(transform: simd_float4x4(targTransform))
         sceneView.session.add(anchor:anchor)
         
@@ -106,14 +85,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         mat_2.transparency = 0.8
         
         // For testing creating three demo boxes and applying global materials
-        let node0 = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
+        let node0 = TrayNode()
         let node1 = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
         let node2 = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
         // Make them both children
-        node0.addChildNode(node1)
-        node0.addChildNode(node2)
+        //node0.addChildNode(node1)
+        //node0.addChildNode(node2)
         // centre
-        node0.position = SCNVector3(0, 0, 0.05)
+        node0.position = SCNVector3(0.15, 0, 0)
         node0.geometry?.materials = [mat_0]
         // centre
         node1.position = SCNVector3(0, 0.2, 0)
@@ -125,6 +104,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         //node1.eulerAngles.y += GLKMathDegreesToRadians(90)
         //node1.eulerAngles.z += GLKMathDegreesToRadians(90)
         TrayCentrepoint.addChildNode(node0)
+        
+    
     }
 
     @IBOutlet weak var ValidateButton: UIButton!
@@ -202,7 +183,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.captureNextFrameForCV = true
         //status = UIColor.red
         //runDatabase()
-        loadDatabase()
+        //loadDatabase()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -484,6 +465,30 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         return false
     }
+    
+    func TrayNode() -> SCNNode{
+        let asset_name = "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left"
+        var node1 = SCNNode(geometry: SCNPyramid(width: 0.1, height: 0.1, length: 0.1))
+        
+        // Try to load the node assets from the scene
+        if let assetScene = SCNScene(named: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn") {
+            print("Loaded scene assets")
+            
+            if let l_node = assetScene.rootNode.childNode(withName: asset_name, recursively: true) {
+                print("Loaded scene node")
+                let anchor = ARAnchor(transform: simd_float4x4(targTransform))
+                sceneView.session.add(anchor:anchor)
+                l_node.transform = TrayCentrepoint.transform
+                node1 = l_node
+                node1.eulerAngles = SCNVector3Make(0, 0, Float(M_PI/2));
+                
+            }
+            
+        }
+        return node1
+    }
+    
+    
 
     
     }

@@ -48,7 +48,6 @@ class Tray{
         
         newObject.position = CentrePoint(withid: 2)
         
-        
         //newObject2.position = SCNVector3(0.05,0.05, 0)
         
         //newObject.addChildNode(newObject2)
@@ -100,7 +99,7 @@ class Tray{
         //node.transform = self.transform
         node.geometry = geometry
         colour.diffuse.contents = UIColor.blue
-        colour.transparency = 0.5
+        colour.transparency = 0.1
         geometry.materials = [colour]
         return node
     }

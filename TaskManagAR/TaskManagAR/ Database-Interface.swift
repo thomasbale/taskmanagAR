@@ -19,7 +19,7 @@ func runDatabase(){
     let entity = NSEntityDescription.entity(forEntityName: "Users", in: context)
     let newUser = NSManagedObject(entity: entity!, insertInto: context)
         
-        newUser.setValue("Shashikant", forKey: "username")
+        newUser.setValue("Testing-db", forKey: "username")
         newUser.setValue("1234", forKey: "password")
         newUser.setValue("1", forKey: "age")
 
