@@ -116,14 +116,9 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
        self.captureNextFrameForCV = true
         
-        
             status_0 = self.ValidateScene(idPresent: assetMark_0)
             status_1 = self.ValidateScene(idPresent: assetMark_1)
             status_2 = self.ValidateScene(idPresent: assetMark_2)
-        
-        
-        
-        
         
         //validateNextFrame = true
     }
@@ -137,11 +132,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard container != nil else {
             fatalError("This view needs a persistent container.")
         }
-        
-        
-        
-        
-        // The persistent container is available.
+        //runDatabase()
+        // The persistent container is now available.
         
         // Limit FPS
         sceneView.preferredFramesPerSecond = 30
@@ -173,6 +165,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         configuration.planeDetection = .horizontal
         configuration.maximumNumberOfTrackedImages = 0
         
+        
         // Run the view's session
         sceneView.session.run(configuration)
     }
@@ -182,7 +175,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // to slow down processing only activated on button press
         self.captureNextFrameForCV = true
         //status = UIColor.red
-        //runDatabase()
+        
         //loadDatabase()
     }
     
@@ -224,12 +217,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // Main calling function: updates pose from passed frame
     private func updateCameraPose(frame: ARFrame) {
-        
+
         // Current status contains a string as to the tracking status of the world
         let currentstatus = sessionStatus()
         // If ready go ahead and pass
         if (currentstatus == "") {
             let pixelBuffer = frame.capturedImage
+            detectBarcode(pixelbffer: pixelBuffer)
+
             //Pixelbuffer is a rectified image. Instrinsics provides a transform from 2d camera space to 3d world coordinate space
             // Create a new frame struct for detection
             var newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))

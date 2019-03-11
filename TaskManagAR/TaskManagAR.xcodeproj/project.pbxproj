@@ -18,6 +18,9 @@
 		223BCCF0220B25A400B62698 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 223BCCEF220B25A300B62698 /* opencv2.framework */; };
 		223BCCF2220B578100B62698 /* MarkerOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BCCF1220B578100B62698 /* MarkerOrigin.swift */; };
 		224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224C07CD220066B50021EBE5 /* Position_estimate.swift */; };
+		225EBC63223697E3000D7F11 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 225EBC62223697E3000D7F11 /* Vision.framework */; };
+		225EBC652236981F000D7F11 /* BarcodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225EBC642236981F000D7F11 /* BarcodeScanner.swift */; };
+		225EBC6722369D59000D7F11 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 225EBC6622369D58000D7F11 /* VideoToolbox.framework */; };
 		227EE02D21C94E3A006B19F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE02C21C94E3A006B19F0 /* Foundation.framework */; };
 		227EE02F21C94E42006B19F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE02E21C94E42006B19F0 /* UIKit.framework */; };
 		227EE03121C94E4A006B19F0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03021C94E4A006B19F0 /* QuartzCore.framework */; };
@@ -72,6 +75,9 @@
 		223BCCEF220B25A300B62698 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../../../Desktop/Frameworks/Current/opencv2.framework; sourceTree = "<group>"; };
 		223BCCF1220B578100B62698 /* MarkerOrigin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerOrigin.swift; sourceTree = "<group>"; };
 		224C07CD220066B50021EBE5 /* Position_estimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position_estimate.swift; sourceTree = "<group>"; };
+		225EBC62223697E3000D7F11 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
+		225EBC642236981F000D7F11 /* BarcodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScanner.swift; sourceTree = "<group>"; };
+		225EBC6622369D58000D7F11 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
 		227EE02521C94D87006B19F0 /* TaskManagAR-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TaskManagAR-Bridging-Header.h"; sourceTree = "<group>"; };
 		227EE02C21C94E3A006B19F0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		227EE02E21C94E42006B19F0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -98,6 +104,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				225EBC6722369D59000D7F11 /* VideoToolbox.framework in Frameworks */,
+				225EBC63223697E3000D7F11 /* Vision.framework in Frameworks */,
 				223BCCF0220B25A400B62698 /* opencv2.framework in Frameworks */,
 				227EE03F21C94E82006B19F0 /* Accelerate.framework in Frameworks */,
 				227EE03D21C94E7B006B19F0 /* AssetsLibrary.framework in Frameworks */,
@@ -159,6 +167,7 @@
 				22174F7721C923F000F4067C /* AppDelegate.swift */,
 				22174F7921C923F000F4067C /* art.scnassets */,
 				22174F7B21C923F000F4067C /* ViewController.swift */,
+				225EBC642236981F000D7F11 /* BarcodeScanner.swift */,
 				22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */,
 				22F7E2F82227F6960029BAC1 /* Utilities.swift */,
 				223BCCF1220B578100B62698 /* MarkerOrigin.swift */,
@@ -194,6 +203,8 @@
 		227EE02921C94E2E006B19F0 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				225EBC6622369D58000D7F11 /* VideoToolbox.framework */,
+				225EBC62223697E3000D7F11 /* Vision.framework */,
 				223BCCEF220B25A300B62698 /* opencv2.framework */,
 				227EE03E21C94E82006B19F0 /* Accelerate.framework */,
 				227EE03C21C94E7B006B19F0 /* AssetsLibrary.framework */,
@@ -361,6 +372,7 @@
 				22174F7821C923F000F4067C /* AppDelegate.swift in Sources */,
 				224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */,
 				22F7E305222805710029BAC1 /*  Database-Interface.swift in Sources */,
+				225EBC652236981F000D7F11 /* BarcodeScanner.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
