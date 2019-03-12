@@ -132,7 +132,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         guard container != nil else {
             fatalError("This view needs a persistent container.")
         }
-        //runDatabase()
+        runDatabase()
         // The persistent container is now available.
         
         // Limit FPS
@@ -176,7 +176,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.captureNextFrameForCV = true
         //status = UIColor.red
         
-        //loadDatabase()
+        loadDatabase()
     }
     
     override func viewWillDisappear(_ animated: Bool) {

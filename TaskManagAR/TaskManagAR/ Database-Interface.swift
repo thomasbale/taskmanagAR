@@ -50,7 +50,7 @@ func loadDatabase(){
         
         print("Failed")
     }
-    deleteRecords()
+    //deleteRecords()
 
 }
 

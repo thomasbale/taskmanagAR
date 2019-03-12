@@ -25,15 +25,15 @@ extension CGImage {
 
 func detectBarcode(pixelbffer: CVPixelBuffer) {
     
-    let image = CGImage.create(pixelBuffer: pixelbffer)!
-    // Save foe debugging
+    // for testing
+    /*
     if let testingImage = UIImage(pixelBuffer: pixelbffer){
         if let data = testingImage.pngData() {
             let filename = getDocumentsDirectory().appendingPathComponent("copy.png")
             try? data.write(to: filename)
         }
     }
-    
+    */
 
     // Create a request handler.
     /*let imageRequestHandler = VNImageRequestHandler(cgImage: image,
@@ -41,16 +41,12 @@ func detectBarcode(pixelbffer: CVPixelBuffer) {
                                                     options: [:])*/
     
     let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelbffer, options: [:])
-
-    let request = VNDetectBarcodesRequest()
+    let barcoderequest = VNDetectBarcodesRequest()
     
-
-    let request2 = VNDetectTextRectanglesRequest()
-
+    barcoderequest.symbologies = [VNBarcodeSymbology.QR]
     var barcodeDetect: [VNRequest] = Array()
+    barcodeDetect.append(barcoderequest)
 
-    barcodeDetect.append(request)
-    barcodeDetect.append(request2)
     
     do {
         try imageRequestHandler.perform(barcodeDetect)
@@ -59,17 +55,14 @@ func detectBarcode(pixelbffer: CVPixelBuffer) {
         return
     }
     
-    guard let barcodes = request.results else {
-        print("No barcodes found...")
-        return
-    }
-    
-    print(barcodes.count)
-    handleBarcodes(request: request)
+    print(handleBarcodes(request: barcoderequest))
 
 }
 
-func handleBarcodes(request: VNRequest) {
+func handleBarcodes(request: VNRequest) -> String {
+    
+    var barcodevalue = ""
+    
     guard let observations = request.results as? [VNBarcodeObservation]
         else { fatalError("unexpected result type from VNBarcodeRequest") }
     guard observations.first != nil else {
@@ -77,39 +70,16 @@ func handleBarcodes(request: VNRequest) {
             print("No barcode detected")
 
         }
-        return
+        return barcodevalue
     }
     
     // Loop through the found results
     for result in request.results! {
-        
         // Cast the result to a barcode-observation
         if let barcode = result as? VNBarcodeObservation {
+            barcodevalue = barcode.payloadStringValue!
             
-            // Print barcode-values
-            print("Symbology: \(barcode.symbology.rawValue)")
-            
-            if let desc = barcode.barcodeDescriptor as? CIQRCodeDescriptor {
-                let content = String(data: desc.errorCorrectedPayload, encoding: .utf8)
-                
-                // FIXME: This currently returns nil. I did not find any docs on how to encode the data properly so far.
-                print("Payload: \(String(describing: content))\n")
-                print("Error-Correction-Level: \(desc.errorCorrectedPayload)\n")
-                print("Symbol-Version: \(desc.symbolVersion)\n")
-            }
         }
 }
-}
-
-extension UIImage {
-    public convenience init?(pixelBuffer: CVPixelBuffer) {
-        var cgImage: CGImage?
-        VTCreateCGImageFromCVPixelBuffer(pixelBuffer, options: nil, imageOut: &cgImage)
-        
-        if let cgImage = cgImage {
-            self.init(cgImage: cgImage)
-        } else {
-            return nil
-        }
-    }
+    return barcodevalue
 }
