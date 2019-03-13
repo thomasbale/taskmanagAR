@@ -45,7 +45,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Override point for customization after application launch.
         
         // Pass database container back to the view controller 
-        if let rootVC = window?.rootViewController as? ViewController {
+        if let rootVC = window?.rootViewController as? EventTableViewController {
             rootVC.container = persistentContainer
         }
         

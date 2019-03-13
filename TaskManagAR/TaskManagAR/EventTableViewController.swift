@@ -7,10 +7,22 @@
 //
 
 import UIKit
+import CoreData
 
+/*
+ This VC establishes the database connection and passes events into the AR view
+ 
+*/
 
 
 class EventTableViewController: UITableViewController {
+    // Database initialisation
+    var container: NSPersistentContainer!
+    
+    
+    let TapSegueIdentifier = "showARViewController"
+
+    let choice = "tester"
 
     let events:[[String]] = [
         ["Test Event",       "Load LBRSP Plate"],
@@ -23,6 +35,13 @@ class EventTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        
+        //check database is connected
+        guard container != nil else {
+            fatalError("This view needs a persistent container.")
+        }
+        runDatabase()
+        // The persistent container is now available.
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -95,14 +114,31 @@ class EventTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?){
+        // get a reference to the second view controller
+        let secondViewController = segue.destination as! ARViewController
+        
+        // set a variable in the second view controller with the data to pass
+        //secondViewController.event = "hello"
     }
-    */
 
+    
+    // method to run when table view cell is tapped
+override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        
+        // Segue to the second view controller
+        self.performSegue(withIdentifier: "showARView", sender: self)
+    }
+    
+ 
 }
+
+
+///
+
+

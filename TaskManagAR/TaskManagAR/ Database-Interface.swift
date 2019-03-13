@@ -71,17 +71,19 @@ func testDatabase(){
         print("Failed saving")
     }
     
+    loadDatabase(entityName: "AR_Event", nameKey: "event_id")
+    
 }
 
 // Testing method to ensure that values are loading from database appropriately
-func loadDatabase(){
-    let request = NSFetchRequest<NSFetchRequestResult>(entityName: "AR_Location")
+func loadDatabase(entityName: String, nameKey: String){
+    let request = NSFetchRequest<NSFetchRequestResult>(entityName: entityName)
     request.returnsObjectsAsFaults = false
     
     do {
         let result = try context.fetch(request)
         for data in result as! [NSManagedObject] {
-            print(data.value(forKey: "location_id"))
+            print(data.value(forKey: nameKey))
         }
         
     } catch {

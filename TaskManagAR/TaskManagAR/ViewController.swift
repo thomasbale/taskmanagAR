@@ -14,10 +14,11 @@ import CoreData
 
 let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically printed marker in meters
 
-class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
+class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    // Database initialisation
-    var container: NSPersistentContainer!
+    var event = ""
+    
+    
     // Localised nodes for this session
     private var localizedContentNode = SCNNode()
     private var TrayCentrepoint = SCNNode()
@@ -105,12 +106,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         super.viewDidLoad()
         
         
-        //check database is connected
-        guard container != nil else {
-            fatalError("This view needs a persistent container.")
-        }
-        runDatabase()
-        // The persistent container is now available.
+       
         
         // Limit FPS
         sceneView.preferredFramesPerSecond = 30
@@ -152,9 +148,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // to slow down processing only activated on button press
         self.captureNextFrameForCV = true
         //status = UIColor.red
-        
-        //loadDatabase()
-        //testDatabase()
+    
+        testDatabase()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
