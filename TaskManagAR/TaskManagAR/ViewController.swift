@@ -16,39 +16,35 @@ let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically p
 
 class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    // Database
+    // Database initialisation
     var container: NSPersistentContainer!
-    
-    private var localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
+    // Localised nodes for this session
+    private var localizedContentNode = SCNNode()
     private var TrayCentrepoint = SCNNode()
+    // status variables
     private var isLocalized = false
-    
-    
-    private var validateNextFrame = false
     private var captureNextFrameForCV = false; //when set to true, frame is processed by opencv for marker
     
+    // for the validation process
     private var status_0 = UIColor.red
     private var status_1 = UIColor.red
     private var status_2 = UIColor.red
     
+    // running session log of objects that are marked as validated
     private var ObjectsPlacedDone = [Int]()
     
     // Object properties
-    
     private var assetMark_0 = 6
     private var assetMark_1 = 6
     private var assetMark_2 = 6
     
     // validation poperties
-    
     private var visibleObjectIds = [Int32]()
     private var visibleObjectPos = [SCNMatrix4]()
-
-    // use for testing accumilation of matricies - each one gets added in turn
-    private var matricies = [SCNMatrix4]()
-    private var targets = [SCNMatrix4]()
     
+    // holds target tray properties
     let loadedtray = Tray()
+    // transform to detected target
     var targTransform = SCNMatrix4()
     
     @IBOutlet var sceneView: ARSCNView!
@@ -58,17 +54,17 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     @IBOutlet weak var loadmodelbutton: UIButton!
     
+    // function called when a 'load model' request from user
     @IBAction func buttonloadmodel(_ sender: Any){
         
         if(isLocalized == false){
             return
         }
         
+        // remove existing nodes from tray
        TrayCentrepoint.enumerateChildNodes { (node, stop) in
             node.removeFromParentNode() }
-
-
-         
+        // add an anchor to the scene for stablisation
         let anchor = ARAnchor(transform: simd_float4x4(targTransform))
         sceneView.session.add(anchor:anchor)
         
@@ -76,33 +72,14 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         mat_0.diffuse.contents = status_0
         mat_0.transparency = 0.8
         
-        let mat_1 = SCNMaterial()
-        mat_1.diffuse.contents = status_1
-        mat_1.transparency = 0.8
-        
-        let mat_2 = SCNMaterial()
-        mat_2.diffuse.contents = status_2
-        mat_2.transparency = 0.8
         
         // For testing creating three demo boxes and applying global materials
         let node0 = TrayNode()
-        let node1 = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
-        let node2 = SCNNode(geometry: SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0))
-        // Make them both children
-        //node0.addChildNode(node1)
-        //node0.addChildNode(node2)
+
         // centre
         node0.position = SCNVector3(0.15, 0, 0)
         node0.geometry?.materials = [mat_0]
-        // centre
-        node1.position = SCNVector3(0, 0.2, 0)
-        node1.geometry?.materials = [mat_1]
-        // right
-        node2.position = SCNVector3(0,-0.2, 0)
-        node2.geometry?.materials = [mat_2]
-        
-        //node1.eulerAngles.y += GLKMathDegreesToRadians(90)
-        //node1.eulerAngles.z += GLKMathDegreesToRadians(90)
+       
         TrayCentrepoint.addChildNode(node0)
         
     
@@ -176,7 +153,8 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.captureNextFrameForCV = true
         //status = UIColor.red
         
-        loadDatabase()
+        //loadDatabase()
+        //testDatabase()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -300,7 +278,7 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         func renderer(_ renderer: SCNSceneRenderer,
                                nodeFor anchor: ARAnchor) -> SCNNode?{
-            return SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
+            return SCNNode()
         }
 
     
@@ -415,7 +393,6 @@ class ViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.isLocalized = false
         
         
-        self.validateNextFrame = false
         self.captureNextFrameForCV = false; //when set to true, frame is processed by opencv for marker
         
         self.status_0 = UIColor.red

@@ -1,26 +1,57 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <model type="com.apple.IDECoreDataModeler.DataModel" documentVersion="1.0" lastSavedToolsVersion="14460.32" systemVersion="18D109" minimumToolsVersion="Automatic" sourceLanguage="Swift" userDefinedModelVersionIdentifier="">
     <entity name="AR_Event" representedClassName="AR_Event" syncable="YES" codeGenerationType="class">
-        <attribute name="depth" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <attribute name="groundplane" optional="YES" attributeType="String" syncable="YES"/>
-        <attribute name="width" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="event_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="event_location_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="event_marker_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="event_object_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="event_sequence_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="event_space_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AR_Location" syncable="YES"/>
+        <relationship name="marker" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AR_Marker" syncable="YES"/>
+        <relationship name="object" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AR_Object" syncable="YES"/>
+        <relationship name="sequence" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AR_Sequence" syncable="YES"/>
+        <relationship name="space" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AR_Space" syncable="YES"/>
     </entity>
     <entity name="AR_Location" representedClassName="AR_Location" syncable="YES" codeGenerationType="class">
-        <attribute name="id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="location_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="location_name" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <entity name="AR_Marker" representedClassName="AR_Marker" syncable="YES" codeGenerationType="class">
         <attribute name="arucoID" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
-        <relationship name="event_happens" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AR_Event" syncable="YES"/>
-        <relationship name="placed_marker" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AR_Location" syncable="YES"/>
+        <attribute name="marker_event_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="marker_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="marker_location_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="event" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AR_Event" syncable="YES"/>
+        <relationship name="location" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AR_Location" syncable="YES"/>
     </entity>
-    <entity name="AR_Users" representedClassName="AR_Users" syncable="YES" codeGenerationType="class">
+    <entity name="AR_Object" representedClassName="AR_Object" syncable="YES" codeGenerationType="class">
+        <attribute name="object_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="object_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="object_space_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="object_verifiable" optional="YES" attributeType="Boolean" defaultValueString="0.0" usesScalarValueType="YES" syncable="YES"/>
+        <relationship name="object_in_space" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="AR_Space" syncable="YES"/>
+    </entity>
+    <entity name="AR_Sequence" representedClassName="AR_Sequence" syncable="YES" codeGenerationType="class">
+        <attribute name="sequence_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="AR_Space" representedClassName="AR_Space" syncable="YES" codeGenerationType="class">
+        <attribute name="space_height" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="space_id" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+        <attribute name="space_name" optional="YES" attributeType="String" syncable="YES"/>
+        <attribute name="space_width" optional="YES" attributeType="Integer 16" defaultValueString="0" usesScalarValueType="YES" syncable="YES"/>
+    </entity>
+    <entity name="AR_User" representedClassName="AR_User" syncable="YES" codeGenerationType="class">
         <attribute name="password" optional="YES" attributeType="String" syncable="YES"/>
         <attribute name="username" optional="YES" attributeType="String" syncable="YES"/>
     </entity>
     <elements>
-        <element name="AR_Users" positionX="-294.1875" positionY="-157.62109375" width="128" height="73"/>
-        <element name="AR_Location" positionX="-143.72265625" positionY="-242.01953125" width="128" height="58"/>
-        <element name="AR_Marker" positionX="-146.51171875" positionY="15.9453125" width="128" height="88"/>
-        <element name="AR_Event" positionX="82.7421875" positionY="-27.56640625" width="128" height="88"/>
+        <element name="AR_User" positionX="-294.1875" positionY="-157.62109375" width="128" height="73"/>
+        <element name="AR_Location" positionX="-143.72265625" positionY="-242.01953125" width="128" height="73"/>
+        <element name="AR_Marker" positionX="-138.3203125" positionY="287.9296875" width="128" height="133"/>
+        <element name="AR_Event" positionX="84.4765625" positionY="-85.77734375" width="128" height="208"/>
+        <element name="AR_Object" positionX="-8.10546875" positionY="-236.91796875" width="128" height="118"/>
+        <element name="AR_Space" positionX="161.72265625" positionY="-225.51953125" width="128" height="103"/>
+        <element name="AR_Sequence" positionX="300.8203125" positionY="-219.1484375" width="128" height="28"/>
     </elements>
 </model>
