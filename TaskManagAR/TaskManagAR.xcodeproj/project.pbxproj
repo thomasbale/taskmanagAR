@@ -21,6 +21,9 @@
 		225EBC63223697E3000D7F11 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 225EBC62223697E3000D7F11 /* Vision.framework */; };
 		225EBC652236981F000D7F11 /* BarcodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225EBC642236981F000D7F11 /* BarcodeScanner.swift */; };
 		225EBC6722369D59000D7F11 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 225EBC6622369D58000D7F11 /* VideoToolbox.framework */; };
+		225EBC7222391BF1000D7F11 /* EventTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225EBC7122391BF1000D7F11 /* EventTableViewController.swift */; };
+		225EBC7322391BF1000D7F11 /* EventTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225EBC7122391BF1000D7F11 /* EventTableViewController.swift */; };
+		225EBC7422391BF1000D7F11 /* EventTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225EBC7122391BF1000D7F11 /* EventTableViewController.swift */; };
 		227EE02D21C94E3A006B19F0 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE02C21C94E3A006B19F0 /* Foundation.framework */; };
 		227EE02F21C94E42006B19F0 /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE02E21C94E42006B19F0 /* UIKit.framework */; };
 		227EE03121C94E4A006B19F0 /* QuartzCore.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03021C94E4A006B19F0 /* QuartzCore.framework */; };
@@ -74,10 +77,12 @@
 		22174F9B21C923F300F4067C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		223BCCEF220B25A300B62698 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../../../Desktop/Frameworks/Current/opencv2.framework; sourceTree = "<group>"; };
 		223BCCF1220B578100B62698 /* MarkerOrigin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerOrigin.swift; sourceTree = "<group>"; };
+		224781542239302500AACBA3 /* TaskManagAR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskManagAR.entitlements; sourceTree = "<group>"; };
 		224C07CD220066B50021EBE5 /* Position_estimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position_estimate.swift; sourceTree = "<group>"; };
 		225EBC62223697E3000D7F11 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
 		225EBC642236981F000D7F11 /* BarcodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScanner.swift; sourceTree = "<group>"; };
 		225EBC6622369D58000D7F11 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
+		225EBC7122391BF1000D7F11 /* EventTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EventTableViewController.swift; sourceTree = "<group>"; };
 		227EE02521C94D87006B19F0 /* TaskManagAR-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TaskManagAR-Bridging-Header.h"; sourceTree = "<group>"; };
 		227EE02C21C94E3A006B19F0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		227EE02E21C94E42006B19F0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -162,6 +167,7 @@
 		22174F7621C923F000F4067C /* TaskManagAR */ = {
 			isa = PBXGroup;
 			children = (
+				224781542239302500AACBA3 /* TaskManagAR.entitlements */,
 				22F7E304222805710029BAC1 /*  Database-Interface.swift */,
 				22F7E2FA2227F76C0029BAC1 /* OpenCV */,
 				22174F7721C923F000F4067C /* AppDelegate.swift */,
@@ -174,6 +180,7 @@
 				224C07CD220066B50021EBE5 /* Position_estimate.swift */,
 				22C584F821E64C9600ADEAB6 /* Tray.swift */,
 				22174F7D21C923F000F4067C /* Main.storyboard */,
+				225EBC6C22391B54000D7F11 /* ViewControl */,
 				22174F8021C923F200F4067C /* Assets.xcassets */,
 				22174F8221C923F200F4067C /* LaunchScreen.storyboard */,
 				22174F8521C923F200F4067C /* Info.plist */,
@@ -198,6 +205,14 @@
 				22174F9B21C923F300F4067C /* Info.plist */,
 			);
 			path = TaskManagARUITests;
+			sourceTree = "<group>";
+		};
+		225EBC6C22391B54000D7F11 /* ViewControl */ = {
+			isa = PBXGroup;
+			children = (
+				225EBC7122391BF1000D7F11 /* EventTableViewController.swift */,
+			);
+			path = ViewControl;
 			sourceTree = "<group>";
 		};
 		227EE02921C94E2E006B19F0 /* Frameworks */ = {
@@ -299,6 +314,14 @@
 					22174F7321C923F000F4067C = {
 						CreatedOnToolsVersion = 10.1;
 						LastSwiftMigration = 1010;
+						SystemCapabilities = {
+							com.apple.Keychain = {
+								enabled = 0;
+							};
+							com.apple.Maps.iOS = {
+								enabled = 0;
+							};
+						};
 					};
 					22174F8921C923F300F4067C = {
 						CreatedOnToolsVersion = 10.1;
@@ -372,6 +395,7 @@
 				22174F7821C923F000F4067C /* AppDelegate.swift in Sources */,
 				224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */,
 				22F7E305222805710029BAC1 /*  Database-Interface.swift in Sources */,
+				225EBC7222391BF1000D7F11 /* EventTableViewController.swift in Sources */,
 				225EBC652236981F000D7F11 /* BarcodeScanner.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -381,6 +405,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22174F8F21C923F300F4067C /* TaskManagARTests.swift in Sources */,
+				225EBC7322391BF1000D7F11 /* EventTableViewController.swift in Sources */,
 				22F7E2FE2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -390,6 +415,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				22174F9A21C923F300F4067C /* TaskManagARUITests.swift in Sources */,
+				225EBC7422391BF1000D7F11 /* EventTableViewController.swift in Sources */,
 				22F7E2FF2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -550,6 +576,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4P6ZYPR98L;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -562,8 +589,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Thomas-Bale.TaskManagAR";
+				PRODUCT_BUNDLE_IDENTIFIER = "Thomas-Bale.TaskManagement";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "TaskManagAR/TaskManagAR-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 4.2;
@@ -576,6 +604,7 @@
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
+				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Automatic;
 				DEVELOPMENT_TEAM = 4P6ZYPR98L;
 				FRAMEWORK_SEARCH_PATHS = (
@@ -588,8 +617,9 @@
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "Thomas-Bale.TaskManagAR";
+				PRODUCT_BUNDLE_IDENTIFIER = "Thomas-Bale.TaskManagement";
 				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "TaskManagAR/TaskManagAR-Bridging-Header.h";
 				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
