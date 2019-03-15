@@ -13,6 +13,41 @@ let delegate = UIApplication.shared.delegate as! AppDelegate
 let container = delegate.persistentContainer
 let context = delegate.persistentContainer.viewContext
 
+// Main datamodel
+
+struct Task{
+    var name = String()
+    var description = String()
+    
+}
+
+struct Event{
+    var name = String()
+    var description = String()
+    var tasks = [Task]()
+    
+}
+
+
+func getEventsForLocation(locationID: Int) -> [Event]{
+    var eventArray = [Event()]
+    
+    var newEvent = Event()
+    var newTask = Task()
+    
+    newEvent.name = "testevent"
+    newEvent.description = "testing description for event"
+    
+    newTask.name = "testTask"
+    newTask.description = "testing description for Task"
+    
+    newEvent.tasks.append(newTask)
+
+    eventArray.append(newEvent)
+    
+    return eventArray
+}
+
 // Testing method to ensure that database contains necessary information
 func runDatabase(){
     
@@ -61,6 +96,7 @@ func testDatabase(){
     newLocation.setValue(456, forKey: "location_id")
     newMarker.setValue(567, forKey: "marker_id")
     newEvent.setValue(890, forKey: "event_id")
+
     
     do {
         
@@ -72,7 +108,6 @@ func testDatabase(){
     }
     
     loadDatabase(entityName: "AR_Event", nameKey: "event_id")
-    
 }
 
 // Testing method to ensure that values are loading from database appropriately
@@ -95,21 +130,6 @@ func loadDatabase(entityName: String, nameKey: String){
 
 func saveDatabase(){
    
-}
 
-func deleteRecords(){
-    // Create Fetch Request
-    let fetchRequest = NSFetchRequest<NSFetchRequestResult>(entityName: "AR_Users")
-
-     // Create Batch Delete Request
-     let batchDeleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
-     let moc = NSManagedObjectContext(concurrencyType: NSManagedObjectContextConcurrencyType.mainQueueConcurrencyType)
-     
-     do {
-     let result = try context.execute(batchDeleteRequest)
-     } catch {
-     print("Cannot delete")
-     //fatalError("Failed to execute request: \(error)")
-     }
 }
 

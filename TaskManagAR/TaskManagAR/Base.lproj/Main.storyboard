@@ -26,7 +26,6 @@
         <!--Event Table View Controller-->
         <scene sceneID="Oj0-l8-I2v">
             <objects>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="FTt-pu-MWF" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <tableViewController id="BzV-9h-Uqo" customClass="EventTableViewController" customModule="TaskManagAR" customModuleProvider="target" sceneMemberID="viewController">
                     <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="82O-UU-erI">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
@@ -49,11 +48,43 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="79R-9Y-gyN"/>
                     <connections>
-                        <segue destination="BV1-FR-VrT" kind="presentation" identifier="showARView" id="3Qf-8D-FhA"/>
+                        <segue destination="aNB-P0-py7" kind="show" identifier="showEventViewController" id="nmT-5W-2kf"/>
                     </connections>
                 </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="FTt-pu-MWF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="728" y="80"/>
+            <point key="canvasLocation" x="378" y="80"/>
+        </scene>
+        <!--Task Table View Controller-->
+        <scene sceneID="yBe-cC-aIV">
+            <objects>
+                <tableViewController id="aNB-P0-py7" customClass="TaskTableViewController" customModule="TaskManagAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="GCA-AJ-Igd">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="1z3-nE-Gds">
+                                <rect key="frame" x="0.0" y="28" width="768" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="1z3-nE-Gds" id="bbT-Zn-Iks">
+                                    <rect key="frame" x="0.0" y="0.0" width="768" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="aNB-P0-py7" id="Dtf-gj-RjL"/>
+                            <outlet property="delegate" destination="aNB-P0-py7" id="4iU-qA-YYd"/>
+                        </connections>
+                    </tableView>
+                    <connections>
+                        <segue destination="BV1-FR-VrT" kind="show" identifier="showARView" id="oFx-1i-Bgq"/>
+                    </connections>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="y1Q-m4-Wmm" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1050" y="80"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tXr-a1-R10">

@@ -149,7 +149,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.captureNextFrameForCV = true
         //status = UIColor.red
     
-        testDatabase()
+        //testDatabase()
     }
     
     override func viewWillDisappear(_ animated: Bool) {
