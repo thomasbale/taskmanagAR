@@ -13,38 +13,62 @@ let delegate = UIApplication.shared.delegate as! AppDelegate
 let container = delegate.persistentContainer
 let context = delegate.persistentContainer.viewContext
 
-// Main datamodel
+// Main datamodel: parent references the event that the task belongs
+
+struct Space{
+    // physical dimensions
+    var width = Double()
+    var height = Double()
+    var depth = Double()
+    // marker properties
+    var marker_height_m = CGFloat()
+    var anchor_marker_id = Int()
+    var boom_marker_id = Int()
+    var left_top_marker_id = Int()
+    var right_top_marker_id = Int()
+    var datum_marker_id = Int()
+}
+
+struct Object{
+    var name = String()
+    var file_name = String()
+    var description = String()
+    var parent_event = Event()
+    var parent_scene = String()
+    var apply_rotation = SCNVector3()
+}
 
 struct Task{
     var name = String()
     var description = String()
-    
+    var parent_event = Event()
+    var objects = [Object]()
+    var space = Space()
+    var complete = Bool()
 }
 
 struct Event{
     var name = String()
     var description = String()
     var tasks = [Task]()
-    
+    var location = Int()
 }
 
 
 func getEventsForLocation(locationID: Int) -> [Event]{
     var eventArray = [Event()]
+    /// Create the event
+    var testTCFevent = Event(name: "Load LBSRP plate", description: "Tile Carrier Facility", tasks: [Task()], location: 000)
+    /// Here the tasks and events are defined
+    let testTraySpace = Space(width: 0.84, height: 0.01, depth: 0.297, marker_height_m: 0.0282, anchor_marker_id: 4, boom_marker_id: 0, left_top_marker_id: 1, right_top_marker_id: 2, datum_marker_id: 3)
+    // create the task
+    let testLBSRPtask = Task(name: "Place LBSRP plate", description: "Rx180 carrier sub-frame", parent_event: testTCFevent, objects: [Object(name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "RX180 Carrier Sub", parent_event: testTCFevent, parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: testTraySpace, complete: true)
     
-    var newEvent = Event()
-    var newTask = Task()
-    
-    newEvent.name = "testevent"
-    newEvent.description = "testing description for event"
-    
-    newTask.name = "testTask"
-    newTask.description = "testing description for Task"
-    
-    newEvent.tasks.append(newTask)
-
-    eventArray.append(newEvent)
-    
+    // clean then add tasks to events
+    testTCFevent.tasks.removeAll()
+    testTCFevent.tasks.append(testLBSRPtask)
+    eventArray.removeAll()
+    eventArray.append(testTCFevent)
     return eventArray
 }
 

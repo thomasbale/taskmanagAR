@@ -10,13 +10,11 @@ import UIKit
 
 class TaskTableViewController: UITableViewController {
 
-    var tapGestureIdentifier = "showARView"
-    var activeEvent:Event?
+    var TapSegueIdentifier = "showARView"
+    var activeEvent = Event()
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
-        print(activeEvent?.tasks.first?.name)
 
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
@@ -34,7 +32,7 @@ class TaskTableViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
-        return 1
+        return activeEvent.tasks.count
     }
 
     
@@ -45,10 +43,14 @@ class TaskTableViewController: UITableViewController {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: "cellIdentifier")
         }
         
-        print("\(#function) --- section = \(indexPath.section), row = \(indexPath.row)")
+            cell!.textLabel?.text = activeEvent.tasks[indexPath.row].name
+            cell!.detailTextLabel?.text = activeEvent.tasks[indexPath.row].description
         
-        cell!.textLabel?.text = activeEvent?.tasks[indexPath.row].name
-        cell!.detailTextLabel?.text = activeEvent?.tasks[indexPath.row].description
+        cell!.backgroundColor = UIColor.green
+        // check for incomplete tasks
+        if activeEvent.tasks[indexPath.row].complete != true{
+            cell!.backgroundColor = UIColor.red
+        }
         
         return cell!
     }
@@ -89,14 +91,28 @@ class TaskTableViewController: UITableViewController {
     }
     */
 
-    /*
+    
     // MARK: - Navigation
 
     // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destination.
-        // Pass the selected object to the new view controller.
+        
+         let index = (self.tableView.indexPathForSelectedRow)!
+         if segue.destination is ARViewController
+         {
+         let vc = segue.destination as? ARViewController
+            // pass over the specific task for action
+         let selection = activeEvent.tasks[index.row]
+         vc?.activeTask = selection
+         }
     }
-    */
+    
+    
+    // method to run when table view cell is tapped
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        //self.secondViewController.activeEvent = events[indexPath.row]
+        // Segue to the second view controller
+        self.performSegue(withIdentifier: TapSegueIdentifier, sender: self)
+    }
 
 }

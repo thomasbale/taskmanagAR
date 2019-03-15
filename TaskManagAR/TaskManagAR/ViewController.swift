@@ -16,9 +16,8 @@ let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically p
 
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    var event = ""
-    
-    
+    // The task passed from the previous controller.
+    var activeTask = Task()
     // Localised nodes for this session
     private var localizedContentNode = SCNNode()
     private var TrayCentrepoint = SCNNode()
@@ -57,11 +56,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // function called when a 'load model' request from user
     @IBAction func buttonloadmodel(_ sender: Any){
-        
         if(isLocalized == false){
-            return
-        }
-        
+            return}
         // remove existing nodes from tray
        TrayCentrepoint.enumerateChildNodes { (node, stop) in
             node.removeFromParentNode() }
@@ -73,16 +69,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         mat_0.diffuse.contents = status_0
         mat_0.transparency = 0.8
         
-        
         // For testing creating three demo boxes and applying global materials
-        let node0 = TrayNode()
+        let node0 = RenderNode()
 
         // centre
         node0.position = SCNVector3(0.15, 0, 0)
         node0.geometry?.materials = [mat_0]
        
         TrayCentrepoint.addChildNode(node0)
-        
     
     }
 
@@ -105,9 +99,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        
+        print(activeTask.name)
+        print(activeTask.objects.count)
        
-        
         // Limit FPS
         sceneView.preferredFramesPerSecond = 30
         Debuggingop.text = "localising"
@@ -433,12 +427,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return false
     }
     
-    func TrayNode() -> SCNNode{
-        let asset_name = "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left"
+    func RenderNode() -> SCNNode{
+        let asset_name = activeTask.objects.first?.file_name as! String
+
         var node1 = SCNNode(geometry: SCNPyramid(width: 0.1, height: 0.1, length: 0.1))
         
         // Try to load the node assets from the scene
-        if let assetScene = SCNScene(named: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn") {
+        if let assetScene = SCNScene(named: activeTask.objects.first?.parent_scene as! String) {
             print("Loaded scene assets")
             
             if let l_node = assetScene.rootNode.childNode(withName: asset_name, recursively: true) {
@@ -447,7 +442,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 sceneView.session.add(anchor:anchor)
                 l_node.transform = TrayCentrepoint.transform
                 node1 = l_node
-                node1.eulerAngles = SCNVector3Make(0, 0, Float(M_PI/2));
+                node1.eulerAngles = activeTask.objects.first?.apply_rotation as! SCNVector3
                 
             }
             

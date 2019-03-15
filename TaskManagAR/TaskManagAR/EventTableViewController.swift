@@ -68,6 +68,17 @@ class EventTableViewController: UITableViewController {
         cell!.textLabel?.text = events[indexPath.row].name
         cell!.detailTextLabel?.text = events[indexPath.row].description
         
+        cell!.backgroundColor = UIColor.green
+        // if there are any incomplete events go red
+        for status in events[indexPath.row].tasks {
+            if status.complete != true{
+                cell!.backgroundColor = UIColor.red
+            }
+        }
+        
+       
+        
+        
         return cell!
     }
     
