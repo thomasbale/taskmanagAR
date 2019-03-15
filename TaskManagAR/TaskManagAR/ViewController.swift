@@ -110,7 +110,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.delegate = self
         sceneView.session.delegate = self
         
-        
         if (sceneView.session.currentFrame != nil){
             updateCameraPose(frame: sceneView.session.currentFrame!)
         }

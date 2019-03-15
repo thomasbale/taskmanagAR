@@ -76,9 +76,6 @@ class EventTableViewController: UITableViewController {
             }
         }
         
-       
-        
-        
         return cell!
     }
     
