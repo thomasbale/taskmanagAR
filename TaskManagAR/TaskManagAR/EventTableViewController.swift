@@ -17,7 +17,9 @@ import CoreData
 
 class EventTableViewController: UITableViewController {
     // Database initialisation
-    var container: NSPersistentContainer!
+    //var container: NSPersistentContainer!
+    
+    var barcodeLocation = String()
     
     let TapSegueIdentifier = "showEventViewController"
     var secondViewController = TaskTableViewController()
@@ -28,12 +30,12 @@ class EventTableViewController: UITableViewController {
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+        /*
         //check database is connected
         guard container != nil else {
             fatalError("This view needs a persistent container.")
         }
-        runDatabase()
+        runDatabase()*/
         // The persistent container is now available.
 
         // Uncomment the following line to preserve selection between presentations

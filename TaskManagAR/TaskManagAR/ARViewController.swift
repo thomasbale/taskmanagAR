@@ -119,7 +119,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         sceneView.showsStatistics = true
         sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
         
-        
 
         
     }

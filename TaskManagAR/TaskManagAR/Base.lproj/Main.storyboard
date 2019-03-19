@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BzV-9h-Uqo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NTg-4V-lMn">
     <device id="ipad9_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -66,7 +66,7 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <segue destination="NTg-4V-lMn" kind="show" identifier="showARView" id="Vn2-Cb-mnN"/>
+                        <segue destination="BV1-FR-VrT" kind="show" identifier="showARView" id="euE-Od-n9G"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y1Q-m4-Wmm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -173,7 +173,7 @@
                                         <rect key="frame" x="21" y="21" width="170" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Check for marker"/>
+                                        <state key="normal" title="Detect Barcode"/>
                                         <connections>
                                             <action selector="pressed:" destination="NTg-4V-lMn" eventType="touchUpInside" id="6I4-7I-UWx"/>
                                         </connections>
@@ -202,12 +202,12 @@
                         <outlet property="Debuggingop" destination="5bJ-Aa-jPD" id="oue-fM-PaW"/>
                         <outlet property="sceneView" destination="drp-Ky-pps" id="O3S-cR-uSc"/>
                         <outletCollection property="buttonpress" destination="TMr-Fk-YDH" collectionClass="NSMutableArray" id="AZa-Ut-tuF"/>
-                        <segue destination="BV1-FR-VrT" kind="show" identifier="markerFoundARView" id="ta3-ns-JMd"/>
+                        <segue destination="BzV-9h-Uqo" kind="show" identifier="barcodeFoundARView" id="6TX-7Q-2UO"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="baV-s2-Pbc" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1690" y="80"/>
+            <point key="canvasLocation" x="-1083" y="80"/>
         </scene>
     </scenes>
 </document>

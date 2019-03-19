@@ -23,7 +23,7 @@ extension CGImage {
     }
 }
 
-func detectBarcode(pixelbffer: CVPixelBuffer) {
+func detectBarcode(pixelbffer: CVPixelBuffer) -> String{
     
     // for testing
     /*
@@ -39,7 +39,7 @@ func detectBarcode(pixelbffer: CVPixelBuffer) {
     /*let imageRequestHandler = VNImageRequestHandler(cgImage: image,
                                                     orientation: .up,
                                                     options: [:])*/
-    
+    var returnVal = ""
     let imageRequestHandler = VNImageRequestHandler(cvPixelBuffer: pixelbffer, options: [:])
     let barcoderequest = VNDetectBarcodesRequest()
     
@@ -52,10 +52,11 @@ func detectBarcode(pixelbffer: CVPixelBuffer) {
         try imageRequestHandler.perform(barcodeDetect)
     } catch let error as NSError {
         print("Failed to perform image request: \(error)")
-        return
+        return returnVal
     }
     
-    print(handleBarcodes(request: barcoderequest))
+    returnVal = handleBarcodes(request: barcoderequest)
+    return returnVal
 
 }
 
