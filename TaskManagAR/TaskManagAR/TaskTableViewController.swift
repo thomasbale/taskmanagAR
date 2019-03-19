@@ -98,9 +98,9 @@ class TaskTableViewController: UITableViewController {
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         
          let index = (self.tableView.indexPathForSelectedRow)!
-         if segue.destination is ARViewController
+         if segue.destination is ARMarkerViewController
          {
-         let vc = segue.destination as? ARViewController
+         let vc = segue.destination as? ARMarkerViewController
             // pass over the specific task for action
          let selection = activeEvent.tasks[index.row]
          vc?.activeTask = selection

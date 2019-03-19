@@ -10,19 +10,6 @@
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
-        <!--Navigation Controller-->
-        <scene sceneID="wxO-qq-9QC">
-            <objects>
-                <navigationController id="OIB-FB-gh9" sceneMemberID="viewController">
-                    <navigationBar key="navigationBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="Kun-b9-7Me">
-                        <rect key="frame" x="0.0" y="20" width="768" height="50"/>
-                        <autoresizingMask key="autoresizingMask"/>
-                    </navigationBar>
-                </navigationController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="Ur7-D9-V2A" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="-1195" y="143"/>
-        </scene>
         <!--Event Table View Controller-->
         <scene sceneID="Oj0-l8-I2v">
             <objects>
@@ -48,12 +35,12 @@
                     </tableView>
                     <navigationItem key="navigationItem" id="79R-9Y-gyN"/>
                     <connections>
-                        <segue destination="aNB-P0-py7" kind="show" identifier="showEventViewController" id="nmT-5W-2kf"/>
+                        <segue destination="aNB-P0-py7" kind="show" identifier="showEventViewController" id="Dhm-Za-hUN"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="FTt-pu-MWF" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="378" y="80"/>
+            <point key="canvasLocation" x="-140" y="80"/>
         </scene>
         <!--Task Table View Controller-->
         <scene sceneID="yBe-cC-aIV">
@@ -79,12 +66,12 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <segue destination="BV1-FR-VrT" kind="show" identifier="showARView" id="oFx-1i-Bgq"/>
+                        <segue destination="NTg-4V-lMn" kind="show" identifier="showARView" id="Vn2-Cb-mnN"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y1Q-m4-Wmm" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1050" y="80"/>
+            <point key="canvasLocation" x="826" y="80"/>
         </scene>
         <!--View Controller-->
         <scene sceneID="tXr-a1-R10">
@@ -94,8 +81,8 @@
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
-                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="905"/>
                             </arscnView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hT7-Sj-g6J">
                                 <rect key="frame" x="0.0" y="913" width="768" height="111"/>
@@ -122,13 +109,6 @@
                                             <action selector="loadmodel:" destination="BV1-FR-VrT" eventType="touchDragInside" id="WZu-ay-AeF"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbI-2Z-2ra">
-                                        <rect key="frame" x="198" y="70" width="372" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZaT-LT-ydo">
                                         <rect key="frame" x="569" y="22" width="175" height="49"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -142,6 +122,13 @@
                                             <action selector="loadmodel:" destination="BV1-FR-VrT" eventType="touchDragInside" id="1hz-rb-ac5"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbI-2Z-2ra">
+                                        <rect key="frame" x="198" y="82" width="372" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -155,7 +142,6 @@
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
-                    <navigationItem key="navigationItem" id="Ne1-vd-4Ku"/>
                     <connections>
                         <outlet property="Debuggingop" destination="kbI-2Z-2ra" id="D43-8R-P3k"/>
                         <outlet property="ValidateButton" destination="ZaT-LT-ydo" id="2r6-ZR-Von"/>
@@ -166,7 +152,62 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="1738" y="80"/>
+            <point key="canvasLocation" x="2602" y="80"/>
+        </scene>
+        <!--Marker View Controller-->
+        <scene sceneID="yfJ-B1-apa">
+            <objects>
+                <viewController id="NTg-4V-lMn" customClass="ARMarkerViewController" customModule="TaskManagAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="Hnc-XW-TU0">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="drp-Ky-pps">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="905"/>
+                            </arscnView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="Ubv-ke-lXo">
+                                <rect key="frame" x="0.0" y="913" width="768" height="111"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="TMr-Fk-YDH">
+                                        <rect key="frame" x="21" y="21" width="170" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Check for marker"/>
+                                        <connections>
+                                            <action selector="pressed:" destination="NTg-4V-lMn" eventType="touchUpInside" id="6I4-7I-UWx"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5bJ-Aa-jPD">
+                                        <rect key="frame" x="198" y="82" width="372" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="drp-Ky-pps" firstAttribute="trailing" secondItem="43d-db-Ycp" secondAttribute="trailing" id="B3m-IF-wU0"/>
+                            <constraint firstItem="drp-Ky-pps" firstAttribute="top" secondItem="Hnc-XW-TU0" secondAttribute="top" id="E3d-74-3ea"/>
+                            <constraint firstItem="drp-Ky-pps" firstAttribute="leading" secondItem="43d-db-Ycp" secondAttribute="leading" id="V5M-NM-amA"/>
+                            <constraint firstItem="drp-Ky-pps" firstAttribute="bottom" secondItem="43d-db-Ycp" secondAttribute="bottom" id="fj0-MU-mzq"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="43d-db-Ycp"/>
+                    </view>
+                    <connections>
+                        <outlet property="Debuggingop" destination="5bJ-Aa-jPD" id="oue-fM-PaW"/>
+                        <outlet property="sceneView" destination="drp-Ky-pps" id="O3S-cR-uSc"/>
+                        <outletCollection property="buttonpress" destination="TMr-Fk-YDH" collectionClass="NSMutableArray" id="AZa-Ut-tuF"/>
+                        <segue destination="BV1-FR-VrT" kind="show" identifier="markerFoundARView" id="ta3-ns-JMd"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="baV-s2-Pbc" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1690" y="80"/>
         </scene>
     </scenes>
 </document>

@@ -9,7 +9,7 @@
 /* Begin PBXBuildFile section */
 		22174F7821C923F000F4067C /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F7721C923F000F4067C /* AppDelegate.swift */; };
 		22174F7A21C923F000F4067C /* art.scnassets in Resources */ = {isa = PBXBuildFile; fileRef = 22174F7921C923F000F4067C /* art.scnassets */; };
-		22174F7C21C923F000F4067C /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F7B21C923F000F4067C /* ViewController.swift */; };
+		22174F7C21C923F000F4067C /* ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F7B21C923F000F4067C /* ARViewController.swift */; };
 		22174F7F21C923F000F4067C /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22174F7D21C923F000F4067C /* Main.storyboard */; };
 		22174F8121C923F200F4067C /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 22174F8021C923F200F4067C /* Assets.xcassets */; };
 		22174F8421C923F200F4067C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22174F8221C923F200F4067C /* LaunchScreen.storyboard */; };
@@ -36,6 +36,7 @@
 		22D788BC2239617E00E1B661 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22174F7D21C923F000F4067C /* Main.storyboard */; };
 		22D788BD2239617E00E1B661 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22174F7D21C923F000F4067C /* Main.storyboard */; };
 		22DA32C6223BD56700E72AB6 /* TaskTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */; };
+		22DA32CA22410A6D00E72AB6 /* ARMarkerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */; };
 		22E25AE4220B21BB00860734 /* OpenCVWrapper .mm in Sources */ = {isa = PBXBuildFile; fileRef = 22E25AE3220B21BB00860734 /* OpenCVWrapper .mm */; };
 		22F7E2F92227F6960029BAC1 /* Utilities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F7E2F82227F6960029BAC1 /* Utilities.swift */; };
 		22F7E2FD2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */; };
@@ -65,7 +66,7 @@
 		22174F7421C923F000F4067C /* TaskManagAR.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = TaskManagAR.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		22174F7721C923F000F4067C /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		22174F7921C923F000F4067C /* art.scnassets */ = {isa = PBXFileReference; lastKnownFileType = wrapper.scnassets; path = art.scnassets; sourceTree = "<group>"; };
-		22174F7B21C923F000F4067C /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
+		22174F7B21C923F000F4067C /* ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARViewController.swift; sourceTree = "<group>"; };
 		22174F7E21C923F000F4067C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		22174F8021C923F200F4067C /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		22174F8321C923F200F4067C /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
@@ -98,6 +99,7 @@
 		227EE04021C94F07006B19F0 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		22C584F821E64C9600ADEAB6 /* Tray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tray.swift; sourceTree = "<group>"; };
 		22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TaskTableViewController.swift; path = TaskManagAR/TaskTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMarkerViewController.swift; sourceTree = "<group>"; };
 		22E25AE3220B21BB00860734 /* OpenCVWrapper .mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "OpenCVWrapper .mm"; sourceTree = "<group>"; };
 		22E25AE5220B21CD00860734 /* OpenCVWrapper.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = OpenCVWrapper.h; sourceTree = "<group>"; };
 		22E25AE6220B21F900860734 /* CVUtils.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = CVUtils.h; sourceTree = "<group>"; };
@@ -174,7 +176,8 @@
 				22F7E2FA2227F76C0029BAC1 /* OpenCV */,
 				22174F7721C923F000F4067C /* AppDelegate.swift */,
 				22174F7921C923F000F4067C /* art.scnassets */,
-				22174F7B21C923F000F4067C /* ViewController.swift */,
+				22174F7B21C923F000F4067C /* ARViewController.swift */,
+				22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */,
 				225EBC642236981F000D7F11 /* BarcodeScanner.swift */,
 				22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */,
 				22F7E2F82227F6960029BAC1 /* Utilities.swift */,
@@ -391,12 +394,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22174F7C21C923F000F4067C /* ViewController.swift in Sources */,
+				22174F7C21C923F000F4067C /* ARViewController.swift in Sources */,
 				22F7E2F92227F6960029BAC1 /* Utilities.swift in Sources */,
 				223BCCF2220B578100B62698 /* MarkerOrigin.swift in Sources */,
 				22E25AE4220B21BB00860734 /* OpenCVWrapper .mm in Sources */,
 				22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */,
 				22F7E2FD2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */,
+				22DA32CA22410A6D00E72AB6 /* ARMarkerViewController.swift in Sources */,
 				22DA32C6223BD56700E72AB6 /* TaskTableViewController.swift in Sources */,
 				22174F7821C923F000F4067C /* AppDelegate.swift in Sources */,
 				224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */,

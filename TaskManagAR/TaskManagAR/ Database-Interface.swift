@@ -63,13 +63,8 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     let testTraySpace = Space(width: 0.84, height: 0.01, depth: 0.297, marker_height_m: 0.0282, anchor_marker_id: 4, boom_marker_id: 0, left_top_marker_id: 1, right_top_marker_id: 2, datum_marker_id: 3)
     // create the task
     let testLBSRPtask = Task(name: "Place LBSRP plate", description: "Rx180 carrier sub-frame", parent_event: testTCFevent, objects: [Object(name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "RX180 Carrier Sub", parent_event: testTCFevent, parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: testTraySpace, complete: true)
-    
-    /// Create another event
-    var testTCFevent2 = Event(name: "Remove LBSRP plate", description: "Tile Carrier Facility", tasks: [Task()], location: 000)
-    /// Here the tasks and events are defined
-    let testTraySpace2 = Space(width: 0.84, height: 0.01, depth: 0.297, marker_height_m: 0.0282, anchor_marker_id: 4, boom_marker_id: 0, left_top_marker_id: 1, right_top_marker_id: 2, datum_marker_id: 3)
-    // create the task
-    let testLBSRPtask2 = Task(name: "Remove LBSRP plate", description: "Rx180 carrier sub-frame", parent_event: testTCFevent, objects: [Object(name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "RX180 Carrier Sub", parent_event: testTCFevent, parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: testTraySpace, complete: false)
+    /// Create second task
+    let testLBSRPtask2 = Task(name: "Connect to Carrier Sub-frame", description: "Rx180 carrier sub-frame", parent_event: testTCFevent, objects: [Object(name: "Sub-frame", file_name: "Carrier_Subframe", description: "Rx180 carrier sub-frame", parent_event: testTCFevent, parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: testTraySpace, complete: false)
     
     
     // clean then add tasks to events
@@ -79,7 +74,6 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     
     eventArray.removeAll()
     eventArray.append(testTCFevent)
-    eventArray.append(testTCFevent2)
     return eventArray
 }
 
