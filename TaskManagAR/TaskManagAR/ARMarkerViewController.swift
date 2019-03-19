@@ -23,13 +23,19 @@ class ARMarkerViewController: UIViewController, ARSCNViewDelegate, ARSessionDele
     var barcodeFound = false
     
     @IBOutlet var sceneView: ARSCNView!
+   // @IBOutlet weak var Skip: UIButton!
     
     // Button press used to prevent process overload & button for loading a tray scene
     @IBOutlet var buttonpress: [UIButton]!
     
-
-    @IBOutlet weak var Debuggingop: UILabel!
+   // @IBAction func skipPressed(_ sender: Any) {
+   //     self.performSegue(withIdentifier: "barcodeFoundARView", sender: self)
+   // }
     
+    @IBOutlet weak var Debuggingop: UILabel!
+
+    
+
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -47,7 +53,6 @@ class ARMarkerViewController: UIViewController, ARSCNViewDelegate, ARSessionDele
         sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
         
         // setup button targets
-        
         
     }
     

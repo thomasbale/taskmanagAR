@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="NTg-4V-lMn">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BzV-9h-Uqo">
     <device id="ipad9_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
@@ -66,7 +66,7 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <segue destination="BV1-FR-VrT" kind="show" identifier="showARView" id="euE-Od-n9G"/>
+                        <segue destination="BV1-FR-VrT" kind="presentation" identifier="showARView" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="euE-Od-n9G"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y1Q-m4-Wmm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -98,7 +98,7 @@
                                         </connections>
                                     </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WXw-1p-RzN">
-                                        <rect key="frame" x="297" y="22" width="175" height="49"/>
+                                        <rect key="frame" x="241" y="21" width="175" height="49"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="Load model">
@@ -109,8 +109,24 @@
                                             <action selector="loadmodel:" destination="BV1-FR-VrT" eventType="touchDragInside" id="WZu-ay-AeF"/>
                                         </connections>
                                     </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbI-2Z-2ra">
+                                        <rect key="frame" x="198" y="82" width="372" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FYC-2y-dMP">
+                                        <rect key="frame" x="682" y="28" width="41" height="36"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Next"/>
+                                        <connections>
+                                            <action selector="nextTask:" destination="BV1-FR-VrT" eventType="touchUpInside" id="m2n-ir-0H6"/>
+                                        </connections>
+                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZaT-LT-ydo">
-                                        <rect key="frame" x="569" y="22" width="175" height="49"/>
+                                        <rect key="frame" x="456" y="15" width="175" height="49"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="Validate">
@@ -122,16 +138,18 @@
                                             <action selector="loadmodel:" destination="BV1-FR-VrT" eventType="touchDragInside" id="1hz-rb-ac5"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbI-2Z-2ra">
-                                        <rect key="frame" x="198" y="82" width="372" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0fN-wK-36g">
+                                <rect key="frame" x="24" y="20" width="39" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Reset"/>
+                                <connections>
+                                    <action selector="backPressed:" destination="Cg6-xQ-SVz" eventType="touchUpInside" id="tAs-uC-ghw"/>
+                                    <action selector="backToPrevious:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Oen-Gp-hZT"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -145,14 +163,17 @@
                     <connections>
                         <outlet property="Debuggingop" destination="kbI-2Z-2ra" id="D43-8R-P3k"/>
                         <outlet property="ValidateButton" destination="ZaT-LT-ydo" id="2r6-ZR-Von"/>
+                        <outlet property="backButton" destination="0fN-wK-36g" id="ofs-Vp-DVp"/>
                         <outlet property="loadmodelbutton" destination="WXw-1p-RzN" id="3UG-TX-XHd"/>
+                        <outlet property="nextButton" destination="FYC-2y-dMP" id="PbZ-1w-FUr"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
                         <outletCollection property="buttonpress" destination="KDj-aU-gHe" collectionClass="NSMutableArray" id="mzf-kb-hj7"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
+                <exit id="Cg6-xQ-SVz" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="2602" y="80"/>
+            <point key="canvasLocation" x="1766" y="80"/>
         </scene>
         <!--Marker View Controller-->
         <scene sceneID="yfJ-B1-apa">
@@ -173,18 +194,20 @@
                                         <rect key="frame" x="21" y="21" width="170" height="50"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Detect Barcode"/>
+                                        <state key="normal" title="Detect QR Code"/>
                                         <connections>
                                             <action selector="pressed:" destination="NTg-4V-lMn" eventType="touchUpInside" id="6I4-7I-UWx"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="5bJ-Aa-jPD">
-                                        <rect key="frame" x="198" y="82" width="372" height="21"/>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="z8R-SQ-9RG">
+                                        <rect key="frame" x="702" y="28" width="39" height="36"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Skip"/>
+                                        <connections>
+                                            <action selector="skipPressed:" destination="NTg-4V-lMn" eventType="touchUpInside" id="Lp8-14-kYN"/>
+                                        </connections>
+                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -199,7 +222,7 @@
                         <viewLayoutGuide key="safeArea" id="43d-db-Ycp"/>
                     </view>
                     <connections>
-                        <outlet property="Debuggingop" destination="5bJ-Aa-jPD" id="oue-fM-PaW"/>
+                        <outlet property="Skip" destination="z8R-SQ-9RG" id="YnY-Ah-kzp"/>
                         <outlet property="sceneView" destination="drp-Ky-pps" id="O3S-cR-uSc"/>
                         <outletCollection property="buttonpress" destination="TMr-Fk-YDH" collectionClass="NSMutableArray" id="AZa-Ut-tuF"/>
                         <segue destination="BzV-9h-Uqo" kind="show" identifier="barcodeFoundARView" id="6TX-7Q-2UO"/>

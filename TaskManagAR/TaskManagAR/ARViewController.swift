@@ -51,8 +51,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // Button press used to prevent process overload & button for loading a tray scene
     @IBOutlet var buttonpress: [UIButton]!
+    @IBOutlet weak var backButton: UIButton!
+    @IBOutlet weak var nextButton: UIButton!
     
     @IBOutlet weak var loadmodelbutton: UIButton!
+
     
     // function called when a 'load model' request from user
     @IBAction func buttonloadmodel(_ sender: Any){
@@ -93,6 +96,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             status_2 = self.ValidateScene(idPresent: assetMark_2)
         
         //validateNextFrame = true
+    }
+    @IBAction func backToPrevious(_ sender: Any) {
+        self.dismiss(animated: true, completion: nil)
+    }
+    @IBAction func nextTask(_ sender: Any) {
+        print(activeTask.parent_event.description)
+        print(activeTask.parent_event.tasks.count)
     }
     @IBOutlet weak var Debuggingop: UILabel!
     
