@@ -20,3 +20,10 @@ func getDocumentsDirectory() -> URL {
     let paths = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
     return paths[0]
 }
+
+func outputImage(name:String,image:UIImage){
+    let fileManager = FileManager.default
+    let pngdata = image.pngData()
+    fileManager.createFile(atPath: "/Users/thomasbale/Desktop/\(name)", contents: pngdata, attributes: nil)
+    
+}

@@ -82,23 +82,14 @@
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <subviews>
                             <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
-                                <rect key="frame" x="0.0" y="0.0" width="768" height="905"/>
+                                <rect key="frame" x="0.0" y="-26" width="768" height="938"/>
                             </arscnView>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hT7-Sj-g6J">
                                 <rect key="frame" x="0.0" y="913" width="768" height="111"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KDj-aU-gHe">
-                                        <rect key="frame" x="21" y="21" width="170" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Check for marker"/>
-                                        <connections>
-                                            <action selector="pressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="et4-ua-edL"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WXw-1p-RzN">
-                                        <rect key="frame" x="241" y="21" width="175" height="49"/>
+                                        <rect key="frame" x="243" y="14" width="175" height="49"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
                                         <state key="normal" title="Load model">
@@ -109,18 +100,13 @@
                                             <action selector="loadmodel:" destination="BV1-FR-VrT" eventType="touchDragInside" id="WZu-ay-AeF"/>
                                         </connections>
                                     </button>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbI-2Z-2ra">
-                                        <rect key="frame" x="198" y="82" width="372" height="21"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                        <nil key="textColor"/>
-                                        <nil key="highlightedColor"/>
-                                    </label>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FYC-2y-dMP">
-                                        <rect key="frame" x="682" y="28" width="41" height="36"/>
+                                        <rect key="frame" x="697" y="21" width="41" height="36"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Next"/>
+                                        <state key="normal" title="Next">
+                                            <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
                                         <connections>
                                             <action selector="nextTask:" destination="BV1-FR-VrT" eventType="touchUpInside" id="m2n-ir-0H6"/>
                                         </connections>
@@ -138,6 +124,22 @@
                                             <action selector="loadmodel:" destination="BV1-FR-VrT" eventType="touchDragInside" id="1hz-rb-ac5"/>
                                         </connections>
                                     </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KDj-aU-gHe">
+                                        <rect key="frame" x="23" y="13" width="170" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Find marker"/>
+                                        <connections>
+                                            <action selector="pressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="et4-ua-edL"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbI-2Z-2ra">
+                                        <rect key="frame" x="543" y="82" width="146" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -150,6 +152,12 @@
                                     <action selector="backToPrevious:" destination="BV1-FR-VrT" eventType="touchUpInside" id="Oen-Gp-hZT"/>
                                 </connections>
                             </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="4Fh-OJ-S8z">
+                                <rect key="frame" x="366" y="425" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="contentStretch" x="0.20000000000000001" y="0.20000000000000001" width="1" height="1"/>
+                                <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
@@ -163,6 +171,7 @@
                     <connections>
                         <outlet property="Debuggingop" destination="kbI-2Z-2ra" id="D43-8R-P3k"/>
                         <outlet property="ValidateButton" destination="ZaT-LT-ydo" id="2r6-ZR-Von"/>
+                        <outlet property="activityWait" destination="4Fh-OJ-S8z" id="i00-vw-hdG"/>
                         <outlet property="backButton" destination="0fN-wK-36g" id="ofs-Vp-DVp"/>
                         <outlet property="loadmodelbutton" destination="WXw-1p-RzN" id="3UG-TX-XHd"/>
                         <outlet property="nextButton" destination="FYC-2y-dMP" id="PbZ-1w-FUr"/>
@@ -173,7 +182,7 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
                 <exit id="Cg6-xQ-SVz" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1766" y="80"/>
+            <point key="canvasLocation" x="1765.625" y="79.6875"/>
         </scene>
         <!--Marker View Controller-->
         <scene sceneID="yfJ-B1-apa">

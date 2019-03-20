@@ -33,8 +33,6 @@
 		227EE03D21C94E7B006B19F0 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03C21C94E7B006B19F0 /* AssetsLibrary.framework */; };
 		227EE03F21C94E82006B19F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03E21C94E82006B19F0 /* Accelerate.framework */; };
 		22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C584F821E64C9600ADEAB6 /* Tray.swift */; };
-		22D788BC2239617E00E1B661 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22174F7D21C923F000F4067C /* Main.storyboard */; };
-		22D788BD2239617E00E1B661 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22174F7D21C923F000F4067C /* Main.storyboard */; };
 		22DA32C6223BD56700E72AB6 /* TaskTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */; };
 		22DA32CA22410A6D00E72AB6 /* ARMarkerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */; };
 		22E25AE4220B21BB00860734 /* OpenCVWrapper .mm in Sources */ = {isa = PBXBuildFile; fileRef = 22E25AE3220B21BB00860734 /* OpenCVWrapper .mm */; };
@@ -375,7 +373,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22D788BC2239617E00E1B661 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -383,7 +380,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				22D788BD2239617E00E1B661 /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -50,6 +50,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // validation poperties
     private var visibleObjectIds = [Int32]()
     private var visibleObjectPos = [SCNMatrix4]()
+    // Activity indicator for the validation process
+    @IBOutlet weak var activityWait: UIActivityIndicatorView!
     
     // holds target tray properties
     let loadedtray = Tray()
@@ -62,9 +64,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet var buttonpress: [UIButton]!
     @IBOutlet weak var backButton: UIButton!
     @IBOutlet weak var nextButton: UIButton!
-    
     @IBOutlet weak var loadmodelbutton: UIButton!
-
+    @IBOutlet weak var ValidateButton: UIButton!
     
     // function called when a 'load model' request from user
     @IBAction func buttonloadmodel(_ sender: Any){
@@ -92,9 +93,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     }
 
-    @IBOutlet weak var ValidateButton: UIButton!
     
-
+    
     @IBAction func Validate(_ sender: Any) {
         // if not ready return
         if(isLocalized == false){
@@ -102,12 +102,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         // capture a frame
        self.captureNextFrameForCV = true
-        
-            status_0 = self.ValidateScene(idPresent: assetMark_0)
-            status_1 = self.ValidateScene(idPresent: assetMark_1)
-            status_2 = self.ValidateScene(idPresent: assetMark_2)
-        
-        //validateNextFrame = true
+        self.activityWait.startAnimating()
+        // check whether the ID is present & orientation
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+            
+            self.status_0 = self.ValidateScene(idPresent: self.activeTasks[self.taskIndex].objects[0].object_marker.id)
+            self.buttonloadmodel(self)
+            self.activityWait.stopAnimating()
+        })
     }
     @IBAction func backToPrevious(_ sender: Any) {
         activeTasks[taskIndex].complete = true
@@ -126,6 +128,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        // Activity wait indicator
+        //self.activityWait.hidesWhenStopped = true
+        
         // Limit FPS
         sceneView.preferredFramesPerSecond = 30
         Debuggingop.text = "localising"
@@ -141,9 +146,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
-        
-
-        
+    
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -293,12 +296,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
 
     
-    func outputImage(name:String,image:UIImage){
-        let fileManager = FileManager.default
-        let pngdata = image.pngData()
-        fileManager.createFile(atPath: "/Users/thomasbale/Desktop/\(name)", contents: pngdata, attributes: nil)
-        
-    }
+
     
     func positionFromTransform(_ transform: matrix_float4x4) -> SCNVector3 {
         // This function performs the following conversion:
@@ -356,29 +354,30 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // Analyse frame for markers and position then return estimate
     func ValidateScene(idPresent: Int) -> UIColor{
         
+        
         if(self.ObjectsPlacedDone.contains(idPresent)){
             return UIColor.green
         }
-        
         // Quick test is the ID present in the view?
         if(self.visibleObjectIds.contains(Int32(idPresent))){
+            // array position of the visible object
             let position = self.visibleObjectIds.firstIndex(of: Int32(idPresent))!
             
-            let node = SCNNode(geometry: SCNBox(width: 0.05, height: 0.05, length: 0.05, chamferRadius: 0))
-            let temp_node = SCNNode(geometry: SCNBox(width: 0.05, height: 0.05, length: 0.05, chamferRadius: 0))
+            let node = SCNNode()
+            let temp_node = SCNNode()
+            
             temp_node.transform = visibleObjectPos[position]
             // Node for position analysis
             node.transform = SCNMatrix4Mult(SCNMatrix4Invert(targTransform),temp_node.transform)
             // Print position analysis
-    
-            //NodeToBoardPosition(Quaternion: node.orientation)
+            NodeToBoardPosition(Quaternion: node.orientation)
             
             if(ObjectOrientatedToTray(Quaternion: node.orientation)){
                 self.ObjectsPlacedDone.append(idPresent)
                 return UIColor.green
             }
             
-            sceneView.scene.rootNode.addChildNode(temp_node)
+            //sceneView.scene.rootNode.addChildNode(temp_node)
 
             return UIColor.black
         }
@@ -417,10 +416,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.ObjectsPlacedDone = [Int]()
     }
     
+    // debugging function
     func NodeToBoardPosition(Quaternion: SCNQuaternion){
         
         if(Quaternion.w > 0.9 && Quaternion.y < 0.1){
-            print("^^")
+            print("^^") // aligned
             return
         }
         if(Quaternion.w < 0.75 && Quaternion.y < -0.6){
@@ -428,7 +428,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         if(Quaternion.w < 0.1 && Quaternion.y > 0.9){
-            print("||")
+            print("||") // 180 degrees misaligned
             return
         }
         if(Quaternion.w > 0.7 && Quaternion.y > 0.7){
@@ -442,6 +442,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func ObjectOrientatedToTray(Quaternion: SCNQuaternion) -> Bool{
+        
+
+        // working on w and y axis
         if(Quaternion.w > 0.9 && Quaternion.y < 0.1){
             return true
         }
@@ -450,6 +453,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func RenderNode() -> SCNNode{
+        // If there is nothing to render don't
+        if activeTasks[taskIndex].objects.count == 0 {
+            return SCNNode()
+        }
+        
         let asset_name = activeTasks[taskIndex].objects.first?.file_name as! String
 
         var node1 = SCNNode(geometry: SCNPyramid(width: 0.1, height: 0.1, length: 0.1))
