@@ -22,6 +22,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     weak var delegate : DisplayViewControllerDelegate?
     
+    @IBOutlet weak var completeTick: UIImageView!
     // All the tasks in the set
     var activeTasks = [Task()]
     // The index of the current task
@@ -106,7 +107,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // check whether the ID is present & orientation
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             
-            self.status_0 = self.ValidateScene(idPresent: self.activeTasks[self.taskIndex].objects[0].object_marker.id)
+            //self.status_0 = self.ValidateScene(idPresent: self.activeTasks[self.taskIndex].objects[0].object_marker.id)
+            self.validateTask(task: &self.activeTasks[self.taskIndex])
+            print(self.activeTasks[self.taskIndex].validation?.objectStates?.first)
             self.buttonloadmodel(self)
             self.activityWait.stopAnimating()
         })
@@ -130,7 +133,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         super.viewDidLoad()
         // Activity wait indicator
         //self.activityWait.hidesWhenStopped = true
-        
+        self.completeTick.isHidden = true
         // Limit FPS
         sceneView.preferredFramesPerSecond = 30
         Debuggingop.text = "localising"
@@ -351,9 +354,31 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         return true
     }
+    
+    //
+    
+    func validateTask(task: inout Task) -> Task{
+        var validatedStates = [validationState]()
+        // Check validation needs to occur
+        if task.validation == nil {
+            print("No validation requirement attached to task")
+            return task
+        }
+        // Check validation for each object in turn
+        
+        for objects in task.objects {
+            validatedStates.append(validationState.aligned)
+        }
+        
+        task.validation?.objectStates = validatedStates
+        return task
+    }
+    
+    
+    
+    
     // Analyse frame for markers and position then return estimate
     func ValidateScene(idPresent: Int) -> UIColor{
-        
         
         if(self.ObjectsPlacedDone.contains(idPresent)){
             return UIColor.green

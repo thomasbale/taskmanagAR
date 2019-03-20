@@ -32,6 +32,7 @@
 		227EE03B21C94E74006B19F0 /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03A21C94E74006B19F0 /* AVFoundation.framework */; };
 		227EE03D21C94E7B006B19F0 /* AssetsLibrary.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03C21C94E7B006B19F0 /* AssetsLibrary.framework */; };
 		227EE03F21C94E82006B19F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03E21C94E82006B19F0 /* Accelerate.framework */; };
+		2293238922429F2D00D66A90 /* tick_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = 2293238822429F2C00D66A90 /* tick_ios.png */; };
 		22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C584F821E64C9600ADEAB6 /* Tray.swift */; };
 		22DA32C6223BD56700E72AB6 /* TaskTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */; };
 		22DA32CA22410A6D00E72AB6 /* ARMarkerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */; };
@@ -95,6 +96,7 @@
 		227EE03C21C94E7B006B19F0 /* AssetsLibrary.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AssetsLibrary.framework; path = System/Library/Frameworks/AssetsLibrary.framework; sourceTree = SDKROOT; };
 		227EE03E21C94E82006B19F0 /* Accelerate.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Accelerate.framework; path = System/Library/Frameworks/Accelerate.framework; sourceTree = SDKROOT; };
 		227EE04021C94F07006B19F0 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
+		2293238822429F2C00D66A90 /* tick_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_ios.png; path = ../../../../../Downloads/tick_ios.png; sourceTree = "<group>"; };
 		22C584F821E64C9600ADEAB6 /* Tray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tray.swift; sourceTree = "<group>"; };
 		22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TaskTableViewController.swift; path = TaskManagAR/TaskTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMarkerViewController.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 				22174F7721C923F000F4067C /* AppDelegate.swift */,
 				22174F7921C923F000F4067C /* art.scnassets */,
 				22174F7B21C923F000F4067C /* ARViewController.swift */,
+				2293238822429F2C00D66A90 /* tick_ios.png */,
 				22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */,
 				225EBC642236981F000D7F11 /* BarcodeScanner.swift */,
 				22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */,
@@ -365,6 +368,7 @@
 				22174F7A21C923F000F4067C /* art.scnassets in Resources */,
 				22174F8421C923F200F4067C /* LaunchScreen.storyboard in Resources */,
 				22174F8121C923F200F4067C /* Assets.xcassets in Resources */,
+				2293238922429F2D00D66A90 /* tick_ios.png in Resources */,
 				22174F7F21C923F000F4067C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
