@@ -14,10 +14,14 @@ import CoreData
 
 let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically printed marker in meters
 
+protocol DisplayViewControllerDelegate : NSObjectProtocol{
+     func updateEvent(activeEvents: [Task])
+}
+
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
-    // The task passed from the previous controller.
-    var activeTask = Task()
+    weak var delegate : DisplayViewControllerDelegate?
+    
     // All the tasks in the set
     var activeTasks = [Task()]
     // The index of the current task
@@ -102,19 +106,20 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         //validateNextFrame = true
     }
     @IBAction func backToPrevious(_ sender: Any) {
+        activeTasks[taskIndex].complete = true
+        if let delegate = delegate{
+            delegate.updateEvent(activeEvents: activeTasks)
+        }
         self.dismiss(animated: true, completion: nil)
     }
     @IBAction func nextTask(_ sender: Any) {
-        print(activeTask.parent_event.description)
+        
         print(activeTasks.count)
     }
     @IBOutlet weak var Debuggingop: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Assign the current task
-        activeTask = activeTasks[taskIndex]
-       
         // Limit FPS
         sceneView.preferredFramesPerSecond = 30
         Debuggingop.text = "localising"
@@ -439,12 +444,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func RenderNode() -> SCNNode{
-        let asset_name = activeTask.objects.first?.file_name as! String
+        let asset_name = activeTasks[taskIndex].objects.first?.file_name as! String
 
         var node1 = SCNNode(geometry: SCNPyramid(width: 0.1, height: 0.1, length: 0.1))
         
         // Try to load the node assets from the scene
-        if let assetScene = SCNScene(named: activeTask.objects.first?.parent_scene as! String) {
+        if let assetScene = SCNScene(named: activeTasks[taskIndex].objects.first?.parent_scene as! String) {
             print("Loaded scene assets")
             
             if let l_node = assetScene.rootNode.childNode(withName: asset_name, recursively: true) {
@@ -453,7 +458,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 sceneView.session.add(anchor:anchor)
                 l_node.transform = TrayCentrepoint.transform
                 node1 = l_node
-                node1.eulerAngles = activeTask.objects.first?.apply_rotation as! SCNVector3
+                node1.eulerAngles = activeTasks[taskIndex].objects.first?.apply_rotation as! SCNVector3
                 
             }
             
@@ -461,7 +466,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return node1
     }
     
-    
+ 
     
 
     

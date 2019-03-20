@@ -8,7 +8,7 @@
 
 import UIKit
 
-class TaskTableViewController: UITableViewController {
+class TaskTableViewController: UITableViewController, DisplayViewControllerDelegate {
 
     var TapSegueIdentifier = "showARView"
     var activeEvent = Event()
@@ -102,6 +102,7 @@ class TaskTableViewController: UITableViewController {
          {
          let vc = segue.destination as? ARViewController
             // pass over all the tasks and the reference to the one selected
+            vc?.delegate = self
          vc?.activeTasks = activeEvent.tasks
          vc?.taskIndex = index.row
          }
@@ -113,6 +114,11 @@ class TaskTableViewController: UITableViewController {
         //self.secondViewController.activeEvent = events[indexPath.row]
         // Segue to the second view controller
         self.performSegue(withIdentifier: TapSegueIdentifier, sender: self)
+    }
+    
+    func updateEvent(activeEvents: [Task]){
+        activeEvent.tasks = activeEvents
+       self.tableView.reloadData()
     }
 
 }
