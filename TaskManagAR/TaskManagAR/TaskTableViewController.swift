@@ -101,9 +101,9 @@ class TaskTableViewController: UITableViewController {
          if segue.destination is ARViewController
          {
          let vc = segue.destination as? ARViewController
-            // pass over the specific task for action
-         let selection = activeEvent.tasks[index.row]
-         vc?.activeTask = selection
+            // pass over all the tasks and the reference to the one selected
+         vc?.activeTasks = activeEvent.tasks
+         vc?.taskIndex = index.row
          }
     }
     

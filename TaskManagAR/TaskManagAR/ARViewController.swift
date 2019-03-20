@@ -18,6 +18,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // The task passed from the previous controller.
     var activeTask = Task()
+    // All the tasks in the set
+    var activeTasks = [Task()]
+    // The index of the current task
+    var taskIndex = Int()
     // Localised nodes for this session
     private var localizedContentNode = SCNNode()
     private var TrayCentrepoint = SCNNode()
@@ -102,16 +106,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     @IBAction func nextTask(_ sender: Any) {
         print(activeTask.parent_event.description)
-        print(activeTask.parent_event.tasks.count)
+        print(activeTasks.count)
     }
     @IBOutlet weak var Debuggingop: UILabel!
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        print("Task name is: ",activeTask.name)
-        
-        print(activeTask.name)
-        print(activeTask.objects.count)
+        // Assign the current task
+        activeTask = activeTasks[taskIndex]
        
         // Limit FPS
         sceneView.preferredFramesPerSecond = 30

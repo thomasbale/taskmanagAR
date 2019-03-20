@@ -56,6 +56,9 @@ struct Event{
 
 
 func getEventsForLocation(locationID: Int) -> [Event]{
+    
+    // possibly need to create all tasks as subset of events?
+    
     var eventArray = [Event()]
     /// Create the event
     var testTCFevent = Event(name: "Load LBSRP plate", description: "Tile Carrier Facility", tasks: [Task()], location: 000)
@@ -74,18 +77,18 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     
     // clean then add tasks to events
     testTCFevent.tasks.removeAll()
+    
     // add each of the tasks to the event
     testTCFevent.tasks.append(testLBSRPtask)
     testTCFevent.tasks.append(testLBSRPtask1)
     testTCFevent.tasks.append(testLBSRPtask2)
     testTCFevent.tasks.append(testLBSRPtask3)
-    print(testTCFevent.tasks.count)
-    
+    /*
     testLBSRPtask.parent_event = testTCFevent
     testLBSRPtask1.parent_event = testTCFevent
     testLBSRPtask2.parent_event = testTCFevent
     testLBSRPtask3.parent_event = testTCFevent
-    
+    */
     eventArray.removeAll()
     eventArray.append(testTCFevent)
     return eventArray
