@@ -15,6 +15,14 @@ let context = delegate.persistentContainer.viewContext
 
 // Main datamodel: parent references the event that the task belongs
 
+struct Validation{
+    
+}
+
+struct Marker{
+    var id = Int()
+}
+
 struct Space{
     // physical dimensions
     var width = Double()
@@ -30,6 +38,7 @@ struct Space{
 }
 
 struct Object{
+    var object_marker = Marker()
     var name = String()
     var file_name = String()
     var description = String()
@@ -66,13 +75,13 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     
     var findTray = Task(name: "Find Tray", description: "Locate correct task module tray", objects: [Object()], space: taskModuleTray, complete: false)
     
-    var findPlate = Task(name: "Find Plate", description: "Locate LBSRP Plate", objects: [Object(name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false)
+    var findPlate = Task(name: "Find Plate", description: "Locate LBSRP Plate", objects: [Object(object_marker: Marker(id: 123), name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false)
     
-    var placePlate = Task(name: "Place Plate", description: "Locate correct task module tray", objects: [Object(name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false)
+    var placePlate = Task(name: "Place Plate", description: "Locate correct task module tray", objects: [Object(object_marker: Marker(id: 123), name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false)
     
-    var fineSubFrame = Task(name: "Find Sub-Frame", description: "Locate correct task module tray", objects: [Object(name: "Rx1800 Carrier Sub Frame", file_name: "Carrier_Subframe", description: "Rx1800 Carrier Sub Frame", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false)
+    var fineSubFrame = Task(name: "Find Sub-Frame", description: "Locate correct task module tray", objects: [Object(object_marker: Marker(id: 123), name: "Rx1800 Carrier Sub Frame", file_name: "Carrier_Subframe", description: "Rx1800 Carrier Sub Frame", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false)
     
-    var addSubFrame = Task(name: "Place Sub-Frame", description: "Locate correct task module tray", objects: [Object(name: "Rx1800 Carrier Sub Frame", file_name: "Carrier_Subframe", description: "Rx1800 Carrier Sub Frame", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false)
+    var addSubFrame = Task(name: "Place Sub-Frame", description: "Locate correct task module tray", objects: [Object(object_marker: Marker(id: 123), name: "Rx1800 Carrier Sub Frame", file_name: "Carrier_Subframe", description: "Rx1800 Carrier Sub Frame", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false)
 
     
     // clean then add tasks to events

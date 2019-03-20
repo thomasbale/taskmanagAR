@@ -116,6 +116,7 @@ class TaskTableViewController: UITableViewController, DisplayViewControllerDeleg
         self.performSegue(withIdentifier: TapSegueIdentifier, sender: self)
     }
     
+    // delegate function to pass updated array of tasks back to contoller
     func updateEvent(activeEvents: [Task]){
         activeEvent.tasks = activeEvents
        self.tableView.reloadData()

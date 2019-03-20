@@ -28,6 +28,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var taskIndex = Int()
     // Localised nodes for this session
     private var localizedContentNode = SCNNode()
+    // localsed from the space
     private var TrayCentrepoint = SCNNode()
     // status variables
     private var isLocalized = false
@@ -38,7 +39,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var status_1 = UIColor.red
     private var status_2 = UIColor.red
     
-    // running session log of objects that are marked as validated
+    // running session log of objects that are marked as validated in the current scene
     private var ObjectsPlacedDone = [Int]()
     
     // Object properties
@@ -92,11 +93,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
 
     @IBOutlet weak var ValidateButton: UIButton!
-    // This is where the validation happens
+    
+
     @IBAction func Validate(_ sender: Any) {
+        // if not ready return
         if(isLocalized == false){
             return
         }
+        // capture a frame
        self.captureNextFrameForCV = true
         
             status_0 = self.ValidateScene(idPresent: assetMark_0)
@@ -113,8 +117,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.dismiss(animated: true, completion: nil)
     }
     @IBAction func nextTask(_ sender: Any) {
-        
-        print(activeTasks.count)
+
+        if (taskIndex < activeTasks.count-1) {
+            taskIndex = taskIndex + 1
+        }
     }
     @IBOutlet weak var Debuggingop: UILabel!
     
