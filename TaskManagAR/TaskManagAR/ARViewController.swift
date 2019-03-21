@@ -110,6 +110,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // pass by reference
             self.validateTask(task: &self.activeTasks[self.taskIndex])
             if self.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
+                // Check the task as complete
+                self.activeTasks[self.taskIndex].complete = true
                 self.completeTick.isHidden = false
                 self.completeTick.alpha = 1.0
                 // Fade the tick
@@ -123,7 +125,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         })
     }
     @IBAction func backToPrevious(_ sender: Any) {
-        activeTasks[taskIndex].complete = true
         if let delegate = delegate{
             delegate.updateEvent(activeEvents: activeTasks)
         }
@@ -401,17 +402,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // Node for position analysis
             relative_position.transform = SCNMatrix4Mult(SCNMatrix4Invert(targTransform),object_position.transform)
             // Print position analysis for debugging
-            NodeToBoardPosition(Quaternion: relative_position.orientation)
+            //NodeToBoardPosition(Quaternion: relative_position.orientation)
             // If the object is correctly aligned:
             if(ObjectOrientatedToTray(Quaternion: relative_position.orientation)){
-                // record as placed
+                // record as placed so object ignored on aubsequent calls
                 self.ObjectsPlacedDone.append(object.object_marker.id)
                 return validationState.aligned
             }
-            // Need to have method in here for working out rotation
-            return validationState.misaligned
+            // rotation estimation is returned
+            return NodeToBoardPosition(Quaternion: relative_position.orientation)
         }
-        return validationState.misaligned
+        return validationState.not_visible
     }
     
     func reset(){
@@ -426,7 +427,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.TrayCentrepoint = SCNNode()
         self.isLocalized = false
         
-        
         self.captureNextFrameForCV = false; //when set to true, frame is processed by opencv for marker
         
         self.status_0 = UIColor.red
@@ -434,45 +434,43 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.status_2 = UIColor.red
         
         // validation poperties
-        
         self.visibleObjectIds = [Int32]()
         self.visibleObjectPos = [SCNMatrix4]()
         self.ObjectsPlacedDone = [Int]()
     }
     
     // debugging function
-    func NodeToBoardPosition(Quaternion: SCNQuaternion){
+    func NodeToBoardPosition(Quaternion: SCNQuaternion) -> validationState{
         
         if(Quaternion.w > 0.9 && Quaternion.y < 0.1){
-            print("^^") // aligned
-            return
+            print("^Correct^") // aligned
+            return validationState.aligned
         }
         if(Quaternion.w < 0.75 && Quaternion.y < -0.6){
-            print("->")
-            return
+            print("Turn left")
+            return validationState.turn_left
         }
         if(Quaternion.w < 0.1 && Quaternion.y > 0.9){
-            print("||") // 180 degrees misaligned
-            return
+            print("Flip 180") // 180 degrees misaligned
+            return validationState.flip_180
         }
         if(Quaternion.w > 0.7 && Quaternion.y > 0.7){
-            print("<-")
-            return
+            print("Turn right")
+            return validationState.turn_right
         }
         
-        print(" ? ? ?")
-        return
+        // If we aren't sure
+        print("Uncertain")
+        return validationState.misaligned
         
     }
     
+    // Quick function to find correct positioning
     func ObjectOrientatedToTray(Quaternion: SCNQuaternion) -> Bool{
-        
-
         // working on w and y axis
         if(Quaternion.w > 0.9 && Quaternion.y < 0.1){
             return true
         }
-        
         return false
     }
     

@@ -16,7 +16,7 @@ let context = delegate.persistentContainer.viewContext
 // Main datamodel: parent references the event that the task belongs
 
 enum validationState{
-    case aligned, turn_right, turn_left, misaligned
+    case aligned, turn_right, turn_left, flip_180, misaligned, not_visible
 }
 
 struct Validation{
