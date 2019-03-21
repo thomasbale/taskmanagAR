@@ -98,20 +98,34 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     @IBAction func Validate(_ sender: Any) {
         // if not ready return
-        if(isLocalized == false){
+        if(isLocalized == false) || (self.activeTasks[self.taskIndex].validation == nil){
+            print("Not localised or no validation available for this task")
             return
         }
         // capture a frame
        self.captureNextFrameForCV = true
         self.activityWait.startAnimating()
         // check whether the ID is present & orientation
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
-            
-            //self.status_0 = self.ValidateScene(idPresent: self.activeTasks[self.taskIndex].objects[0].object_marker.id)
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
+            // pass by reference
             self.validateTask(task: &self.activeTasks[self.taskIndex])
-            print(self.activeTasks[self.taskIndex].validation?.objectStates?.first)
-            self.buttonloadmodel(self)
+            if self.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
+                
+                self.completeTick.isHidden = false
+                self.completeTick.alpha = 1.0
+                
+                UIView.animate(withDuration: 0.5, delay: 0.5, options: [], animations: {
+                    
+                    self.completeTick.alpha = 0.0
+                    
+                }) { (finished: Bool) in
+                    
+                    self.completeTick.isHidden = true
+                }
+                
+            }
             self.activityWait.stopAnimating()
+            //self.completeTick.isHidden = true
         })
     }
     @IBAction func backToPrevious(_ sender: Any) {
@@ -218,7 +232,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // If ready go ahead and pass
         if (currentstatus == "") {
             let pixelBuffer = frame.capturedImage
-            detectBarcode(pixelbffer: pixelBuffer)
+            // Barcode detection function
+            //detectBarcode(pixelbffer: pixelBuffer)
 
             //Pixelbuffer is a rectified image. Instrinsics provides a transform from 2d camera space to 3d world coordinate space
             // Create a new frame struct for detection
@@ -357,62 +372,54 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     //
     
-    func validateTask(task: inout Task) -> Task{
+    func validateTask(task: inout Task){
         var validatedStates = [validationState]()
         // Check validation needs to occur
-        if task.validation == nil {
-            print("No validation requirement attached to task")
-            return task
+        if (task.validation == nil) || (isLocalized == false) {
+            print("No validation requirement attached to task or not yet localised")
+            return
         }
         // Check validation for each object in turn
-        
-        for objects in task.objects {
-            validatedStates.append(validationState.aligned)
+        for object in task.objects {
+            // Add the result of each object validation to the array
+            validatedStates.append(validateObject(object: object)!)
         }
-        
+        // Record the validation state back against the task
         task.validation?.objectStates = validatedStates
-        return task
+        return
     }
     
     
-    
-    
-    // Analyse frame for markers and position then return estimate
-    func ValidateScene(idPresent: Int) -> UIColor{
+    // Validates an object relative to the current scene
+    func validateObject(object: Object) -> validationState?{
         
-        if(self.ObjectsPlacedDone.contains(idPresent)){
-            return UIColor.green
+        // is the object already aligned? Assumed that once validated not checked again
+        if(self.ObjectsPlacedDone.contains(object.object_marker.id)){
+            return validationState.aligned
         }
-        // Quick test is the ID present in the view?
-        if(self.visibleObjectIds.contains(Int32(idPresent))){
+        // Is the object present in the view?
+        if(self.visibleObjectIds.contains(Int32(object.object_marker.id))){
             // array position of the visible object
-            let position = self.visibleObjectIds.firstIndex(of: Int32(idPresent))!
+            let position = self.visibleObjectIds.firstIndex(of: Int32(object.object_marker.id))!
             
-            let node = SCNNode()
-            let temp_node = SCNNode()
+            let relative_position = SCNNode()
+            let object_position = SCNNode()
             
-            temp_node.transform = visibleObjectPos[position]
+            object_position.transform = visibleObjectPos[position]
             // Node for position analysis
-            node.transform = SCNMatrix4Mult(SCNMatrix4Invert(targTransform),temp_node.transform)
-            // Print position analysis
-            NodeToBoardPosition(Quaternion: node.orientation)
-            
-            if(ObjectOrientatedToTray(Quaternion: node.orientation)){
-                self.ObjectsPlacedDone.append(idPresent)
-                return UIColor.green
+            relative_position.transform = SCNMatrix4Mult(SCNMatrix4Invert(targTransform),object_position.transform)
+            // Print position analysis for debugging
+            NodeToBoardPosition(Quaternion: relative_position.orientation)
+            // If the object is correctly aligned:
+            if(ObjectOrientatedToTray(Quaternion: relative_position.orientation)){
+                // record as placed
+                self.ObjectsPlacedDone.append(object.object_marker.id)
+                return validationState.aligned
             }
-            
-            //sceneView.scene.rootNode.addChildNode(temp_node)
-
-            return UIColor.black
+            // Need to have method in here for working out rotation
+            return validationState.misaligned
         }
-        
-        //
-        
-        
-       //self.sceneView.scene.physicsWorld.rayTestWithSegment(from: <#T##SCNVector3#>, to: <#T##SCNVector3#>, options: ///<#T##[SCNPhysicsWorld.TestOption : Any]?#>)
-        
-        return UIColor.red
+        return validationState.misaligned
     }
     
     func reset(){
@@ -475,6 +482,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         return false
+    }
+    
+    func AllObjectsValidated(currentTask: Task) -> Bool{
+        return true
     }
     
     func RenderNode() -> SCNNode{
