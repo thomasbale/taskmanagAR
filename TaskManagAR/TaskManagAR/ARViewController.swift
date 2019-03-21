@@ -103,29 +103,23 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return
         }
         // capture a frame
-       self.captureNextFrameForCV = true
         self.activityWait.startAnimating()
+        self.captureNextFrameForCV = true
         // check whether the ID is present & orientation
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             // pass by reference
             self.validateTask(task: &self.activeTasks[self.taskIndex])
             if self.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
-                
                 self.completeTick.isHidden = false
                 self.completeTick.alpha = 1.0
-                
-                UIView.animate(withDuration: 0.5, delay: 0.5, options: [], animations: {
-                    
+                // Fade the tick
+                UIView.animate(withDuration: 1.5, delay: 1.5, options: [], animations: {
                     self.completeTick.alpha = 0.0
-                    
                 }) { (finished: Bool) in
-                    
                     self.completeTick.isHidden = true
                 }
-                
             }
             self.activityWait.stopAnimating()
-            //self.completeTick.isHidden = true
         })
     }
     @IBAction func backToPrevious(_ sender: Any) {
@@ -183,8 +177,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.reset()
         // to slow down processing only activated on button press
         self.captureNextFrameForCV = true
-        //status = UIColor.red
-    
         //testDatabase()
     }
     
@@ -485,6 +477,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     func AllObjectsValidated(currentTask: Task) -> Bool{
+        
+        for object_state in currentTask.validation?.objectStates as! [validationState] {
+            if object_state != validationState.aligned{
+                return false
+            }
+        }
+        
         return true
     }
     
