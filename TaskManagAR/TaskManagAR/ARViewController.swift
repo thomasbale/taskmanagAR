@@ -11,6 +11,7 @@ import SceneKit
 import ARKit
 import GLKit
 import CoreData
+import CoreVideo
 
 let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically printed marker in meters
 
@@ -21,6 +22,9 @@ protocol DisplayViewControllerDelegate : NSObjectProtocol{
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     weak var delegate : DisplayViewControllerDelegate?
+    
+    var detectionQueue = DispatchQueue(label: "detection", qos: .default, autoreleaseFrequency: .workItem)
+
     
     @IBOutlet weak var completeTick: UIImageView!
     // All the tasks in the set
@@ -34,6 +38,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // status variables
     private var isLocalized = false
     private var captureNextFrameForCV = false; //when set to true, frame is processed by opencv for marker
+    private var dispatchProcesscomplete = true;
     
     // for the validation process
     private var status_0 = UIColor.red
@@ -53,6 +58,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var visibleObjectPos = [SCNMatrix4]()
     // Activity indicator for the validation process
     @IBOutlet weak var activityWait: UIActivityIndicatorView!
+    // Validation class object
+    let valid = Validator()
     
     // holds target tray properties
     let loadedtray = Tray()
@@ -89,13 +96,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // centre
         node0.position = SCNVector3(0.15, 0, 0)
         node0.geometry?.materials = [mat_0]
-       
         TrayCentrepoint.addChildNode(node0)
     
     }
-
-    
-    
+    // function called on validate request from user
     @IBAction func Validate(_ sender: Any) {
         // if not ready return
         if(isLocalized == false) || (self.activeTasks[self.taskIndex].validation == nil){
@@ -109,7 +113,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             // pass by reference
             self.validateTask(task: &self.activeTasks[self.taskIndex])
-            if self.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
+            if self.valid.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
                 // Check the task as complete
                 self.activeTasks[self.taskIndex].complete = true
                 self.completeTick.isHidden = false
@@ -124,6 +128,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.activityWait.stopAnimating()
         })
     }
+    // function called on back request (unwind segue)
     @IBAction func backToPrevious(_ sender: Any) {
         if let delegate = delegate{
             delegate.updateEvent(activeEvents: activeTasks)
@@ -134,19 +139,29 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
         if (taskIndex < activeTasks.count-1) {
             taskIndex = taskIndex + 1
+            // Load in current space
+            buttonloadmodel(self)
         }
+        
     }
     @IBOutlet weak var Debuggingop: UILabel!
     
+    @IBAction func pressed(_ sender: Any) {
+        //self.reset()
+        // to slow down processing only activated on button press
+        self.captureNextFrameForCV = true
+        //testDatabase()
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Activity wait indicator
-        //self.activityWait.hidesWhenStopped = true
+        
+        
+        // Hide the completion tick
         self.completeTick.isHidden = true
         // Limit FPS
-        sceneView.preferredFramesPerSecond = 30
+        //sceneView.preferredFramesPerSecond = 30
         Debuggingop.text = "localising"
-        
         // Set the view's delegate
         sceneView.delegate = self
         sceneView.session.delegate = self
@@ -154,11 +169,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if (sceneView.session.currentFrame != nil){
             updateCameraPose(frame: sceneView.session.currentFrame!)
         }
-        
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
         sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
-    
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -168,18 +181,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let configuration = ARWorldTrackingConfiguration()
         configuration.planeDetection = .horizontal
         configuration.maximumNumberOfTrackedImages = 0
-        
-        
         // Run the view's session
         sceneView.session.run(configuration)
     }
     
-    @IBAction func pressed(_ sender: Any) {
-        self.reset()
-        // to slow down processing only activated on button press
-        self.captureNextFrameForCV = true
-        //testDatabase()
-    }
+    
     
     override func viewWillDisappear(_ animated: Bool) {
         super.viewWillDisappear(animated)
@@ -206,92 +212,88 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // Calls every time a frame is updated in the session
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        // Only run if the button is pressed
-                if(self.captureNextFrameForCV != false) {
-                self.updateCameraPose(frame: frame)
+        // Only run if the button is pressed & prevent memory leak
+                if(self.captureNextFrameForCV != false)  {
+                    detectionQueue.sync {
+                        self.updateCameraPose(frame: frame)
+                    }
                 //status = self.ValidateScene()
-                self.captureNextFrameForCV = false // used to limit to button calling
             }
-   
+        self.captureNextFrameForCV = false // used to limit to button calling
 }
     
     
     
-    // Main calling function: updates pose from passed frame
-    private func updateCameraPose(frame: ARFrame) {
+    // Main calling function: updates pose and id array from passed frame
+    func updateCameraPose(frame: ARFrame) {
 
         // Current status contains a string as to the tracking status of the world
-        let currentstatus = sessionStatus()
-        // If ready go ahead and pass
-        if (currentstatus == "") {
-            let pixelBuffer = frame.capturedImage
-            // Barcode detection function
-            //detectBarcode(pixelbffer: pixelBuffer)
-
-            //Pixelbuffer is a rectified image. Instrinsics provides a transform from 2d camera space to 3d world coordinate space
-            // Create a new frame struct for detection
-            var newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))
-            // Save the transform from camera to world space
-            newframe.cameratransform = frame.camera.transform
-            //quick break
-            if(newframe.no_markers == 0) {
-                self.Debuggingop.text = "no marker found. Keep looking."
-                return;
-            }
-            
-            self.visibleObjectIds.removeAll()
-            self.visibleObjectPos.removeAll()
-            // Copy the found markers in via a tuple due to Cpp conversion
-            let tempTuple = TupletoArray(tuple: newframe.ids).array
-            let tempNumber = String(newframe.no_markers)
-            let tempIntNumber = Int(tempNumber)
-
-            if(tempIntNumber != nil){
-                visibleObjectIds = Array(tempTuple.prefix(tempIntNumber!))
+        let currentstatus = sessionStatus(frame: frame)
+        
+            // If ready go ahead and pass
+            if (currentstatus == "") {
+                let pixelBuffer = frame.capturedImage
+                
+                // Barcode detection function
+                //detectBarcode(pixelbffer: pixelBuffer)
+                //var newframe = FrameCall()
+                // Create a new frame struct for detection
+                var newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(MARKER_SIZE_IN_METERS))
+                // Save the transform from camera to world space
+                newframe.cameratransform = frame.camera.transform
+                //quick break
+                if(newframe.no_markers == 0) {
+                    return;
+                }
+                
+                self.visibleObjectIds.removeAll()
+                self.visibleObjectPos.removeAll()
+                // Copy the found markers in via a tuple due to Cpp conversion
+                let tempTuple = TupletoArray(tuple: newframe.ids).array
+                let tempNumber = String(newframe.no_markers)
+                let tempIntNumber = Int(tempNumber)
+                
+                if(tempIntNumber != nil){
+                    self.visibleObjectIds = Array(tempTuple.prefix(tempIntNumber!))
+                }
+                
+                // Copy the transform matrix to the master
+                self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.0.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.1.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.2.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.3.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.4.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.5.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.6.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.7.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.8.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.9.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
+                
+                
+                // IF a marker is found: transform in the main queue
+                if(self.isLocalized == false){
+                    DispatchQueue.main.async {
+                        self.targTransform = self.visibleObjectPos.first!
+                        // create a localised tray at the first location found:
+                        self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
+                        return
+                    }
+                }
+                
+                
             }
         
-            // Copy the transform matrix to the master
-            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.0.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
-            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.1.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
-            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.2.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
-            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.3.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
-            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.4.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
-            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.5.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
-            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.6.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
-            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.7.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
-            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.8.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
-            visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.9.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
-            
-            
-            // IF a marker is found: transform in the main queue
-            
-            if(self.isLocalized == false){
-                    DispatchQueue.main.async {
-                    self.targTransform = self.visibleObjectPos.first!
-                    self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
-                return
-            }
-            }
-            
-        }
-        self.Debuggingop.text = currentstatus
+        
+        self.dispatchProcesscomplete = true
         return
     }
     
     
     private func updateContentNode(targTransform: SCNMatrix4, markerid: Int) {
-        //Basic error check before rendering
-        
-        /*if self.isLocalized {
-            // Is there already a localised content node? Destroy it:
-                sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-                    node.removeFromParentNode() }}*/
-       
             localizedContentNode.opacity = 0.5
             localizedContentNode.transform = targTransform // apply new transform to node
 
             // Calculate the centre of the tray and make child of marker
-            //var clean_centre = TrayAnchor()
             TrayCentrepoint = loadedtray.TrayCentreNode()
             
             // Get the offset to the centre of the tray
@@ -305,70 +307,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                                nodeFor anchor: ARAnchor) -> SCNNode?{
             return SCNNode()
         }
-
-    
-
-    
-    func positionFromTransform(_ transform: matrix_float4x4) -> SCNVector3 {
-        // This function performs the following conversion:
-        //    column 0  column 1  column 2  column 3
-        //         1        0         0       X    
-        //         0        1         0       Y    
-        //         0        0         1       Z    
-        //         0        0         0       1    
-        
-        return SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
-    }
-    
-        
-        /// Returns The Status Of The Current ARSession
-        func sessionStatus() -> String? {
-            
-            //1. Get The Current Frame
-            guard let frame = sceneView.session.currentFrame else { return nil }
-            
-            var status = "Preparing Device.."
-            
-            //1. Return The Current Tracking State & Lighting Conditions
-            switch frame.camera.trackingState {
-                
-            case .normal:                                                   status = ""
-            case .notAvailable:                                             status = "Tracking Unavailable"
-            case .limited(.excessiveMotion):                                status = "Please Slow Your Movement"
-            case .limited(.insufficientFeatures):                           status = "Try To Point At A Flat Surface"
-            case .limited(.initializing):                                   status = "Initializing"
-            case .limited(.relocalizing):                                   status = "Relocalizing"
-                
-            }
-            
-            guard let lightEstimate = frame.lightEstimate?.ambientIntensity else { return nil }
-            
-            if lightEstimate < 100 { status = "Lighting Is Too Dark" }
-            
-            return status
-            
-        }
-    
-    // error checking function to make sure that detected marker is flat to the camera and not
-    func applyMatrixThreshold(matrix: SCNMatrix4)->Bool{
-        
-        let throwawaynode = SCNNode()
-        throwawaynode.transform = matrix
-        let orientation = abs(throwawaynode.simdEulerAngles.x)
-        if
-            matrix.m31 < -1 || matrix.m32 < -5 || matrix.m24 > 10 || matrix.m34 > 5 || !(orientation > 1.3 && orientation < 1.8){
-            return false
-        }
-        
-        return true
-    }
-    
-    //
     
     func validateTask(task: inout Task){
         var validatedStates = [validationState]()
         // Check validation needs to occur
-        if (task.validation == nil) || (isLocalized == false) {
+        if (task.validation == nil) {
             print("No validation requirement attached to task or not yet localised")
             return
         }
@@ -381,7 +324,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         task.validation?.objectStates = validatedStates
         return
     }
-    
     
     // Validates an object relative to the current scene
     func validateObject(object: Object) -> validationState?{
@@ -401,89 +343,35 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             object_position.transform = visibleObjectPos[position]
             // Node for position analysis
             relative_position.transform = SCNMatrix4Mult(SCNMatrix4Invert(targTransform),object_position.transform)
-            // Print position analysis for debugging
-            //NodeToBoardPosition(Quaternion: relative_position.orientation)
             // If the object is correctly aligned:
-            if(ObjectOrientatedToTray(Quaternion: relative_position.orientation)){
+            if(valid.ObjectOrientatedToTray(Quaternion: relative_position.orientation)){
                 // record as placed so object ignored on aubsequent calls
                 self.ObjectsPlacedDone.append(object.object_marker.id)
                 return validationState.aligned
             }
             // rotation estimation is returned
-            return NodeToBoardPosition(Quaternion: relative_position.orientation)
+            return valid.NodeToBoardPosition(Quaternion: relative_position.orientation)
         }
         return validationState.not_visible
     }
+
+    
+
     
     func reset(){
-        
         // Is there already a localised content node? Destroy it:
-        sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-            node.removeFromParentNode() }
+
         
-        self.targTransform = SCNMatrix4()
-        
-        self.localizedContentNode = SCNNode(geometry: SCNBox(width: 0.01, height: 0.005, length: 0.01, chamferRadius: 0))
-        self.TrayCentrepoint = SCNNode()
         self.isLocalized = false
-        
-        self.captureNextFrameForCV = false; //when set to true, frame is processed by opencv for marker
-        
-        self.status_0 = UIColor.red
-        self.status_1 = UIColor.red
-        self.status_2 = UIColor.red
+        self.captureNextFrameForCV = false
         
         // validation poperties
-        self.visibleObjectIds = [Int32]()
-        self.visibleObjectPos = [SCNMatrix4]()
-        self.ObjectsPlacedDone = [Int]()
+        self.visibleObjectIds.removeAll()
+        self.visibleObjectPos.removeAll()
+        self.ObjectsPlacedDone.removeAll()
     }
     
-    // debugging function
-    func NodeToBoardPosition(Quaternion: SCNQuaternion) -> validationState{
-        
-        if(Quaternion.w > 0.9 && Quaternion.y < 0.1){
-            print("^Correct^") // aligned
-            return validationState.aligned
-        }
-        if(Quaternion.w < 0.75 && Quaternion.y < -0.6){
-            print("Turn left")
-            return validationState.turn_left
-        }
-        if(Quaternion.w < 0.1 && Quaternion.y > 0.9){
-            print("Flip 180") // 180 degrees misaligned
-            return validationState.flip_180
-        }
-        if(Quaternion.w > 0.7 && Quaternion.y > 0.7){
-            print("Turn right")
-            return validationState.turn_right
-        }
-        
-        // If we aren't sure
-        print("Uncertain")
-        return validationState.misaligned
-        
-    }
-    
-    // Quick function to find correct positioning
-    func ObjectOrientatedToTray(Quaternion: SCNQuaternion) -> Bool{
-        // working on w and y axis
-        if(Quaternion.w > 0.9 && Quaternion.y < 0.1){
-            return true
-        }
-        return false
-    }
-    
-    func AllObjectsValidated(currentTask: Task) -> Bool{
-        
-        for object_state in currentTask.validation?.objectStates as! [validationState] {
-            if object_state != validationState.aligned{
-                return false
-            }
-        }
-        
-        return true
-    }
+
     
     func RenderNode() -> SCNNode{
         // If there is nothing to render don't
@@ -512,10 +400,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         return node1
     }
-    
- 
-    
-
     
     }
 

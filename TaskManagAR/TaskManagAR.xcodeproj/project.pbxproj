@@ -42,6 +42,7 @@
 		22F7E2FE2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */; };
 		22F7E2FF2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */; };
 		22F7E305222805710029BAC1 /*  Database-Interface.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22F7E304222805710029BAC1 /*  Database-Interface.swift */; };
+		22FEB53F2243C88700BB3BB0 /* Validation.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22FEB53E2243C88700BB3BB0 /* Validation.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -106,6 +107,7 @@
 		22F7E2F82227F6960029BAC1 /* Utilities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utilities.swift; sourceTree = "<group>"; };
 		22F7E2FC2227F9A50029BAC1 /* AR-Database.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = "AR-Database.xcdatamodel"; sourceTree = "<group>"; };
 		22F7E304222805710029BAC1 /*  Database-Interface.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = " Database-Interface.swift"; sourceTree = "<group>"; };
+		22FEB53E2243C88700BB3BB0 /* Validation.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Validation.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -177,6 +179,7 @@
 				22174F7721C923F000F4067C /* AppDelegate.swift */,
 				22174F7921C923F000F4067C /* art.scnassets */,
 				22174F7B21C923F000F4067C /* ARViewController.swift */,
+				22FEB53E2243C88700BB3BB0 /* Validation.swift */,
 				2293238822429F2C00D66A90 /* tick_ios.png */,
 				22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */,
 				225EBC642236981F000D7F11 /* BarcodeScanner.swift */,
@@ -400,6 +403,7 @@
 				22E25AE4220B21BB00860734 /* OpenCVWrapper .mm in Sources */,
 				22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */,
 				22F7E2FD2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */,
+				22FEB53F2243C88700BB3BB0 /* Validation.swift in Sources */,
 				22DA32CA22410A6D00E72AB6 /* ARMarkerViewController.swift in Sources */,
 				22DA32C6223BD56700E72AB6 /* TaskTableViewController.swift in Sources */,
 				22174F7821C923F000F4067C /* AppDelegate.swift in Sources */,

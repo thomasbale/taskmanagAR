@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import ARKit
 
 struct TupletoArray {
     var tuple: (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32)
@@ -25,5 +26,42 @@ func outputImage(name:String,image:UIImage){
     let fileManager = FileManager.default
     let pngdata = image.pngData()
     fileManager.createFile(atPath: "/Users/thomasbale/Desktop/\(name)", contents: pngdata, attributes: nil)
+    
+}
+
+func positionFromTransform(_ transform: matrix_float4x4) -> SCNVector3 {
+    // This function performs the following conversion:
+    //    column 0  column 1  column 2  column 3
+    //         1        0         0       X    
+    //         0        1         0       Y    
+    //         0        0         1       Z    
+    //         0        0         0       1    
+    
+    return SCNVector3Make(transform.columns.3.x, transform.columns.3.y, transform.columns.3.z)
+}
+
+
+/// Returns The Status Of The Current ARSession
+func sessionStatus(frame: ARFrame) -> String? {
+
+    var status = "Preparing Device.."
+    
+    //1. Return The Current Tracking State & Lighting Conditions
+    switch frame.camera.trackingState {
+        
+    case .normal:                                                   status = ""
+    case .notAvailable:                                             status = "Tracking Unavailable"
+    case .limited(.excessiveMotion):                                status = "Please Slow Your Movement"
+    case .limited(.insufficientFeatures):                           status = "Try To Point At A Flat Surface"
+    case .limited(.initializing):                                   status = "Initializing"
+    case .limited(.relocalizing):                                   status = "Relocalizing"
+        
+    }
+    
+    guard let lightEstimate = frame.lightEstimate?.ambientIntensity else { return nil }
+    
+    if lightEstimate < 100 { status = "Lighting Is Too Dark" }
+    
+    return status
     
 }

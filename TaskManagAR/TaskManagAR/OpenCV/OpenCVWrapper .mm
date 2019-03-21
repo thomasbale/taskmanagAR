@@ -231,7 +231,7 @@
             
         }
         
-
+        CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
         
         return frame;
     }
