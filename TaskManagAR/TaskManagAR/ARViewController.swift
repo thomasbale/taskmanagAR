@@ -171,7 +171,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
-        sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
+        //sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -290,7 +290,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     
     private func updateContentNode(targTransform: SCNMatrix4, markerid: Int) {
-            localizedContentNode.opacity = 0.5
+            //localizedContentNode.opacity = 0.5
             localizedContentNode.transform = targTransform // apply new transform to node
 
             // Calculate the centre of the tray and make child of marker
@@ -395,6 +395,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 node1 = l_node
                 node1.eulerAngles = activeTasks[taskIndex].objects.first?.apply_rotation as! SCNVector3
                 
+                // scale down
+
+                node1.scale = SCNVector3(0.001, 0.001, 0.001)
+                
+                // add lighting *todo make this ambient based on lighting sensor
+                
+                addLightNodeTo(node1)
             }
             
         }

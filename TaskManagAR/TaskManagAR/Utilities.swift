@@ -65,3 +65,23 @@ func sessionStatus(frame: ARFrame) -> String? {
     return status
     
 }
+
+func getLightNode() -> SCNNode {
+    let light = SCNLight()
+    light.type = .ambient
+    light.intensity = 0.5
+    light.temperature = 0.0
+
+    
+    let lightNode = SCNNode()
+    lightNode.light = light
+    lightNode.position = SCNVector3(0,1,0)
+    
+    return lightNode
+}
+
+func addLightNodeTo(_ node: SCNNode) {
+    let lightNode = getLightNode()
+    node.addChildNode(lightNode)
+    //lightNodes.append(lightNode)
+}

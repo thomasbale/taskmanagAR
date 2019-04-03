@@ -93,6 +93,8 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     var fineSubFrame = Task(name: "Find Sub-Frame", description: "Locate correct task module tray", objects: [Object(object_marker: Marker(id: 6), name: "Rx1800 Carrier Sub Frame", file_name: "Carrier_Subframe", description: "Rx1800 Carrier Sub Frame", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false, validation: nil)
     
     var addSubFrame = Task(name: "Place Sub-Frame", description: "Locate correct task module tray", objects: [Object(object_marker: Marker(id: 6), name: "Rx1800 Carrier Sub Frame", file_name: "Carrier_Subframe", description: "Rx1800 Carrier Sub Frame", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false, validation: nil)
+    
+    var placeSextant = Task(name: "Place Sextant", description: "Place Sextant on marker", objects: [Object(object_marker: Marker(id: 265), name: "Historic Sextant", file_name: "sextant", description: "Sextant", parent_scene: "art.scnassets/sextant.scn", apply_rotation: SCNVector3Make(Float(Double.pi/2), Float(Double.pi/2), Float(Double.pi/2)))], space: taskModuleTray, complete: false, validation: nil)
 
     
     // clean then add tasks to events
@@ -103,6 +105,7 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     testTCFevent.tasks.append(findPlate)
     testTCFevent.tasks.append(placePlate)
     testTCFevent.tasks.append(addSubFrame)
+    testTCFevent.tasks.append(placeSextant)
 
     eventArray.removeAll()
     eventArray.append(testTCFevent)
