@@ -99,7 +99,7 @@ class Tray{
         //node.transform = self.transform
         node.geometry = geometry
         colour.diffuse.contents = UIColor.blue
-        colour.transparency = 0
+        colour.transparency = 0.1
         geometry.materials = [colour]
         return node
     }

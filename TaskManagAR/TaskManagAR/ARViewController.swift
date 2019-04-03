@@ -90,12 +90,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         mat_0.diffuse.contents = status_0
         mat_0.transparency = 0.8
         
-        // For testing creating three demo boxes and applying global materials
+        // render based on task
         let node0 = RenderNode()
 
         // centre
-        node0.position = SCNVector3(0.15, 0, 0)
-        node0.geometry?.materials = [mat_0]
+        //node0.position = SCNVector3(0.15, 0, 0)
+        node0.position = SCNVector3(0, 0, activeTasks[taskIndex].objects.first?.height as! Float)
+        //node0.geometry?.materials = [mat_0]
         TrayCentrepoint.addChildNode(node0)
     
     }
@@ -395,9 +396,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 node1 = l_node
                 node1.eulerAngles = activeTasks[taskIndex].objects.first?.apply_rotation as! SCNVector3
                 
-                // scale down
-
-                node1.scale = SCNVector3(0.001, 0.001, 0.001)
+                // scale using object properties
+                
+                node1.scale = activeTasks[taskIndex].objects.first?.scale as! SCNVector3
                 
                 // add lighting *todo make this ambient based on lighting sensor
                 

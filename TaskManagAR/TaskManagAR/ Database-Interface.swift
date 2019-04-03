@@ -52,6 +52,8 @@ struct Object{
     var description = String()
     var parent_scene = String()
     var apply_rotation = SCNVector3()
+    var scale = SCNVector3()
+    var height = Float()
 }
 
 struct Task{
@@ -86,15 +88,19 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     // create the tasks
     var findTray = Task(name: "Find Tray", description: "Locate correct task module tray", objects: [Object()], space: taskModuleTray, complete: false, validation: nil)
     
-    var findPlate = Task(name: "Find Plate", description: "Locate LBSRP Plate", objects: [Object(object_marker: Marker(id: 6), name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil))
+    var findPlate = Task(name: "Find Plate", description: "Locate LBSRP Plate", objects: [Object(object_marker: Marker(id: 6), name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(0.0, 0.0, 0.0), height: 0.15)], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil))
     
-    var placePlate = Task(name: "Place Plate", description: "Locate correct task module tray", objects: [Object(object_marker: Marker(id: 6), name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false, validation: nil)
+    var placePlate = Task(name: "Place Plate", description: "Locate correct task module tray", objects: [Object(object_marker: Marker(id: 6), name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(0.0, 0.0, 0.0), height: 0.15)], space: taskModuleTray, complete: false, validation: nil)
     
-    var fineSubFrame = Task(name: "Find Sub-Frame", description: "Locate correct task module tray", objects: [Object(object_marker: Marker(id: 6), name: "Rx1800 Carrier Sub Frame", file_name: "Carrier_Subframe", description: "Rx1800 Carrier Sub Frame", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false, validation: nil)
+    var fineSubFrame = Task(name: "Find Sub-Frame", description: "Locate correct task module tray", objects: [Object(object_marker: Marker(id: 6), name: "Rx1800 Carrier Sub Frame", file_name: "Carrier_Subframe", description: "Rx1800 Carrier Sub Frame", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(0.0, 0.0, 0.0), height: 0.15)], space: taskModuleTray, complete: false, validation: nil)
     
-    var addSubFrame = Task(name: "Place Sub-Frame", description: "Locate correct task module tray", objects: [Object(object_marker: Marker(id: 6), name: "Rx1800 Carrier Sub Frame", file_name: "Carrier_Subframe", description: "Rx1800 Carrier Sub Frame", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)))], space: taskModuleTray, complete: false, validation: nil)
+    var addSubFrame = Task(name: "Place Sub-Frame", description: "Locate correct task module tray", objects: [Object(object_marker: Marker(id: 6), name: "Rx1800 Carrier Sub Frame", file_name: "Carrier_Subframe", description: "Rx1800 Carrier Sub Frame", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(0.0, 0.0, 0.0), height: 0.15)], space: taskModuleTray, complete: false, validation: nil)
     
-    var placeSextant = Task(name: "Place Sextant", description: "Place Sextant on marker", objects: [Object(object_marker: Marker(id: 265), name: "Historic Sextant", file_name: "sextant", description: "Sextant", parent_scene: "art.scnassets/sextant.scn", apply_rotation: SCNVector3Make(Float(Double.pi/2), Float(Double.pi/2), Float(Double.pi/2)))], space: taskModuleTray, complete: false, validation: nil)
+    var placeSextant = Task(name: "Place Sextant", description: "Place Sextant on marker", objects: [Object(object_marker: Marker(id: 265), name: "Historic Sextant", file_name: "sextant", description: "Sextant", parent_scene: "art.scnassets/sextant.scn", apply_rotation: SCNVector3Make(Float(Double.pi/2), Float(Double.pi/2), Float(Double.pi/2)), scale: SCNVector3(0.001, 0.001, 0.001), height: 0.2)], space: taskModuleTray, complete: true, validation: nil)
+    
+    var placeKitchen = Task(name: "Place Kitchen", description: "Place Kitchen on marker", objects: [Object(object_marker: Marker(id: 265), name: "Kitchen", file_name: "model", description: "Kitchen", parent_scene: "art.scnassets/kitchen.scn", apply_rotation: SCNVector3Make(0,Float(Double.pi),0), scale: SCNVector3(0.1, 0.1, 0.1), height: 0.15)], space: taskModuleTray, complete: true, validation: nil)
+
+    var placeKitchenRoomScale = Task(name: "Place Kitchen Room Scale", description: "Place Kitchen on marker Room Scale", objects: [Object(object_marker: Marker(id: 265), name: "Kitchen", file_name: "model", description: "Kitchen", parent_scene: "art.scnassets/kitchen.scn", apply_rotation: SCNVector3Make(0,Float(Double.pi),0), scale: SCNVector3(2, 2, 2), height: 0.15)], space: taskModuleTray, complete: true, validation: nil)
 
     
     // clean then add tasks to events
@@ -106,6 +112,8 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     testTCFevent.tasks.append(placePlate)
     testTCFevent.tasks.append(addSubFrame)
     testTCFevent.tasks.append(placeSextant)
+    testTCFevent.tasks.append(placeKitchen)
+    testTCFevent.tasks.append(placeKitchenRoomScale)
 
     eventArray.removeAll()
     eventArray.append(testTCFevent)
