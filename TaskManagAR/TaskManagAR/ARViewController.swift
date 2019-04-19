@@ -95,8 +95,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
         // centre
         //node0.position = SCNVector3(0.15, 0, 0)
-        node0.position = SCNVector3(0, 0, activeTasks[taskIndex].objects.first?.height as! Float)
-        //node0.geometry?.materials = [mat_0]
+        node0.position = SCNVector3(0.15, 0, activeTasks[taskIndex].objects.first?.height as! Float)
+        node0.geometry?.materials = [mat_0]
         TrayCentrepoint.addChildNode(node0)
     
     }
@@ -291,7 +291,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     
     private func updateContentNode(targTransform: SCNMatrix4, markerid: Int) {
-            //localizedContentNode.opacity = 0.5
+            localizedContentNode.opacity = 0.5
             localizedContentNode.transform = targTransform // apply new transform to node
 
             // Calculate the centre of the tray and make child of marker
