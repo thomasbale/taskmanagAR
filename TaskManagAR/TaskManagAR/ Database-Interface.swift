@@ -78,7 +78,6 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     
     // possibly need to create all tasks as subset of events?
     
-    
     var eventArray = [Event()]
     /// Create the event
     var testTCFevent = Event(name: "Load LBSRP plate", description: "Tile Carrier Facility", tasks: [Task()], location: 000)
@@ -117,6 +116,7 @@ func getEventsForLocation(locationID: Int) -> [Event]{
 
     eventArray.removeAll()
     eventArray.append(testTCFevent)
+    
     return eventArray
 }
 

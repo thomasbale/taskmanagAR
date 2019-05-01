@@ -18,6 +18,7 @@
 		223BCCF0220B25A400B62698 /* opencv2.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 223BCCEF220B25A300B62698 /* opencv2.framework */; };
 		223BCCF2220B578100B62698 /* MarkerOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BCCF1220B578100B62698 /* MarkerOrigin.swift */; };
 		224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224C07CD220066B50021EBE5 /* Position_estimate.swift */; };
+		225B81D32279ABC000A55C77 /* View_QR_code.png in Resources */ = {isa = PBXBuildFile; fileRef = 225B81D22279ABBF00A55C77 /* View_QR_code.png */; };
 		225EBC63223697E3000D7F11 /* Vision.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 225EBC62223697E3000D7F11 /* Vision.framework */; };
 		225EBC652236981F000D7F11 /* BarcodeScanner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 225EBC642236981F000D7F11 /* BarcodeScanner.swift */; };
 		225EBC6722369D59000D7F11 /* VideoToolbox.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 225EBC6622369D58000D7F11 /* VideoToolbox.framework */; };
@@ -81,6 +82,7 @@
 		223BCCF1220B578100B62698 /* MarkerOrigin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerOrigin.swift; sourceTree = "<group>"; };
 		224781542239302500AACBA3 /* TaskManagAR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskManagAR.entitlements; sourceTree = "<group>"; };
 		224C07CD220066B50021EBE5 /* Position_estimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position_estimate.swift; sourceTree = "<group>"; };
+		225B81D22279ABBF00A55C77 /* View_QR_code.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = View_QR_code.png; sourceTree = "<group>"; };
 		225EBC62223697E3000D7F11 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
 		225EBC642236981F000D7F11 /* BarcodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScanner.swift; sourceTree = "<group>"; };
 		225EBC6622369D58000D7F11 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
@@ -181,6 +183,7 @@
 				22174F7B21C923F000F4067C /* ARViewController.swift */,
 				22FEB53E2243C88700BB3BB0 /* Validation.swift */,
 				2293238822429F2C00D66A90 /* tick_ios.png */,
+				225B81D22279ABBF00A55C77 /* View_QR_code.png */,
 				22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */,
 				225EBC642236981F000D7F11 /* BarcodeScanner.swift */,
 				22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */,
@@ -372,6 +375,7 @@
 				22174F8421C923F200F4067C /* LaunchScreen.storyboard in Resources */,
 				22174F8121C923F200F4067C /* Assets.xcassets in Resources */,
 				2293238922429F2D00D66A90 /* tick_ios.png in Resources */,
+				225B81D32279ABC000A55C77 /* View_QR_code.png in Resources */,
 				22174F7F21C923F000F4067C /* Main.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
