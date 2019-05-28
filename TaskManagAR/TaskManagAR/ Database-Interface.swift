@@ -85,7 +85,7 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     let taskModuleTray = Space(spaceId: 1, width: 0.84, height: 0.01, depth: 0.297, marker_height_m: 0.0282, anchor_marker_id: 4, boom_marker_id: 0, left_top_marker_id: 1, right_top_marker_id: 2, datum_marker_id: 3)
     
     // create the tasks
-    var findTray = Task(name: "Find Tray", description: "Locate correct task module tray", objects: [Object()], space: taskModuleTray, complete: false, validation: nil)
+    var findTray = Task(name: "Find Tray", description: "Locate correct task module tray", objects: [Object()], space: taskModuleTray, complete: false, validation: nil)  
     
     var findPlate = Task(name: "Find Plate", description: "Locate LBSRP Plate", objects: [Object(object_marker: Marker(id: 6), name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0)], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil))
     

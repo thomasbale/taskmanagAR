@@ -47,7 +47,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var frameCounter = 0
     private var MarkerframeRate = 5 // runs every n frames
     private var NumberofMarkersFound = 0 // Total for a confidence level on the scene
-    private var ConfirmationMarkerLevel = 50 // how many times do I need to see the marker?
+    private var ConfirmationMarkerLevel = 30 // how many times do I need to see the marker?
     // for the validation process
     private var status_0 = UIColor.red
     private var status_1 = UIColor.red
@@ -114,7 +114,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         // capture a frame
         self.activityWait.startAnimating()
-        self.captureNextFrameForCV = true
+        //self.captureNextFrameForCV = true
         // check whether the ID is present & orientation
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
             // pass by reference
@@ -280,13 +280,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.9.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
                 
                 
-                // Is this a first localisation? Has the target been found?
+                // Is this a first localisation? Has the target been found? .// todo replace here 265 with actual board reading
                 if(self.isLocalized == false && self.visibleObjectIds.contains(265)){
                     DispatchQueue.main.async {
                         self.targTransform = self.visibleObjectPos.first!
                         // create a localised tray at the first location found:
                         self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
-                        
                         return
                     }
                 }
@@ -313,7 +312,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // Here we determine that of space markers for the scene is sufficiently localised
         self.NumberofMarkersFound = self.NumberofMarkersFound + 1
-        self.markerFound1.isHidden = false
+        self.activityWait.startAnimating()
+        
+        if (self.NumberofMarkersFound >= self.ConfirmationMarkerLevel/3){
+            self.markerFound1.isHidden = false
+        }
         
         if (self.NumberofMarkersFound >= self.ConfirmationMarkerLevel/2){
             self.markerFound2.isHidden = false
@@ -327,11 +330,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         {
   
             sceneView.scene.rootNode.addChildNode(localizedContentNode)
-            
-            
+            self.activityWait.stopAnimating()
             // Fade the UI
             DispatchQueue.main.async{
-                UIView.animate(withDuration: 1.5, delay: 1.5, options: [], animations: {
+                UIView.animate(withDuration: 0.5, delay: 0.5, options: [], animations: {
                     self.findMarkerLayer.alpha = 0.0
                     self.markerFound1.alpha = 0.0
                     self.markerFound2.alpha = 0.0
@@ -345,6 +347,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 }
             }
             self.isLocalized = true
+            // load the model
+            self.buttonloadmodel(self)
         }
         
         }
@@ -364,6 +368,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Check validation for each object in turn
         for object in task.objects {
             // Add the result of each object validation to the array
+            print(validateObject(object: object)!)
             validatedStates.append(validateObject(object: object)!)
         }
         // Record the validation state back against the task
