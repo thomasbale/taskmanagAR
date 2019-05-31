@@ -182,7 +182,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
-        //sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
+        // sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -451,7 +451,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 node1.scale = activeTasks[taskIndex].objects.first?.scale as! SCNVector3
                 
                 // add lighting *todo make this ambient based on lighting sensor
-                
                 //addLightNodeTo(node1)
             }
             

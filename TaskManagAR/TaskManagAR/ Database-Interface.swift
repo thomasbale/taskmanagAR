@@ -82,6 +82,29 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     /// Create the event
     var testTCFevent = Event(name: "Load LBSRP plate", description: "Tile Carrier Facility", tasks: [Task()], location: 000)
     /// Here the tasks and events are defined
+    
+     // Test architecture content
+    
+    var architecture = Event(name: "Temple Quarter", description: "Enterprise Campus", tasks: [Task()], location: 001)
+    /// Here the tasks and events are defined
+    
+    let TQEC = Space(spaceId: 1, width: 0.84, height: 0.01, depth: 0.297, marker_height_m: 0.0282, anchor_marker_id: 4, boom_marker_id: 0, left_top_marker_id: 1, right_top_marker_id: 2, datum_marker_id: 3)
+    
+    var box = Task(name: "Terrain", description: "Topo terrain", objects: [Object(object_marker: Marker(id: 6), name: "Terrainx", file_name: "_bristol", description: "Building Structure", parent_scene: "art.scnassets/Base.lproj/Bristol_topo.scn", apply_rotation: SCNVector3Make(Float(Double.pi)/2, 0, 0), scale: SCNVector3(0.3, 0.3, 0.3), height: 0.0)], space: TQEC, complete: false, validation: Validation(isValidated: false, objectStates: nil))
+    
+    var building = Task(name: "Building", description: "Topo terrain", objects: [Object(object_marker: Marker(id: 6), name: "Terrainx", file_name: "Mesh1__Green_", description: "Building Structure", parent_scene: "art.scnassets/Base.lproj/Building_2.scn", apply_rotation: SCNVector3Make(Float(Double.pi)/2, 0, 0), scale: SCNVector3(0.02, 0.02, 0.02), height: 0.0)], space: TQEC, complete: false, validation: Validation(isValidated: false, objectStates: nil))
+    
+    // add each of the tasks to the event
+    architecture.tasks.append(box)
+    architecture.tasks.append(building)
+
+    
+
+    
+    
+    
+     // RACE content
+    
     let taskModuleTray = Space(spaceId: 1, width: 0.84, height: 0.01, depth: 0.297, marker_height_m: 0.0282, anchor_marker_id: 4, boom_marker_id: 0, left_top_marker_id: 1, right_top_marker_id: 2, datum_marker_id: 3)
     
     // create the tasks
@@ -116,6 +139,8 @@ func getEventsForLocation(locationID: Int) -> [Event]{
 
     eventArray.removeAll()
     eventArray.append(testTCFevent)
+    eventArray.append(architecture)
+
     
     return eventArray
 }
