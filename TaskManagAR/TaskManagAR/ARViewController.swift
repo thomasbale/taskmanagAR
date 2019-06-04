@@ -33,6 +33,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // All the tasks in the set - this allows progression backwards and forwards
     var activeTasks = [Task()]
+    var currentTask = Task()
     // The index of the current task
     var taskIndex = Int()
     // Localised nodes for this session based on marker target transformation
@@ -61,6 +62,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // validation poperties
     private var visibleObjectIds = [Int32]()
     private var visibleObjectPos = [SCNMatrix4]()
+    private var visibleSpaceIds = [Int32]()
+    private var visibleSpacePos = [SCNMatrix4]()
     // Activity indicator for the validation process
     @IBOutlet weak var activityWait: UIActivityIndicatorView!
     // Validation class object
@@ -170,6 +173,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.completeTick.isHidden = true
         //self.findMarkerLayer.isHidden = false
         self.findMarkerLayer.alpha = 0.7
+        self.currentTask = activeTasks[taskIndex]
         // Limit FPS
         //sceneView.preferredFramesPerSecond = 30
         Debuggingop.text = "localising"
@@ -265,9 +269,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 
                 if(tempIntNumber != nil){
                     self.visibleObjectIds = Array(tempTuple.prefix(tempIntNumber!))
+                    print(self.visibleObjectIds)
                 }
                 
-                // Copy the transform matrix to the master
+                // Copy the transform matrix to the master // note can only track 9 markers in a scene at once
                 self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.0.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
                 self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.1.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
                 self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.2.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
@@ -280,8 +285,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 self.visibleObjectPos.append(SCNMatrix4Mult(newframe.all_extrinsics.9.extrinsics, SCNMatrix4.init(newframe.cameratransform)))
                 
                 
-                // Is this a first localisation? Has the target been found? .// todo replace here 265 with actual board reading
-                if(self.isLocalized == false && self.visibleObjectIds.contains(265)){
+                // Is this a first localisation? Can a space marker be seen in shot?
+                if(self.isLocalized == false && frameIncludesSpaceMarker()){
                     DispatchQueue.main.async {
                         self.targTransform = self.visibleObjectPos.first!
                         // create a localised tray at the first location found:
@@ -290,13 +295,33 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     }
                 }
                 
-                
             }
-        
         
         self.dispatchProcesscomplete = true
         return
     }
+    
+    // is a space localisation marker in shot?
+    private func frameIncludesSpaceMarker() -> Bool {
+        var position = 0
+        
+        for id in self.visibleObjectIds{
+            
+            if id == self.currentTask.space.boom_marker_id || id == self.currentTask.space.datum_marker_id || id == self.currentTask.space.right_top_marker_id || id == self.currentTask.space.left_top_marker_id{
+                
+                self.visibleSpaceIds.append(id)
+                self.visibleSpacePos.append(self.visibleObjectPos[position])
+                
+            }
+            position = position + 1
+        }
+        if visibleSpaceIds.count > 0 {
+            return true
+        }
+        return false
+    }
+    
+
     
     
     private func updateContentNode(targTransform: SCNMatrix4, markerid: Int) {
@@ -308,7 +333,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
             // Get the offset to the centre of the tray
                 localizedContentNode.addChildNode(TrayCentrepoint)
-                TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid)
+                TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
         
         // Here we determine that of space markers for the scene is sufficiently localised
         self.NumberofMarkersFound = self.NumberofMarkersFound + 1

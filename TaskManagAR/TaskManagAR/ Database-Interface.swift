@@ -5,7 +5,6 @@
 //  Created by Thomas Bale on 28/02/2019.
 //  Copyright © 2019 Thomas Bale. All rights reserved.
 //
-// These methods a
 import Foundation
 import CoreData
 
@@ -54,6 +53,7 @@ struct Object{
     var apply_rotation = SCNVector3()
     var scale = SCNVector3()
     var height = Float()
+    let istool = Bool()
 }
 
 struct Task{
@@ -101,7 +101,7 @@ func getEventsForLocation(locationID: Int) -> [Event]{
 
     var placeKitchenRoomScale = Task(name: "Place Kitchen Room Scale", description: "Place Kitchen on marker Room Scale", objects: [Object(object_marker: Marker(id: 265), name: "Kitchen", file_name: "model", description: "Kitchen", parent_scene: "art.scnassets/kitchen.scn", apply_rotation: SCNVector3Make(0,Float(Double.pi),0), scale: SCNVector3(2, 2, 2), height: 0.15)], space: taskModuleTray, complete: true, validation: nil)
 
-    
+
     // clean then add tasks to events
     testTCFevent.tasks.removeAll()
     

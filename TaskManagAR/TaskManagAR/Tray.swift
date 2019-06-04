@@ -46,7 +46,7 @@ class Tray{
         
         let newObject = SCNNode(geometry:newGeometry)
         
-        newObject.position = CentrePoint(withid: 2)
+
         
         //newObject2.position = SCNVector3(0.05,0.05, 0)
         
@@ -57,19 +57,19 @@ class Tray{
         return newScene
     }
     
-    func CentrePoint (withid: Int) -> SCNVector3 {
+    func CentrePoint (withid: Int, task: Task) -> SCNVector3 {
         // Function calculates the centrepoint based on tray size
         switch withid {
-        case 3: // RightHand
+        case task.space.datum_marker_id: // datum
             let vector = SCNVector3(self.markerVerticalSeparation/2,self.markerHorizontalSeparation/2, 0)
              return vector
-        case 0: // boom
+        case task.space.boom_marker_id: // boom
             let vector = SCNVector3(self.markerVerticalSeparation/2,0-(self.markerHorizontalSeparation/2), 0)
              return vector
-        case 1: // TopLeft
+        case task.space.left_top_marker_id: // TopLeft
             let vector = SCNVector3(0-(self.markerVerticalSeparation/2),0-(self.markerHorizontalSeparation/2), 0)
              return vector
-        case 2: // TopRight
+        case task.space.right_top_marker_id: // TopRight
             let vector = SCNVector3(0-(self.markerVerticalSeparation/2),self.markerHorizontalSeparation/2, 0)
              return vector
         default:
