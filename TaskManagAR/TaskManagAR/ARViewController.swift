@@ -24,9 +24,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     weak var delegate : DisplayViewControllerDelegate?
     var detectionQueue = DispatchQueue(label: "detection", qos: .default, autoreleaseFrequency: .workItem)
 
+    // UI interface for marker detection work
     @IBOutlet weak var completeTick: UIImageView!
     @IBOutlet weak var findMarkerLayer: UIImageView!
-    
     @IBOutlet weak var markerFound1: UIImageView!
     @IBOutlet weak var markerFound2: UIImageView!
     @IBOutlet weak var markerFound3: UIImageView!
@@ -64,6 +64,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var visibleObjectPos = [SCNMatrix4]()
     private var visibleSpaceIds = [Int32]()
     private var visibleSpacePos = [SCNMatrix4]()
+    // Space localisation
+    private var visibleSpaceTarget = [SCNMatrix4]()
     // Activity indicator for the validation process
     @IBOutlet weak var activityWait: UIActivityIndicatorView!
     // Validation class object
@@ -288,6 +290,35 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 // Is this a first localisation? Can a space marker be seen in shot?
                 if(self.isLocalized == false && frameIncludesSpaceMarker()){
                     DispatchQueue.main.async {
+                        // For each visibleID if it's a space marker
+                        var position = 0
+                        for id in self.visibleObjectIds{
+                            if self.isSpaceMarker(id: id){
+                                // Get the relative board offset and add to array
+                                self.localizedContentNode.transform = self.visibleObjectPos[position] // apply new transform to node
+                                // Calculate the centre of the tray and make child of marker
+                                self.TrayCentrepoint = self.loadedtray.TrayCentreNode()
+                                
+                                // Get the offset to the centre of the tray
+                                self.localizedContentNode.addChildNode(self.TrayCentrepoint)
+                                self.TrayCentrepoint.position = self.loadedtray.CentrePoint(withid: Int(id), task: self.currentTask)
+                                
+                                // add the position to the space array
+                                self.visibleSpacePos.append(self.TrayCentrepoint.worldTransform)
+                                
+                                position = position + 1
+                                
+                                print(self.TrayCentrepoint.simdConvertPosition(simd_float3(0,0,0), to: nil))
+                                
+                                var node = SCNNode()
+                                node.position = SCNVector3(self.TrayCentrepoint.simdConvertPosition(simd_float3(0,0,0), to: nil))
+                                node.geometry = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
+                                self.sceneView.scene.rootNode.addChildNode(node)
+
+                                
+                            }
+                        }
+                        
                         self.targTransform = self.visibleObjectPos.first!
                         // create a localised tray at the first location found:
                         self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
@@ -307,7 +338,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         for id in self.visibleObjectIds{
             
-            if id == self.currentTask.space.boom_marker_id || id == self.currentTask.space.datum_marker_id || id == self.currentTask.space.right_top_marker_id || id == self.currentTask.space.left_top_marker_id{
+            if isSpaceMarker(id: id){
                 
                 self.visibleSpaceIds.append(id)
                 self.visibleSpacePos.append(self.visibleObjectPos[position])
@@ -321,19 +352,26 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return false
     }
     
-
+    private func isSpaceMarker(id: Int32) -> Bool {
+    
+         if id == self.currentTask.space.boom_id || id == self.currentTask.space.datum_id || id == self.currentTask.space.boom_face_id || id == self.currentTask.space.datum_face_id{
+            return true
+    
+    }
+        return false
+    }
     
     
     private func updateContentNode(targTransform: SCNMatrix4, markerid: Int) {
             localizedContentNode.opacity = 1.0
             localizedContentNode.transform = targTransform // apply new transform to node
-
             // Calculate the centre of the tray and make child of marker
             TrayCentrepoint = loadedtray.TrayCentreNode()
             
             // Get the offset to the centre of the tray
                 localizedContentNode.addChildNode(TrayCentrepoint)
                 TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
+    
         
         // Here we determine that of space markers for the scene is sufficiently localised
         self.NumberofMarkersFound = self.NumberofMarkersFound + 1

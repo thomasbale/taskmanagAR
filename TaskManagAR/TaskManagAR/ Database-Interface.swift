@@ -38,10 +38,10 @@ struct Space{
     // marker properties
     var marker_height_m = CGFloat()
     var anchor_marker_id = Int()
-    var boom_marker_id = Int()
-    var left_top_marker_id = Int()
-    var right_top_marker_id = Int()
-    var datum_marker_id = Int()
+    var boom_id = Int()
+    var boom_face_id = Int()
+    var datum_id = Int()
+    var datum_face_id = Int()
 }
 
 struct Object{
@@ -82,7 +82,7 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     /// Create the event
     var testTCFevent = Event(name: "Load LBSRP plate", description: "Tile Carrier Facility", tasks: [Task()], location: 000)
     /// Here the tasks and events are defined
-    let taskModuleTray = Space(spaceId: 1, width: 0.84, height: 0.01, depth: 0.297, marker_height_m: 0.0282, anchor_marker_id: 4, boom_marker_id: 0, left_top_marker_id: 1, right_top_marker_id: 2, datum_marker_id: 3)
+    let taskModuleTray = Space(spaceId: 1, width: 0.84, height: 0.01, depth: 0.297, marker_height_m: 0.0282, anchor_marker_id: 4, boom_id: 2, boom_face_id: 3, datum_id: 1, datum_face_id: 0)
     
     // create the tasks
     var findTray = Task(name: "Find Tray", description: "Locate correct task module tray", objects: [Object()], space: taskModuleTray, complete: false, validation: nil)  

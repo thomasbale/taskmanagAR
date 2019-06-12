@@ -14,6 +14,7 @@ import SceneKit
 
 class Tray{
     // Based on A3 dimensions 29.7 x 42.0cm
+    // Total tray size is 29.7 x 84.0cm
     private var markerVerticalSeparation = 0.297 //metres
     private var markerHorizontalSeparation = 0.84
     private var trayState = "pending" // pending or ready
@@ -60,16 +61,16 @@ class Tray{
     func CentrePoint (withid: Int, task: Task) -> SCNVector3 {
         // Function calculates the centrepoint based on tray size
         switch withid {
-        case task.space.datum_marker_id: // datum
+        case task.space.datum_id: //
             let vector = SCNVector3(self.markerVerticalSeparation/2,self.markerHorizontalSeparation/2, 0)
              return vector
-        case task.space.boom_marker_id: // boom
+        case task.space.boom_id: //
             let vector = SCNVector3(self.markerVerticalSeparation/2,0-(self.markerHorizontalSeparation/2), 0)
              return vector
-        case task.space.left_top_marker_id: // TopLeft
+        case task.space.boom_face_id: //
             let vector = SCNVector3(0-(self.markerVerticalSeparation/2),0-(self.markerHorizontalSeparation/2), 0)
              return vector
-        case task.space.right_top_marker_id: // TopRight
+        case task.space.datum_face_id: // 
             let vector = SCNVector3(0-(self.markerVerticalSeparation/2),self.markerHorizontalSeparation/2, 0)
              return vector
         default:
@@ -95,11 +96,12 @@ class Tray{
     
     }
     
+    // this is the tray
     func TrayCentreNode () -> SCNNode{
         //node.transform = self.transform
         node.geometry = geometry
-        colour.diffuse.contents = UIColor.blue
-        colour.transparency = 0.1
+        colour.diffuse.contents = UIImage(named: "tray.png")
+        //colour.transparency = 0.1
         geometry.materials = [colour]
         return node
     }
