@@ -13,6 +13,30 @@ import GLKit
 import CoreData
 import CoreVideo
 
+extension SCNGeometry {
+    class func lineFrom(vector vector1: SCNVector3, toVector vector2: SCNVector3) -> SCNGeometry {
+        let indices: [Int32] = [0, 1]
+        
+        let source = SCNGeometrySource(vertices: [vector1, vector2])
+        let element = SCNGeometryElement(indices: indices, primitiveType: .line)
+        
+        return SCNGeometry(sources: [source], elements: [element])
+    }
+}
+
+extension SCNVector3 {
+    static func distanceFrom(vector vector1: SCNVector3, toVector vector2: SCNVector3) -> Float {
+        let x0 = vector1.x
+        let x1 = vector2.x
+        let y0 = vector1.y
+        let y1 = vector2.y
+        let z0 = vector1.z
+        let z1 = vector2.z
+        
+        return sqrtf(powf(x1-x0, 2) + powf(y1-y0, 2) + powf(z1-z0, 2))
+    }
+}
+
 //let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically printed marker in meters
 
 protocol DisplayViewControllerDelegate : NSObjectProtocol{
@@ -48,7 +72,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var frameCounter = 0
     private var MarkerframeRate = 5 // runs every n frames
     private var NumberofMarkersFound = 0 // Total for a confidence level on the scene
-    private var ConfirmationMarkerLevel = 30 // how many times do I need to see the marker?
+    private var ConfirmationMarkerLevel = 100 // how many times do I need to markers?
     // for the validation process
     private var status_0 = UIColor.red
     private var status_1 = UIColor.red
@@ -65,7 +89,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var visibleSpaceIds = [Int32]()
     private var visibleSpacePos = [SCNMatrix4]()
     // Space localisation
-    private var visibleSpaceTarget = [SCNMatrix4]()
+    private var visibleSpaceTarget = [SCNVector3]()
     // Activity indicator for the validation process
     @IBOutlet weak var activityWait: UIActivityIndicatorView!
     // Validation class object
@@ -288,40 +312,24 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 
                 
                 // Is this a first localisation? Can a space marker be seen in shot?
-                if(self.isLocalized == false && frameIncludesSpaceMarker()){
-                    DispatchQueue.main.async {
-                        // For each visibleID if it's a space marker
-                        var position = 0
-                        for id in self.visibleObjectIds{
-                            if self.isSpaceMarker(id: id){
-                                // Get the relative board offset and add to array
-                                self.localizedContentNode.transform = self.visibleObjectPos[position] // apply new transform to node
-                                // Calculate the centre of the tray and make child of marker
-                                self.TrayCentrepoint = self.loadedtray.TrayCentreNode()
-                                
-                                // Get the offset to the centre of the tray
-                                self.localizedContentNode.addChildNode(self.TrayCentrepoint)
-                                self.TrayCentrepoint.position = self.loadedtray.CentrePoint(withid: Int(id), task: self.currentTask)
-                                
-                                // add the position to the space array
-                                self.visibleSpacePos.append(self.TrayCentrepoint.worldTransform)
-                                
-                                position = position + 1
-                                
-                                print(self.TrayCentrepoint.simdConvertPosition(simd_float3(0,0,0), to: nil))
-                                
-                                var node = SCNNode()
-                                node.position = SCNVector3(self.TrayCentrepoint.simdConvertPosition(simd_float3(0,0,0), to: nil))
-                                node.geometry = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
-                                self.sceneView.scene.rootNode.addChildNode(node)
+                if(self.isLocalized == false && frameIncludesSpaceMarker() ){
 
-                                
-                            }
-                        }
-                        
+                    DispatchQueue.main.async {
                         self.targTransform = self.visibleObjectPos.first!
+                        
+                        var node = SCNNode()
+                        node.transform = self.visibleObjectPos.first!
+                        var box = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
+                        node.geometry = box
+                        
+   
+                        self.sceneView.scene.rootNode.addChildNode(node)
+                       // node.position = self.loadedtray.CentrePoint(withid: 0, task: self.currentTask)
+
+                        
+                        
                         // create a localised tray at the first location found:
-                        self.updateContentNode(targTransform: self.targTransform, markerid: Int(newframe.ids.0))
+                        self.updateContentNode(targTransform: self.targTransform, markerid: Int(self.visibleObjectIds.first!))
                         return
                     }
                 }
@@ -335,16 +343,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // is a space localisation marker in shot?
     private func frameIncludesSpaceMarker() -> Bool {
         var position = 0
-        
         for id in self.visibleObjectIds{
             
             if isSpaceMarker(id: id){
                 
-                self.visibleSpaceIds.append(id)
-                self.visibleSpacePos.append(self.visibleObjectPos[position])
-                
+                if !(self.visibleSpaceIds.contains(id)){
+                    self.visibleSpaceIds.append(id)
+                }
+
             }
-            position = position + 1
         }
         if visibleSpaceIds.count > 0 {
             return true
@@ -363,14 +370,44 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     
     private func updateContentNode(targTransform: SCNMatrix4, markerid: Int) {
-            localizedContentNode.opacity = 1.0
+            localizedContentNode.opacity = 0.5
             localizedContentNode.transform = targTransform // apply new transform to node
             // Calculate the centre of the tray and make child of marker
             TrayCentrepoint = loadedtray.TrayCentreNode()
+            localizedContentNode.addChildNode(TrayCentrepoint)
+            TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
+        
+        var marker = SCNNode()
+        var node = SCNNode()
+        marker.transform = targTransform
+        var box = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
+        let material = SCNMaterial()
+        material.diffuse.contents = UIColor.red
+        box.materials = [material]
+        node.geometry = box
+        marker.addChildNode(node)
+        node.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
+        self.sceneView.scene.rootNode.addChildNode(marker)
+        
+        var transform = simd_float4x4(node.worldTransform)
+        
+        self.visibleSpaceTarget.append(SCNVector3(transform.columns.3.x,transform.columns.3.y,transform.columns.3.z))
+        
+        print(self.visibleSpaceTarget.count)
+        
+        if (self.visibleSpaceTarget.count > 3) {
+            addLineBetween(start: self.visibleSpaceTarget[self.visibleSpaceTarget.count-2], end: self.visibleSpaceTarget[self.visibleSpaceTarget.count-1])
+            print(SCNVector3.distanceFrom(vector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-2], toVector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-1]))
+        }
+        
+        
+        
+        
+        //node.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
+        
             
             // Get the offset to the centre of the tray
-                localizedContentNode.addChildNode(TrayCentrepoint)
-                TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
+            //TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
     
         
         // Here we determine that of space markers for the scene is sufficiently localised
@@ -389,9 +426,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.markerFound3.isHidden = false
         }
         
-        if self.NumberofMarkersFound >= self.ConfirmationMarkerLevel
+        if self.NumberofMarkersFound >= self.ConfirmationMarkerLevel && (self.visibleSpaceIds.count > 1)
         {
-  
+
             sceneView.scene.rootNode.addChildNode(localizedContentNode)
             self.activityWait.stopAnimating()
             // Fade the UI
@@ -520,6 +557,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
         }
         return node1
+    }
+    
+    func addLineBetween(start: SCNVector3, end: SCNVector3) {
+        let lineGeometry = SCNGeometry.lineFrom(vector: start, toVector: end)
+        let lineNode = SCNNode(geometry: lineGeometry)
+        
+        sceneView.scene.rootNode.addChildNode(lineNode)
     }
     
     }
