@@ -70,9 +70,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var dispatchProcesscomplete = true; //for threading main que
     // Framerate limiting and localisations settings
     private var frameCounter = 0
-    private var MarkerframeRate = 5 // runs every n frames
+    private var MarkerframeRate = 3 // runs every n frames
     private var NumberofMarkersFound = 0 // Total for a confidence level on the scene
-    private var ConfirmationMarkerLevel = 100 // how many times do I need to markers?
+    private var ConfirmationMarkerLevel = 18 // how many times do I need to markers?
     // for the validation process
     private var status_0 = UIColor.red
     private var status_1 = UIColor.red
@@ -145,7 +145,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.activityWait.startAnimating()
         //self.captureNextFrameForCV = true
         // check whether the ID is present & orientation
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(2), execute: {
+        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
             // pass by reference
             self.validateTask(task: &self.activeTasks[self.taskIndex])
             if self.valid.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
@@ -194,7 +194,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     override func viewDidLoad() {
+       
         super.viewDidLoad()
+
         // Hide the completion tick
         self.completeTick.isHidden = true
         //self.findMarkerLayer.isHidden = false
@@ -253,7 +255,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // Calls every time a frame is updated in the session
     func session(_ session: ARSession, didUpdate frame: ARFrame) {
-        if (self.frameCounter % self.MarkerframeRate == 0 && self.isLocalized == false)
+        if (self.frameCounter % self.MarkerframeRate == 0)
         {
             detectionQueue.sync {
                 self.updateCameraPose(frame: frame)
@@ -295,7 +297,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 
                 if(tempIntNumber != nil){
                     self.visibleObjectIds = Array(tempTuple.prefix(tempIntNumber!))
-                    print(self.visibleObjectIds)
                 }
                 
                 // Copy the transform matrix to the master // note can only track 9 markers in a scene at once
@@ -313,48 +314,57 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 
                 // Is this a first localisation? Can a space marker be seen in shot?
                 if(self.isLocalized == false && frameIncludesSpaceMarker() ){
-
-                    DispatchQueue.main.async {
+                    
+                    var id = self.visibleObjectIds.first!
+                    if self.isSpaceMarker(id: id){
+                        
+                        if !(self.visibleSpaceIds.contains(id)){
+                            self.visibleSpaceIds.append(id)
+                        }
+                        
                         self.targTransform = self.visibleObjectPos.first!
-                        
-                        var node = SCNNode()
-                        node.transform = self.visibleObjectPos.first!
-                        var box = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
-                        node.geometry = box
-                        
-   
-                        self.sceneView.scene.rootNode.addChildNode(node)
-                       // node.position = self.loadedtray.CentrePoint(withid: 0, task: self.currentTask)
-
-                        
-                        
                         // create a localised tray at the first location found:
-                        self.updateContentNode(targTransform: self.targTransform, markerid: Int(self.visibleObjectIds.first!))
+                        print(id)
+                        self.updateContentNode(targTransform: self.targTransform, markerid: Int(id))
+
+                    
+
+                    
+                    /*
+                        var position = 0
+                        for id in self.visibleObjectIds{
+                            
+                            if self.isSpaceMarker(id: id){
+                                
+                                if !(self.visibleSpaceIds.contains(id)){
+                                    self.visibleSpaceIds.append(id)
+                                }
+                                // pass for processing
+                                self.targTransform = self.visibleObjectPos[position]
+                                // create a localised tray at the first location found:
+                                print(id)
+                                self.updateContentNode(targTransform: self.targTransform, markerid: Int(id))
+                            }
+                            position = position + 1
+                        }
+                       
                         return
-                    }
+                    */
+                    
                 }
                 
             }
         
         self.dispatchProcesscomplete = true
         return
+                
+        }
     }
     
     // is a space localisation marker in shot?
     private func frameIncludesSpaceMarker() -> Bool {
-        var position = 0
         for id in self.visibleObjectIds{
-            
-            if isSpaceMarker(id: id){
-                
-                if !(self.visibleSpaceIds.contains(id)){
-                    self.visibleSpaceIds.append(id)
-                }
-
-            }
-        }
-        if visibleSpaceIds.count > 0 {
-            return true
+            if isSpaceMarker(id: id){return true}
         }
         return false
     }
@@ -373,9 +383,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             localizedContentNode.opacity = 0.5
             localizedContentNode.transform = targTransform // apply new transform to node
             // Calculate the centre of the tray and make child of marker
-            TrayCentrepoint = loadedtray.TrayCentreNode()
-            localizedContentNode.addChildNode(TrayCentrepoint)
-            TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
+        
         
         var marker = SCNNode()
         var node = SCNNode()
@@ -384,7 +392,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let material = SCNMaterial()
         material.diffuse.contents = UIColor.red
         box.materials = [material]
-        node.geometry = box
+        
         marker.addChildNode(node)
         node.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
         self.sceneView.scene.rootNode.addChildNode(marker)
@@ -395,10 +403,35 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         print(self.visibleSpaceTarget.count)
         
-        if (self.visibleSpaceTarget.count > 3) {
-            addLineBetween(start: self.visibleSpaceTarget[self.visibleSpaceTarget.count-2], end: self.visibleSpaceTarget[self.visibleSpaceTarget.count-1])
-            print(SCNVector3.distanceFrom(vector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-2], toVector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-1]))
+        if (self.visibleSpaceTarget.count > 10) {
+            
+            // find the total distance between the current and last 4 points and add them together
+            var variance =
+                
+                SCNVector3.distanceFrom(vector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-2], toVector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-1])
+                
+                +
+                
+                SCNVector3.distanceFrom(vector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-3], toVector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-1])
+            
+                +
+            
+                SCNVector3.distanceFrom(vector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-4], toVector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-1])
+            
+            print(variance)
+            // if variance is less than 10mm :
+            if variance < 0.01{
+                self.NumberofMarkersFound = self.NumberofMarkersFound + 1
+                // original marker position is good
+                self.localizedContentNode.transform = marker.transform
+            }
         }
+        
+        TrayCentrepoint = loadedtray.TrayCentreNode()
+        localizedContentNode.addChildNode(TrayCentrepoint)
+        TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
+            
+        
         
         
         
@@ -411,7 +444,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
         
         // Here we determine that of space markers for the scene is sufficiently localised
-        self.NumberofMarkersFound = self.NumberofMarkersFound + 1
+        
         self.activityWait.startAnimating()
         
         if (self.NumberofMarkersFound >= self.ConfirmationMarkerLevel/3){
@@ -468,7 +501,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Check validation for each object in turn
         for object in task.objects {
             // Add the result of each object validation to the array
-            print(validateObject(object: object)!)
             validatedStates.append(validateObject(object: object)!)
         }
         // Record the validation state back against the task
@@ -485,15 +517,29 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         // Is the object present in the view?
         if(self.visibleObjectIds.contains(Int32(object.object_marker.id))){
+            
             // array position of the visible object
             let position = self.visibleObjectIds.firstIndex(of: Int32(object.object_marker.id))!
             
             let relative_position = SCNNode()
             let object_position = SCNNode()
             
+            object_position.name = "object_position"
+            // remove prevoius instruction
+            sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+                if (node.name == "object_position") {
+                    node.removeFromParentNode()
+                }
+            }
+            
+            sceneView.scene.rootNode.addChildNode(object_position)
+            
+            // is the object on the tray TODO
+            
             object_position.transform = visibleObjectPos[position]
             // Node for position analysis
-            relative_position.transform = SCNMatrix4Mult(SCNMatrix4Invert(targTransform),object_position.transform)
+            relative_position.transform = SCNMatrix4Mult(SCNMatrix4Invert(TrayCentrepoint.worldTransform),object_position.worldTransform)
+            
             // If the object is correctly aligned:
             if(valid.ObjectOrientatedToTray(Quaternion: relative_position.orientation)){
                 // record as placed so object ignored on aubsequent calls
@@ -501,6 +547,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 return validationState.aligned
             }
             // rotation estimation is returned
+            
+            if (valid.NodeToBoardPosition(Quaternion: relative_position.orientation) == validationState.turn_right || valid.NodeToBoardPosition(Quaternion: relative_position.orientation) == validationState.flip_180){
+                
+                object_position.addChildNode(rightArrow())
+                
+                // TO DO impliment function to map position
+                object_position.geometry = SCNGeometry.lineFrom(vector: object_position.position, toVector: relative_position.position)
+                
+            }else{
+                object_position.addChildNode(leftArrow())
+            }
+            
             return valid.NodeToBoardPosition(Quaternion: relative_position.orientation)
         }
         return validationState.not_visible
@@ -550,9 +608,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 
                 node1.scale = activeTasks[taskIndex].objects.first?.scale as! SCNVector3
                 
+
                 // add lighting *todo make this ambient based on lighting sensor
                 
-                //addLightNodeTo(node1)
+                
+                
+                addLightNodeTo(node1)
             }
             
         }

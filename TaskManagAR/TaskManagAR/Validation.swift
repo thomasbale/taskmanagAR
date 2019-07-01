@@ -17,7 +17,15 @@ class Validator{
     // return a suggested movement based on node relative to space
     func NodeToBoardPosition(Quaternion: SCNQuaternion) -> validationState{
         
-        if(Quaternion.w > 0.9 && Quaternion.y < 0.1){
+        print("POSITION FOLLOWS * * ")
+        print(Quaternion)
+        let rotation = GLKQuaternionMake(Quaternion.x, Quaternion.y, Quaternion.z, Quaternion.w)
+        
+        print(GLKQuaternionAngle(rotation))
+        print(GLKQuaternionAxis(rotation))
+        
+        
+        if(Quaternion.w > 1 && Quaternion.y < 0.08){
             print("^Correct^") // aligned
             return validationState.aligned
         }

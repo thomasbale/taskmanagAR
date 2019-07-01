@@ -68,7 +68,7 @@ func sessionStatus(frame: ARFrame) -> String? {
 
 func getLightNode() -> SCNNode {
     let light = SCNLight()
-    light.type = .ambient
+    light.type = .omni
     light.intensity = 0.5
     light.temperature = 0.0
 
@@ -85,3 +85,22 @@ func addLightNodeTo(_ node: SCNNode) {
     node.addChildNode(lightNode)
     //lightNodes.append(lightNode)
 }
+
+func leftArrow()-> SCNNode {
+    let tempScene = SCNScene(named: "art.scnassets/Base.lproj/arrow_scaled.dae")!
+    let modelNode = tempScene.rootNode
+    modelNode.scale = SCNVector3(0.1, 0.1, 0.1)
+    modelNode.eulerAngles = SCNVector3Make(0,0,0)
+    return modelNode
+}
+
+func rightArrow()-> SCNNode {
+    let tempScene = SCNScene(named: "art.scnassets/Base.lproj/arrow_scaled.dae")!
+    let modelNode = tempScene.rootNode
+    modelNode.scale = SCNVector3(0.1, 0.1, 0.1)
+    modelNode.eulerAngles = SCNVector3Make(Float(Double.pi),0,0)
+    print("arrow called")
+    
+    return modelNode
+}
+
