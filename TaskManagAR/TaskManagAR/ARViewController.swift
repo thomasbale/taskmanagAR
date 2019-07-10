@@ -13,6 +13,7 @@ import GLKit
 import CoreData
 import CoreVideo
 
+//extension to return line geometry between two vectors
 extension SCNGeometry {
     class func lineFrom(vector vector1: SCNVector3, toVector vector2: SCNVector3) -> SCNGeometry {
         let indices: [Int32] = [0, 1]
@@ -23,7 +24,7 @@ extension SCNGeometry {
         return SCNGeometry(sources: [source], elements: [element])
     }
 }
-
+// ectension to calculate distance between two vector points in the same coordinate space
 extension SCNVector3 {
     static func distanceFrom(vector vector1: SCNVector3, toVector vector2: SCNVector3) -> Float {
         let x0 = vector1.x
