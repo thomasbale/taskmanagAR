@@ -115,7 +115,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // function called when a 'load model' request from user
     @IBAction func buttonloadmodel(_ sender: Any){
+        
+        
+        
         if(isLocalized == false){
+            
             return}
         // remove existing nodes from tray
        TrayCentrepoint.enumerateChildNodes { (node, stop) in
@@ -132,11 +136,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let node0 = RenderNode() // returns the model within the task as a node
         node0.position = SCNVector3(0.15, 0, activeTasks[taskIndex].objects.first?.height as! Float)
         TrayCentrepoint.addChildNode(node0)
+        
+        
     
     }
     
     // function called on validate request from user
     @IBAction func Validate(_ sender: Any) {
+        self.segue()
         // if not ready return
         if(isLocalized == false) || (self.activeTasks[self.taskIndex].validation == nil){
             print("Not localised or no validation available for this task")
@@ -626,6 +633,33 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         let lineNode = SCNNode(geometry: lineGeometry)
         
         sceneView.scene.rootNode.addChildNode(lineNode)
+    }
+    
+    // In a storyboard-based application, you will often want to do a little preparation before navigation
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        
+        if segue.destination is InstructionViewController
+        {
+            let vc = segue.destination as? InstructionViewController
+            // pass over all the tasks and the reference to the one selected
+            //vc?.delegate = self
+        }
+    }
+    
+    
+    // method to run when table view cell is tapped
+    func segue (){
+        print("segue called")
+        //self.secondViewController.activeEvent = events[indexPath.row]
+        // Segue to the second view controller
+        self.performSegue(withIdentifier: "showInstruction", sender: self)
+    }
+    
+    override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
+        if motion == .motionShake {
+            print("shaken")
+            self.dismiss(animated: true, completion: nil)
+        }
     }
     
     }

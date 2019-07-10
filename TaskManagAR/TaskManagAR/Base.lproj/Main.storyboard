@@ -202,12 +202,15 @@
                         <outlet property="nextButton" destination="FYC-2y-dMP" id="PbZ-1w-FUr"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
                         <outletCollection property="buttonpress" destination="KDj-aU-gHe" collectionClass="NSMutableArray" id="mzf-kb-hj7"/>
+                        <segue destination="tcg-Mm-Gbg" kind="popoverPresentation" identifier="showInstruction" popoverAnchorView="BrB-h1-WRS" id="0ZK-Jb-T3q">
+                            <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
+                        </segue>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="SZV-WD-TEh" sceneMemberID="firstResponder"/>
                 <exit id="Cg6-xQ-SVz" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
-            <point key="canvasLocation" x="1765.625" y="79.6875"/>
+            <point key="canvasLocation" x="1770" y="80"/>
         </scene>
         <!--Marker View Controller-->
         <scene sceneID="yfJ-B1-apa">
@@ -265,6 +268,35 @@
                 <placeholder placeholderIdentifier="IBFirstResponder" id="baV-s2-Pbc" sceneMemberID="firstResponder"/>
             </objects>
             <point key="canvasLocation" x="-1083" y="80"/>
+        </scene>
+        <!--Instruction View Controller-->
+        <scene sceneID="WuK-mX-ZLw">
+            <objects>
+                <tableViewController id="tcg-Mm-Gbg" customClass="InstructionViewController" customModule="TaskManagAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <tableView key="view" clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" id="enb-9T-xI1">
+                        <rect key="frame" x="0.0" y="0.0" width="100" height="100"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <prototypes>
+                            <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="default" indentationWidth="10" id="pAT-i6-Teo">
+                                <rect key="frame" x="0.0" y="28" width="100" height="44"/>
+                                <autoresizingMask key="autoresizingMask"/>
+                                <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" preservesSuperviewLayoutMargins="YES" insetsLayoutMarginsFromSafeArea="NO" tableViewCell="pAT-i6-Teo" id="tDc-HA-Wdx">
+                                    <rect key="frame" x="0.0" y="0.0" width="100" height="43.5"/>
+                                    <autoresizingMask key="autoresizingMask"/>
+                                </tableViewCellContentView>
+                            </tableViewCell>
+                        </prototypes>
+                        <connections>
+                            <outlet property="dataSource" destination="tcg-Mm-Gbg" id="2AN-Ia-Y8j"/>
+                            <outlet property="delegate" destination="tcg-Mm-Gbg" id="KKi-E3-UFB"/>
+                        </connections>
+                    </tableView>
+                    <value key="contentSizeForViewInPopover" type="size" width="100" height="100"/>
+                </tableViewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="cgW-UX-Kht" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="2634" y="80"/>
         </scene>
     </scenes>
     <resources>
