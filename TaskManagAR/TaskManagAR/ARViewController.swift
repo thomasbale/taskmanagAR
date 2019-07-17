@@ -59,6 +59,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // All the tasks in the set - this allows progression backwards and forwards
     var activeTasks = [Task()]
     var currentTask = Task()
+    // instructions
+    var vc = InstructionViewController()
     // The index of the current task
     var taskIndex = Int()
     // Localised nodes for this session based on marker target transformation
@@ -640,18 +642,20 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         if segue.destination is InstructionViewController
         {
-            let vc = segue.destination as? InstructionViewController
+            self.vc = segue.destination as! InstructionViewController
             // pass over all the tasks and the reference to the one selected
             //vc?.delegate = self
+            
+            self.vc.activeTask = activeTasks[taskIndex]
         }
     }
     
     
     // method to run when table view cell is tapped
     func segue (){
-        print("segue called")
-        //self.secondViewController.activeEvent = events[indexPath.row]
-        // Segue to the second view controller
+        // Segue to the second view controller after updating
+        vc.activeTask = activeTasks[taskIndex]
+        vc.update()
         self.performSegue(withIdentifier: "showInstruction", sender: self)
     }
     

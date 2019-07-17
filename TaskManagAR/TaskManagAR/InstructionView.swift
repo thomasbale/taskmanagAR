@@ -13,26 +13,42 @@ class InstructionViewController: UITableViewController, DisplayViewControllerDel
     
     
     var TapSegueIdentifier = "showARView"
+    var activeTask = Task()
     var activeEvent = Event()
-    
+    let imageView = UIImageView()
     override func viewDidLoad() {
         super.viewDidLoad()
         
         self.tableView.separatorStyle = UITableViewCell.SeparatorStyle.none
-        
-        let imageName = "tick_ios.png"
-        let image = UIImage(named: imageName)
-        let imageView = UIImageView(image: image!)
-        imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
         self.view.addSubview(imageView)
         //Imageview on Top of View
         self.view.bringSubviewToFront(imageView)
+        
+        self.update()
+        
+        
+        
         
         // Uncomment the following line to preserve selection between presentations
         // self.clearsSelectionOnViewWillAppear = false
         
         // Uncomment the following line to display an Edit button in the navigation bar for this view controller.
         // self.navigationItem.rightBarButtonItem = self.editButtonItem
+    }
+    
+    func update(){
+        if activeTask.instruction != nil{
+
+            let imageName = activeTask.instruction!
+            let image = UIImage(named: imageName)
+            imageView.image = image!
+            imageView.frame = CGRect(x: 0, y: 0, width: 100, height: 100)
+            imageView.sizeToFit()
+            
+            
+            
+        }
+        
     }
     
     // MARK: - Table view data source
@@ -94,6 +110,7 @@ class InstructionViewController: UITableViewController, DisplayViewControllerDel
         
         let index = (self.tableView.indexPathForSelectedRow)!
         if segue.destination is ARViewController
+            
         {
             let vc = segue.destination as? ARViewController
             // pass over all the tasks and the reference to the one selected
