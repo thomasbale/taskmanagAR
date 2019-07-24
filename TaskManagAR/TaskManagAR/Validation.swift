@@ -17,34 +17,28 @@ class Validator{
     // return a suggested movement based on node relative to space
     func NodeToBoardPosition(Quaternion: SCNQuaternion) -> validationState{
         
-        print("POSITION FOLLOWS * * ")
-        print(Quaternion)
+        
         let rotation = GLKQuaternionMake(Quaternion.x, Quaternion.y, Quaternion.z, Quaternion.w)
+
+        print(Quaternion)
         
-        print(GLKQuaternionAngle(rotation))
-        print(GLKQuaternionAxis(rotation))
-        
-        
-        if(Quaternion.w > 1 && Quaternion.y < 0.08){
+        if(Quaternion.w > 0.98 && Quaternion.y < 0.01){
             print("^Correct^") // aligned
             return validationState.aligned
         }
-        if(Quaternion.w < 0.75 && Quaternion.y < -0.6){
-            print("Turn left")
-            return validationState.turn_left
-        }
-        if(Quaternion.w < 0.1 && Quaternion.y > 0.9){
+        if(Quaternion.w < 0.01 && Quaternion.y > 0.98){
             print("Flip 180") // 180 degrees misaligned
             return validationState.flip_180
         }
-        if(Quaternion.w > 0.7 && Quaternion.y > 0.7){
+        
+        if(Quaternion.w >= 0.01 && Quaternion.y <= 0.98 && Quaternion.y >= 0){
             print("Turn right")
             return validationState.turn_right
         }
         
-        // If we aren't sure
-        print("Uncertain")
-        return validationState.misaligned
+        // else
+        print("Turn left")
+        return validationState.turn_left
         
     }
     

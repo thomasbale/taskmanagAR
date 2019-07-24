@@ -38,7 +38,7 @@ extension SCNVector3 {
     }
 }
 
-//let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically printed marker in meters
+//let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically med marker in meters
 
 protocol DisplayViewControllerDelegate : NSObjectProtocol{
      func updateEvent(activeEvents: [Task])
@@ -145,7 +145,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // function called on validate request from user
     @IBAction func Validate(_ sender: Any) {
-        self.segue()
+        //self.segue() //debugging
         // if not ready return
         if(isLocalized == false) || (self.activeTasks[self.taskIndex].validation == nil){
             print("Not localised or no validation available for this task")
@@ -334,7 +334,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         
                         self.targTransform = self.visibleObjectPos.first!
                         // create a localised tray at the first location found:
-                        print(id)
+        
                         self.updateContentNode(targTransform: self.targTransform, markerid: Int(id))
 
                     
@@ -410,8 +410,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         var transform = simd_float4x4(node.worldTransform)
         
         self.visibleSpaceTarget.append(SCNVector3(transform.columns.3.x,transform.columns.3.y,transform.columns.3.z))
-        
-        print(self.visibleSpaceTarget.count)
+
         
         if (self.visibleSpaceTarget.count > 10) {
             
@@ -428,7 +427,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
                 SCNVector3.distanceFrom(vector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-4], toVector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-1])
             
-            print(variance)
             // if variance is less than 10mm :
             if variance < 0.01{
                 self.NumberofMarkersFound = self.NumberofMarkersFound + 1
@@ -527,7 +525,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         // Is the object present in the view?
         if(self.visibleObjectIds.contains(Int32(object.object_marker.id))){
-            
             // array position of the visible object
             let position = self.visibleObjectIds.firstIndex(of: Int32(object.object_marker.id))!
             
@@ -544,14 +541,34 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
             sceneView.scene.rootNode.addChildNode(object_position)
             
+            let secondobject_pos = SCNNode()
+            
+            
+            //sceneView.scene.rootNode.addChildNode(relative_position)
             // is the object on the tray TODO
             
             object_position.transform = visibleObjectPos[position]
+            
             // Node for position analysis
+            
+            secondobject_pos.transform = object_position.transform
+            
+            TrayCentrepoint.addChildNode(secondobject_pos)
+            
+            
             relative_position.transform = SCNMatrix4Mult(SCNMatrix4Invert(TrayCentrepoint.worldTransform),object_position.worldTransform)
             
+            self.addLineBetween(start: TrayCentrepoint.worldPosition, end: object_position.worldPosition)
+            
+            let distance = SCNVector3.distanceFrom(vector: TrayCentrepoint.worldPosition, toVector: object_position.worldPosition)
+           
+            print("distance",distance)
+           
+            //TrayCentrepoint.geometry = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
+            //object_position.geometry = SCNTorus(ringRadius: 0.1, pipeRadius: 0.1)
+            
             // If the object is correctly aligned:
-            if(valid.ObjectOrientatedToTray(Quaternion: relative_position.orientation)){
+            if(valid.ObjectOrientatedToTray(Quaternion: secondobject_pos.orientation)){
                 // record as placed so object ignored on aubsequent calls
                 self.ObjectsPlacedDone.append(object.object_marker.id)
                 return validationState.aligned
@@ -604,10 +621,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // Try to load the node assets from the scene
         if let assetScene = SCNScene(named: activeTasks[taskIndex].objects.first?.parent_scene as! String) {
-            print("Loaded scene assets")
+
             
             if let l_node = assetScene.rootNode.childNode(withName: asset_name, recursively: true) {
-                print("Loaded scene node")
+
                 let anchor = ARAnchor(transform: simd_float4x4(targTransform))
                 sceneView.session.add(anchor:anchor)
                 l_node.transform = TrayCentrepoint.transform
