@@ -153,11 +153,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         // capture a frame
         self.activityWait.startAnimating()
+        self.validateTask(task: &self.activeTasks[self.taskIndex])
         //self.captureNextFrameForCV = true
         // check whether the ID is present & orientation
         DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
             // pass by reference
-            self.validateTask(task: &self.activeTasks[self.taskIndex])
             if self.valid.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
                 // Check the task as complete
                 self.activeTasks[self.taskIndex].complete = true
@@ -336,30 +336,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         // create a localised tray at the first location found:
         
                         self.updateContentNode(targTransform: self.targTransform, markerid: Int(id))
-
-                    
-
-                    
-                    /*
-                        var position = 0
-                        for id in self.visibleObjectIds{
-                            
-                            if self.isSpaceMarker(id: id){
-                                
-                                if !(self.visibleSpaceIds.contains(id)){
-                                    self.visibleSpaceIds.append(id)
-                                }
-                                // pass for processing
-                                self.targTransform = self.visibleObjectPos[position]
-                                // create a localised tray at the first location found:
-                                print(id)
-                                self.updateContentNode(targTransform: self.targTransform, markerid: Int(id))
-                            }
-                            position = position + 1
-                        }
-                       
-                        return
-                    */
                     
                 }
                 
@@ -438,20 +414,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         TrayCentrepoint = loadedtray.TrayCentreNode()
         localizedContentNode.addChildNode(TrayCentrepoint)
         TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
-            
-        
-        
-        
-        
-        
-        //node.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
-        
-            
-            // Get the offset to the centre of the tray
-            //TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
-    
-        
-        // Here we determine that of space markers for the scene is sufficiently localised
         
         self.activityWait.startAnimating()
         
@@ -527,68 +489,37 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if(self.visibleObjectIds.contains(Int32(object.object_marker.id))){
             // array position of the visible object
             let position = self.visibleObjectIds.firstIndex(of: Int32(object.object_marker.id))!
-            
-            let relative_position = SCNNode()
             let object_position = SCNNode()
+            var direction_line = SCNNode()
             
-            object_position.name = "object_position"
+            object_position.name = "object_position" + String(object.object_marker.id)
+            direction_line.name = "direction_line" + String(object.object_marker.id)
+            
             // remove prevoius instruction
             sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-                if (node.name == "object_position") {
+                if (node.name == object_position.name || node.name == direction_line.name) {
                     node.removeFromParentNode()
                 }
             }
-            
             sceneView.scene.rootNode.addChildNode(object_position)
-            
-            let secondobject_pos = SCNNode()
-            
-            
-            //sceneView.scene.rootNode.addChildNode(relative_position)
-            // is the object on the tray TODO
-            
             object_position.transform = visibleObjectPos[position]
             
-            // Node for position analysis
+            direction_line = addLineBetween(start: object_position.worldPosition, end: TrayCentrepoint.worldPosition)
+            direction_line.name = "direction_line"
+            sceneView.scene.rootNode.addChildNode(direction_line)
             
-            secondobject_pos.transform = object_position.transform
-            
-            TrayCentrepoint.addChildNode(secondobject_pos)
-            
-            
-            relative_position.transform = SCNMatrix4Mult(SCNMatrix4Invert(TrayCentrepoint.worldTransform),object_position.worldTransform)
-            
-            self.addLineBetween(start: TrayCentrepoint.worldPosition, end: object_position.worldPosition)
-            
-            let distance = SCNVector3.distanceFrom(vector: TrayCentrepoint.worldPosition, toVector: object_position.worldPosition)
-           
-            print("distance",distance)
-           
-            //TrayCentrepoint.geometry = SCNBox(width: 0.1, height: 0.1, length: 0.1, chamferRadius: 0)
-            //object_position.geometry = SCNTorus(ringRadius: 0.1, pipeRadius: 0.1)
-            
-            // If the object is correctly aligned:
-            if(valid.ObjectOrientatedToTray(Quaternion: secondobject_pos.orientation)){
-                // record as placed so object ignored on aubsequent calls
-                self.ObjectsPlacedDone.append(object.object_marker.id)
-                return validationState.aligned
-            }
-            // rotation estimation is returned
-            
-            if (valid.NodeToBoardPosition(Quaternion: relative_position.orientation) == validationState.turn_right || valid.NodeToBoardPosition(Quaternion: relative_position.orientation) == validationState.flip_180){
-                
-                object_position.addChildNode(rightArrow())
-                
-                // TO DO impliment function to map position
-                object_position.geometry = SCNGeometry.lineFrom(vector: object_position.position, toVector: relative_position.position)
-                
-            }else{
-                object_position.addChildNode(leftArrow())
-            }
-            
-            return valid.NodeToBoardPosition(Quaternion: relative_position.orientation)
+            return valid.nodeTonodePath(candidate: object_position, target: TrayCentrepoint)
         }
         return validationState.not_visible
+    }
+
+    
+    func eulerToDegrees(euler: Float) -> Float{
+        var euler_deg = euler * 180 / Float.pi
+        if( euler_deg < 0 ){
+            euler_deg = euler_deg + 360.0
+        }
+        return euler_deg
     }
 
     
@@ -647,11 +578,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return node1
     }
     
-    func addLineBetween(start: SCNVector3, end: SCNVector3) {
+    func addLineBetween(start: SCNVector3, end: SCNVector3) -> SCNNode {
         let lineGeometry = SCNGeometry.lineFrom(vector: start, toVector: end)
         let lineNode = SCNNode(geometry: lineGeometry)
         
-        sceneView.scene.rootNode.addChildNode(lineNode)
+        return lineNode
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation

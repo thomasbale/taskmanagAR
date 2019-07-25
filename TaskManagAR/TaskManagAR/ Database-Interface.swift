@@ -54,6 +54,9 @@ struct Object{
     var scale = SCNVector3()
     var height = Float()
     let istool = Bool()
+    // Object offset from the centre of the tray: defaults to centre
+    let x_offset = Float()
+    let y_offset = Float()
 }
 
 struct Task{
@@ -88,7 +91,7 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     // create the tasks
     var findTray = Task(name: "Find Tray", description: "Locate correct task module tray", objects: [Object()], space: taskModuleTray, complete: false, validation: nil, instruction: nil)
     
-    var findPlate = Task(name: "Find Plate", description: "Locate LBSRP Plate", objects: [Object(object_marker: Marker(id: 6), name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0)], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: nil)
+    var findPlate = Task(name: "Find Plate", description: "Locate LBSRP Plate", objects: [Object(object_marker: Marker(id: 6), name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0), Object(object_marker: Marker(id: 8), name: "LBSRP_Adapter", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0)], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: nil)
     
     // Create validation
     

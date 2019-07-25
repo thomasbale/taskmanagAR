@@ -94,6 +94,13 @@ func leftArrow()-> SCNNode {
     return modelNode
 }
 
+func tickDone()-> SCNNode {
+    let modelNode = SCNNode()
+    modelNode.geometry = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
+    return modelNode
+}
+
+
 func rightArrow()-> SCNNode {
     let tempScene = SCNScene(named: "art.scnassets/Base.lproj/arrow_scaled.dae")!
     let modelNode = tempScene.rootNode
