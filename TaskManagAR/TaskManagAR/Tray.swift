@@ -33,6 +33,11 @@ class Tray{
         let plane = SCNNode(geometry: SCNBox(width: 0.05, height: 0.005, length: 0.05, chamferRadius: 0))
         return plane
     }
+    
+    func getDistance () -> Float{
+        return Float(markerHorizontalSeparation/2)
+    }
+    
     // Returns the full tray plane relative to the fudicial marker
     func GetObjects (withid: Int, localnode: SCNNode) -> SCNScene {
         let newScene = SCNScene()

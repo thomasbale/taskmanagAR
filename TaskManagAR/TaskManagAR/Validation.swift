@@ -58,23 +58,63 @@ class Validator{
         // flip axis as per openGL issue
         relative_position.rotation = SCNVector4(relative_position.rotation.y, relative_position.rotation.x, relative_position.rotation.z, relative_position.rotation.w)
         
-        var degree_rot = eulerToDegrees(euler: relative_position.eulerAngles.x)
+        let degree_rot = eulerToDegrees(euler: relative_position.eulerAngles.x)
         
-        print("distance",distance)
-        print("rotation:",degree_rot)
         
-        if (degree_rot > 360.0 - rotation_deg_tollerance || degree_rot < rotation_deg_tollerance) {
+        
+        
+        
+        
+        if (degree_rot > 360.0 - rotation_deg_tollerance || degree_rot < rotation_deg_tollerance) && distance < Float(distance_m_tollerance) {
             // accurate
             candidate.addChildNode(tickDone())
+            
+            let destination_marker = TrayWaypoint(colour: UIColor.green)
+            candidate.addChildNode(destination_marker)
+            destination_marker.worldPosition = target.worldPosition
+            
             return validationState.aligned
         }
         
-        if (degree_rot > 180.0 && degree_rot > rotation_deg_tollerance) {
+        if (degree_rot > 180.0) {
             // left turn
-            candidate.addChildNode(leftArrow())
+            if distance < Float(0.4){
+                candidate.addChildNode(Arrow(degrees: degree_rot, direction: "left"))
+                let destination_marker = TrayWaypoint(colour: UIColor.red)
+                candidate.addChildNode(destination_marker)
+                destination_marker.worldPosition = target.worldPosition
+                AddFloatingInstruction(message: "move  " + String(distance) + "m closer", parent: destination_marker)
+                
+                AddFloatingInstruction(message: "rotate  " + String(360.0 - degree_rot) + " degrees", parent: candidate)
+                
+            }else{
+                AddFloatingInstruction(message: "Move to Tray", parent: candidate)
+                let destination_marker = TrayWaypoint(colour: UIColor.red)
+                candidate.addChildNode(destination_marker)
+                destination_marker.worldPosition = target.worldPosition
+                AddFloatingInstruction(message: "move  " + String(distance) + " closer", parent: destination_marker)
+            }
             return validationState.turn_left
         }
-        candidate.addChildNode(rightArrow())
+        
+        
+        if distance < Float(0.4){
+            candidate.addChildNode(Arrow(degrees: degree_rot, direction: "right"))
+            AddFloatingInstruction(message: "rotate  " + String(degree_rot) + " degrees", parent: candidate)
+            
+            let destination_marker = TrayWaypoint(colour: UIColor.red)
+            candidate.addChildNode(destination_marker)
+            destination_marker.worldPosition = target.worldPosition
+            AddFloatingInstruction(message: "move  " + String(distance) + "m closer", parent: destination_marker)
+        }
+        else{
+            AddFloatingInstruction(message: "Move to Tray", parent: candidate)
+            
+            let destination_marker = TrayWaypoint(colour: UIColor.red)
+            candidate.addChildNode(destination_marker)
+            destination_marker.worldPosition = target.worldPosition
+            AddFloatingInstruction(message: "move  " + String(distance) + "m closer", parent: destination_marker)
+        }
         return validationState.turn_right
     }
     

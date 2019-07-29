@@ -67,30 +67,27 @@ func sessionStatus(frame: ARFrame) -> String? {
 }
 
 func getLightNode() -> SCNNode {
-    let light = SCNLight()
-    light.type = .omni
-    light.intensity = 0.5
-    light.temperature = 0.0
-
+    let ambientLight = SCNLight()
+    ambientLight.type = .ambient
+    ambientLight.intensity = 40
     
-    let lightNode = SCNNode()
-    lightNode.light = light
-    lightNode.position = SCNVector3(0,1,0)
-    
-    return lightNode
+    let lightnode = SCNNode()
+    lightnode.light = ambientLight
+    return lightnode
 }
 
-func addLightNodeTo(_ node: SCNNode) {
-    let lightNode = getLightNode()
-    node.addChildNode(lightNode)
-    //lightNodes.append(lightNode)
-}
+
 
 func leftArrow()-> SCNNode {
     let tempScene = SCNScene(named: "art.scnassets/Base.lproj/arrow_scaled.dae")!
     let modelNode = tempScene.rootNode
     modelNode.scale = SCNVector3(0.1, 0.1, 0.1)
     modelNode.eulerAngles = SCNVector3Make(0,0,0)
+    
+    let action : SCNAction = SCNAction.rotate(by: .pi, around: SCNVector3(0, 0, 1), duration: 1.0)
+    let forever = SCNAction.repeatForever(action)
+    modelNode.runAction(forever)
+    
     return modelNode
 }
 
@@ -111,3 +108,84 @@ func rightArrow()-> SCNNode {
     return modelNode
 }
 
+func Arrow(degrees: Float, direction: String)-> SCNNode {
+    let tempScene = SCNScene(named: "art.scnassets/Base.lproj/arrow_scaled.dae")!
+    let modelNode = tempScene.rootNode
+    modelNode.scale = SCNVector3(0.1, 0.1, 0.1)
+    
+    if direction == "right" {
+        modelNode.eulerAngles = SCNVector3Make(Float(Double.pi),0,0)
+    }else{
+        modelNode.eulerAngles = SCNVector3Make(0,0,0)
+    }
+    
+    let up :
+        
+        SCNAction = SCNAction.rotate(by: CGFloat(deg2rad(degrees)), around: SCNVector3(0, 0, 1), duration: 1.5)
+    
+    let down :
+        
+        SCNAction = SCNAction.rotate(by: -CGFloat(deg2rad(degrees)), around: SCNVector3(0, 0, 1), duration: 0.2)
+    
+    var sequence = [SCNAction]()
+    
+    sequence.append(up)
+    sequence.append(down)
+    
+    let actions = SCNAction.sequence(sequence)
+    
+    let forever = SCNAction.repeatForever(actions)
+
+    
+    modelNode.runAction(forever)
+    
+    return modelNode
+}
+
+
+func TrayWaypoint(colour: UIColor)-> SCNNode{
+    let waypoint = SCNNode()
+    let torus = SCNTorus(ringRadius: 0.1, pipeRadius: 0.01)
+    let material = SCNMaterial()
+    waypoint.geometry = torus
+    waypoint.eulerAngles = SCNVector3Make(Float(Double.pi/2), 0,0 )
+
+    material.diffuse.contents = colour
+    torus.materials = [material]
+    
+    return waypoint
+}
+
+func lineTowards(from: SCNNode, to: SCNNode) -> SCNNode{
+    //from.addChildNode(to)
+    let lineGeometry = SCNGeometry.lineFrom(vector: from.worldPosition, toVector: to.worldPosition)
+    let lineNode = SCNNode(geometry: lineGeometry)
+    return lineNode
+}
+
+func AddFloatingInstruction(message: String, parent: SCNNode){
+    parent.addChildNode(createTextNode(string: message))
+}
+
+func createTextNode(string: String) -> SCNNode {
+    let text = SCNText(string: string, extrusionDepth: 0.1)
+    text.font = UIFont.systemFont(ofSize: 0.5)
+    text.flatness = 0.01
+    text.firstMaterial?.diffuse.contents = UIColor.white
+    
+    let textNode = SCNNode(geometry: text)
+    
+    let fontSize = Float(0.02)
+    textNode.scale = SCNVector3(fontSize, fontSize, fontSize)
+    //textNode.position = SCNVector3Zero
+    
+    textNode.constraints = [SCNBillboardConstraint()]
+    
+    // apply the constraint to the parent node
+    
+    return textNode
+}
+
+func deg2rad(_ number: Float) -> Float {
+    return number * .pi / 180
+}

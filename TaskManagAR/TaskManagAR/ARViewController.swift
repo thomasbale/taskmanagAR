@@ -185,7 +185,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if (taskIndex < activeTasks.count-1) {
             taskIndex = taskIndex + 1
             // Load in current space
-            buttonloadmodel(self)
+            //buttonloadmodel(self)
         }
         
     }
@@ -207,6 +207,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
        
         super.viewDidLoad()
 
+        self.sceneView.scene.rootNode.addChildNode(getLightNode())
+        
         // Hide the completion tick
         self.completeTick.isHidden = true
         //self.findMarkerLayer.isHidden = false
@@ -451,7 +453,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             }
             self.isLocalized = true
             // load the model
-            self.buttonloadmodel(self)
+            //self.buttonloadmodel(self)
         }
         
         }
@@ -492,6 +494,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             let object_position = SCNNode()
             var direction_line = SCNNode()
             
+    
             object_position.name = "object_position" + String(object.object_marker.id)
             direction_line.name = "direction_line" + String(object.object_marker.id)
             
@@ -501,12 +504,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     node.removeFromParentNode()
                 }
             }
+            
             sceneView.scene.rootNode.addChildNode(object_position)
             object_position.transform = visibleObjectPos[position]
-            
-            direction_line = addLineBetween(start: object_position.worldPosition, end: TrayCentrepoint.worldPosition)
-            direction_line.name = "direction_line"
             sceneView.scene.rootNode.addChildNode(direction_line)
+            direction_line.geometry = addLineBetween(start: object_position.worldPosition, end: TrayCentrepoint.worldPosition)
+
             
             return valid.nodeTonodePath(candidate: object_position, target: TrayCentrepoint)
         }
@@ -569,20 +572,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
                 // add lighting *todo make this ambient based on lighting sensor
                 
-                
-                
-                addLightNodeTo(node1)
+                //addLightNodeTo(node1)
             }
             
         }
         return node1
     }
     
-    func addLineBetween(start: SCNVector3, end: SCNVector3) -> SCNNode {
+    func addLineBetween(start: SCNVector3, end: SCNVector3) -> SCNGeometry {
         let lineGeometry = SCNGeometry.lineFrom(vector: start, toVector: end)
-        let lineNode = SCNNode(geometry: lineGeometry)
         
-        return lineNode
+        return lineGeometry
     }
     
     // In a storyboard-based application, you will often want to do a little preparation before navigation
