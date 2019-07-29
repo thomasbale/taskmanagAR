@@ -189,3 +189,19 @@ func createTextNode(string: String) -> SCNNode {
 func deg2rad(_ number: Float) -> Float {
     return number * .pi / 180
 }
+
+func tranformCoordinate(_ latitude: Double, _ longitude: Double, zoom: Int) -> (x: Int, y: Int) {
+    let tileX = Int(floor((longitude + 180) / 360.0 * pow(2.0, Double(zoom))))
+    let tileY = Int(floor((1 - log( tan( latitude * Double.pi / 180.0 ) + 1 / cos( latitude * Double.pi / 180.0 )) / Double.pi ) / 2 * pow(2.0, Double(zoom))))
+    
+    return (tileX, tileY)
+}
+
+func tileToLatLon(tileX : Int, tileY : Int, mapZoom: Int) -> (lat_deg : Double, lon_deg : Double) {
+    let n : Double = pow(2.0, Double(mapZoom))
+    let lon = (Double(tileX) / n) * 360.0 - 180.0
+    let lat = atan( sinh (.pi - (Double(tileY) / n) * 2 * Double.pi)) * (180.0 / .pi)
+    
+    return (lat, lon)
+}
+

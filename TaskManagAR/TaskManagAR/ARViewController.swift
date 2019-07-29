@@ -204,8 +204,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     override func viewDidLoad() {
-       
+        
+    
         super.viewDidLoad()
+        
+        print(tranformCoordinate(51.454514,-2.587910, zoom: 18))
+        
 
         self.sceneView.scene.rootNode.addChildNode(getLightNode())
         
