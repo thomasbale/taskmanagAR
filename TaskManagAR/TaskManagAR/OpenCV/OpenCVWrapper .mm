@@ -87,7 +87,6 @@
     mat.m43 = (float) 0.0;
     mat.m44 = (float) 0.0;
     
-    
     // copy the rotationRows
     mat.m11 = (float) openCVTransformation.at<double>(0, 0);
     mat.m12 = (float) openCVTransformation.at<double>(0, 1);
@@ -112,7 +111,6 @@
     mat.m43 = (float)openCVTransformation.at<double>(3, 2);
     mat.m44 = (float)openCVTransformation.at<double>(3, 3);
     
-    
     return mat;
     
 }
@@ -123,6 +121,7 @@
     
     // Create a new struct
     struct FrameCall frame;
+    
     frame.pixelBuffer = pixelBuffer;
     frame.intrinsics = intrinsics;
     frame.markerSize = markerSize;
@@ -143,7 +142,6 @@
     intrinMat.at<Float64>(2,1) = intrinsics.columns[1][2];
     intrinMat.at<Float64>(2,2) = intrinsics.columns[2][2];
 
-    
     distMat.at<Float64>(0,0) = 0;
     distMat.at<Float64>(0,1) = 0;
     distMat.at<Float64>(0,2) = 0;
@@ -154,6 +152,7 @@
     // The first plane / channel (at index 0) is the grayscale plane
     // See more infomation about the YUV format
     // http://en.wikipedia.org/wiki/YUV
+    
     CVPixelBufferLockBaseAddress(pixelBuffer, 0);
     void *baseaddress = CVPixelBufferGetBaseAddressOfPlane(pixelBuffer, 0);
     CGFloat width = CVPixelBufferGetWidth(pixelBuffer);
@@ -162,30 +161,35 @@
     
     std::vector<int> ids;
     std::vector<std::vector<cv::Point2f>> corners;
+    
     cv::aruco::detectMarkers(mat,dictionary,corners,ids);
     
-    frame.no_markers = 0;
+    std::vector<cv::Vec3d> rvecs, tvecs;
+    cv::Mat distCoeffs = cv::Mat::zeros(8, 1, CV_64FC1); //zero out distortion for now
+    cv::aruco::estimatePoseSingleMarkers(corners, markerSize, intrinMat, distCoeffs, rvecs, tvecs);
     
-    //Todo : somehow handle situation with multiple markers - interim solution only grab the last item in the list
-    if(ids.size() > 0 && ids.size() < 10) {
+    frame.no_markers = (int)ids.size();
+    
+    if (ids.size() >= 10) {
+        frame.no_markers = 0;
+    }
+    
+    if(frame.no_markers > 0 && frame.no_markers < 10) {
         
-        frame.no_markers = (int)ids.size();
+        // debug
+        //std::cout << frame.no_markers;
         int i;
         for( i = 0; i < frame.no_markers; i++) {
-            frame.ids[i] = (double)ids[i];
             
-            std::vector<cv::Vec3d> rvecs, tvecs;
-            cv::Mat distCoeffs = cv::Mat::zeros(8, 1, CV_64FC1); //zero out distortion for now
-            cv::aruco::estimatePoseSingleMarkers(corners, markerSize, intrinMat, distCoeffs, rvecs, tvecs);
+            // debug
+            //std::cout << ids[i];
             
-            CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
+            //CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
             
             // Need to consider an efficient approach as removing first element is inefficient
             cv::Mat rotMat, tranMat;
             
             cv::Rodrigues(rvecs[i], rotMat); //convert results rotation matrix
-            
-            
             cv::Mat extrinsics(4, 4, CV_64FC1);
             
             // Apply identity matrix before setting values .
@@ -214,20 +218,19 @@
                 for (int col = 0; col < rotMat.rows; col++) {
                     extrinsics.at<double>(row,col) = rotMat.at<double>(row,col); //copy rotation matrix values
                 }
-                extrinsics.at<double>(row,3) = tvecs[0][row];
-                
+                extrinsics.at<double>(row,3) = tvecs[i][row];
+
             }
-            
+
             //The important thing to remember about the extrinsic matrix is that it describes how the world is transformed relative to the camera. This is often counter-intuitive, because we usually want to specify how the camera is transformed relative to the world.
             // Convert coordinate systems of opencv to openGL (ARKIT)
             
             extrinsics = [OpenCVWrapper GetCVToGLMat] * extrinsics;
             
-            frame.extrinsics = [OpenCVWrapper transformToSceneKitMatrix:extrinsics];
-            
+            frame.ids[i] = (int)ids[i];
             frame.all_extrinsics[i] = FoundMarker();
-            
-            frame.all_extrinsics[i].extrinsics = frame.extrinsics;
+            frame.all_extrinsics[i].id = (int)frame.ids[i];
+            frame.all_extrinsics[i].extrinsics = [OpenCVWrapper transformToSceneKitMatrix:extrinsics];
             
         }
         
@@ -236,10 +239,12 @@
         return frame;
     }
     
+    
     CVPixelBufferUnlockBaseAddress(pixelBuffer, 0);
     
     return frame;
 }
+
 
 
 @end

@@ -66,7 +66,7 @@
                         </connections>
                     </tableView>
                     <connections>
-                        <segue destination="BV1-FR-VrT" kind="presentation" identifier="showARView" modalPresentationStyle="fullScreen" modalTransitionStyle="crossDissolve" id="euE-Od-n9G"/>
+                        <segue destination="BV1-FR-VrT" kind="presentation" identifier="showARView" id="vn2-be-VtT"/>
                     </connections>
                 </tableViewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="y1Q-m4-Wmm" userLabel="First Responder" sceneMemberID="firstResponder"/>
@@ -211,6 +211,143 @@
                 <exit id="Cg6-xQ-SVz" userLabel="Exit" sceneMemberID="exit"/>
             </objects>
             <point key="canvasLocation" x="1770" y="80"/>
+        </scene>
+        <!--View Controller2-->
+        <scene sceneID="h0h-hn-4sX">
+            <objects>
+                <viewController id="MsM-3j-B41" customClass="ARViewController2" customModule="TaskManagAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="9RM-kd-QU4">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                        <subviews>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="I6L-YD-eCf">
+                                <rect key="frame" x="0.0" y="0.0" width="768" height="938"/>
+                            </arscnView>
+                            <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="5XU-f5-lax">
+                                <rect key="frame" x="0.0" y="913" width="768" height="111"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <subviews>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hGh-mq-maP">
+                                        <rect key="frame" x="204" y="13" width="175" height="49"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Load task">
+                                            <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="buttonloadmodel:" destination="MsM-3j-B41" eventType="touchUpInside" id="irO-Gj-Yoa"/>
+                                            <action selector="loadmodel:" destination="MsM-3j-B41" eventType="touchDragInside" id="yEj-TO-Q36"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="NgX-ml-LWN">
+                                        <rect key="frame" x="665" y="20" width="82" height="36"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Next task">
+                                            <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="nextTask:" destination="MsM-3j-B41" eventType="touchUpInside" id="JHT-XY-655"/>
+                                        </connections>
+                                    </button>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="30T-qj-C0d">
+                                        <rect key="frame" x="0.0" y="13" width="170" height="50"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Find marker"/>
+                                        <connections>
+                                            <action selector="pressed:" destination="MsM-3j-B41" eventType="touchUpInside" id="KxY-kB-YRo"/>
+                                        </connections>
+                                    </button>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="8Jw-d6-cNl">
+                                        <rect key="frame" x="543" y="82" width="146" height="21"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="13"/>
+                                        <nil key="textColor"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="IkW-Ou-RhK">
+                                        <rect key="frame" x="417" y="13" width="175" height="49"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
+                                        <state key="normal" title="Validate task">
+                                            <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
+                                        </state>
+                                        <connections>
+                                            <action selector="Validate:" destination="MsM-3j-B41" eventType="touchUpInside" id="BCO-ui-4nJ"/>
+                                            <action selector="buttonloadmodel:" destination="MsM-3j-B41" eventType="touchUpInside" id="kCP-hJ-yZA"/>
+                                            <action selector="loadmodel:" destination="MsM-3j-B41" eventType="touchDragInside" id="M37-L5-AP2"/>
+                                        </connections>
+                                    </button>
+                                </subviews>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </view>
+                            <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="MxJ-HY-iZF">
+                                <rect key="frame" x="24" y="20" width="39" height="30"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <state key="normal" title="Reset"/>
+                                <connections>
+                                    <action selector="backPressed:" destination="abh-ij-wTW" eventType="touchUpInside" id="2Hz-AS-hiA"/>
+                                    <action selector="backPressed:" destination="Cg6-xQ-SVz" eventType="touchUpInside" id="D9z-M1-xit"/>
+                                    <action selector="backToPrevious:" destination="MsM-3j-B41" eventType="touchUpInside" id="7gD-Y5-chY"/>
+                                </connections>
+                            </button>
+                            <activityIndicatorView hidden="YES" opaque="NO" contentMode="center" horizontalHuggingPriority="750" verticalHuggingPriority="750" fixedFrame="YES" hidesWhenStopped="YES" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="zJq-68-zvG">
+                                <rect key="frame" x="366" y="425" width="37" height="37"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                <rect key="contentStretch" x="0.20000000000000001" y="0.20000000000000001" width="1" height="1"/>
+                                <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </activityIndicatorView>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick_ios.png" translatesAutoresizingMaskIntoConstraints="NO" id="Hqd-lS-7jt">
+                                <rect key="frame" x="264" y="328" width="240" height="230"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="View_QR_code.png" translatesAutoresizingMaskIntoConstraints="NO" id="I3V-ln-abx">
+                                <rect key="frame" x="-129" y="170" width="1027" height="547"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick_ios.png" translatesAutoresizingMaskIntoConstraints="NO" id="WQd-4N-c3X">
+                                <rect key="frame" x="151" y="203" width="103" height="117"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick_ios.png" translatesAutoresizingMaskIntoConstraints="NO" id="CGK-KO-RXa">
+                                <rect key="frame" x="150" y="570" width="104" height="117"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick_ios.png" translatesAutoresizingMaskIntoConstraints="NO" id="OTU-2G-f4P">
+                                <rect key="frame" x="517" y="203" width="105" height="118"/>
+                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                            </imageView>
+                        </subviews>
+                        <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstItem="I6L-YD-eCf" firstAttribute="bottom" secondItem="5e7-Bg-6kP" secondAttribute="bottom" id="Kyh-5f-C20"/>
+                            <constraint firstItem="I6L-YD-eCf" firstAttribute="top" secondItem="9RM-kd-QU4" secondAttribute="top" id="YTn-aR-LJ5"/>
+                            <constraint firstItem="I6L-YD-eCf" firstAttribute="leading" secondItem="5e7-Bg-6kP" secondAttribute="leading" id="cx0-Jz-cHt"/>
+                            <constraint firstItem="I6L-YD-eCf" firstAttribute="trailing" secondItem="5e7-Bg-6kP" secondAttribute="trailing" id="shr-MZ-B5D"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="5e7-Bg-6kP"/>
+                    </view>
+                    <connections>
+                        <outlet property="Debuggingop" destination="8Jw-d6-cNl" id="FKi-sq-NG1"/>
+                        <outlet property="ValidateButton" destination="IkW-Ou-RhK" id="Q3B-zq-1YD"/>
+                        <outlet property="activityWait" destination="zJq-68-zvG" id="xuW-6l-c64"/>
+                        <outlet property="backButton" destination="MxJ-HY-iZF" id="Fsg-P9-yba"/>
+                        <outlet property="completeTick" destination="Hqd-lS-7jt" id="xMv-eL-3xs"/>
+                        <outlet property="findMarkerLayer" destination="I3V-ln-abx" id="m3A-7c-G1U"/>
+                        <outlet property="loadmodelbutton" destination="hGh-mq-maP" id="GfL-8q-P7l"/>
+                        <outlet property="markerFound1" destination="CGK-KO-RXa" id="bX1-Oq-M0H"/>
+                        <outlet property="markerFound2" destination="WQd-4N-c3X" id="hNt-Yw-JRF"/>
+                        <outlet property="markerFound3" destination="OTU-2G-f4P" id="xeH-14-fOy"/>
+                        <outlet property="nextButton" destination="NgX-ml-LWN" id="O2K-Ds-Iun"/>
+                        <outlet property="sceneView" destination="I6L-YD-eCf" id="RHz-4g-pHQ"/>
+                        <outletCollection property="buttonpress" destination="30T-qj-C0d" collectionClass="NSMutableArray" id="VGi-L7-MBe"/>
+                    </connections>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="bY1-MN-xQx" sceneMemberID="firstResponder"/>
+                <exit id="abh-ij-wTW" userLabel="Exit" sceneMemberID="exit"/>
+            </objects>
+            <point key="canvasLocation" x="1770" y="-653"/>
         </scene>
         <!--Marker View Controller-->
         <scene sceneID="yfJ-B1-apa">

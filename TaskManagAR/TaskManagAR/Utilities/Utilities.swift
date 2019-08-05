@@ -9,6 +9,32 @@
 import Foundation
 import ARKit
 
+//extension to return line geometry between two vectors
+extension SCNGeometry {
+    class func lineFrom(vector vector1: SCNVector3, toVector vector2: SCNVector3) -> SCNGeometry {
+        let indices: [Int] = [0, 1]
+        
+        let source = SCNGeometrySource(vertices: [vector1, vector2])
+        let element = SCNGeometryElement(indices: indices, primitiveType: .line)
+        
+        return SCNGeometry(sources: [source], elements: [element])
+    }
+}
+// ectension to calculate distance between two vector points in the same coordinate space
+extension SCNVector3 {
+    static func distanceFrom(vector vector1: SCNVector3, toVector vector2: SCNVector3) -> Float {
+        let x0 = vector1.x
+        let x1 = vector2.x
+        let y0 = vector1.y
+        let y1 = vector2.y
+        let z0 = vector1.z
+        let z1 = vector2.z
+        
+        return sqrtf(powf(x1-x0, 2) + powf(y1-y0, 2) + powf(z1-z0, 2))
+    }
+}
+
+
 struct TupletoArray {
     var tuple: (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32)
     var array: [Int32] {
@@ -203,5 +229,102 @@ func tileToLatLon(tileX : Int, tileY : Int, mapZoom: Int) -> (lat_deg : Double, 
     let lat = atan( sinh (.pi - (Double(tileY) / n) * 2 * Double.pi)) * (180.0 / .pi)
     
     return (lat, lon)
+}
+
+func tupleIdToArray(tuple: (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int32), no: Int32)->[Int]{
+    
+    var newArray = TupletoArray(tuple: tuple).array
+    var retarray = [Int]()
+
+    var i = 0
+    while (i < no) {
+        retarray.append(Int(newArray[i]))
+        
+        i = i+1
+    }
+    return retarray
+}
+
+
+func tupleMatrixToDict(tuple: (FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker), camera: SCNMatrix4, last_frame: [Int: SCNMatrix4], count: Int)->[Int: SCNMatrix4]{
+
+    var previous = [Int: SCNMatrix4] ()
+    
+    previous = last_frame
+    
+    var mat = [SCNMatrix4]()
+    var mark_ids = [Int]()
+    
+    mat.append(SCNMatrix4Mult(tuple.0.extrinsics, camera))
+    mark_ids.append(Int(tuple.0.id))
+    
+    mat.append(SCNMatrix4Mult(tuple.1.extrinsics, camera))
+    mark_ids.append(Int(tuple.1.id))
+    
+    mat.append(SCNMatrix4Mult(tuple.2.extrinsics, camera))
+    mark_ids.append(Int(tuple.2.id))
+    
+    mat.append(SCNMatrix4Mult(tuple.3.extrinsics, camera))
+    mark_ids.append(Int(tuple.3.id))
+    
+    mat.append(SCNMatrix4Mult(tuple.4.extrinsics, camera))
+    mark_ids.append(Int(tuple.4.id))
+    
+    mat.append(SCNMatrix4Mult(tuple.5.extrinsics, camera))
+    mark_ids.append(Int(tuple.5.id))
+    
+    mat.append(SCNMatrix4Mult(tuple.6.extrinsics, camera))
+    mark_ids.append(Int(tuple.6.id))
+    
+    mat.append(SCNMatrix4Mult(tuple.7.extrinsics, camera))
+    mark_ids.append(Int(tuple.7.id))
+    
+    mat.append(SCNMatrix4Mult(tuple.8.extrinsics, camera))
+    mark_ids.append(Int(tuple.8.id))
+    
+    mark_ids = number_of_markers(array: mark_ids, no: count)
+    
+    var i = 0
+    while (i < mark_ids.count) {
+        
+        if mark_ids[i] > 20{
+            return previous
+        }
+        
+        // if it's in the previous frame
+        if previous[mark_ids[i]] != nil {
+            previous[mark_ids[i]] = mat[i]
+            //print("id " + String(mark_ids[i]) + "position updated")
+        }else{
+        // else add it as new
+            previous.updateValue(mat[i], forKey: mark_ids[i])
+            //print("id " + String(mark_ids[i]) + "position added as new")
+            }
+        i = i + 1
+        }
+    //print(previous.count)
+    return previous
+    }
+
+func number_of_markers(array: [Int], no: Int)-> [Int]{
+    var newarray = [Int]()
+    
+    var i = 0
+    while i < no {
+        newarray.append(array[i])
+        i = i + 1
+    }
+    
+    return newarray
+}
+
+// remove nodes with specific name
+func removeChildrenNamed(name: String, parent: SCNNode){
+    parent.enumerateChildNodes { (node, stop) in
+        if (node.name == name) {
+            node.removeFromParentNode()
+        }
+    }
+    
 }
 

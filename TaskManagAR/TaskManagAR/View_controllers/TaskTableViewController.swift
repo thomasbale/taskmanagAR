@@ -106,6 +106,16 @@ class TaskTableViewController: UITableViewController, DisplayViewControllerDeleg
          vc?.activeTasks = activeEvent.tasks
          vc?.taskIndex = index.row
          }
+        
+        if segue.destination is ARViewController2
+        {
+            let vc = segue.destination as? ARViewController2
+            // pass over all the tasks and the reference to the one selected
+            vc?.delegate = self
+            vc?.activeTasks = activeEvent.tasks
+            vc?.taskIndex = index.row
+        }
+        
     }
     
     
@@ -121,5 +131,4 @@ class TaskTableViewController: UITableViewController, DisplayViewControllerDeleg
         activeEvent.tasks = activeEvents
        self.tableView.reloadData()
     }
-
 }

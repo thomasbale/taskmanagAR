@@ -15,6 +15,7 @@
 		22174F8421C923F200F4067C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22174F8221C923F200F4067C /* LaunchScreen.storyboard */; };
 		22174F8F21C923F300F4067C /* TaskManagARTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F8E21C923F300F4067C /* TaskManagARTests.swift */; };
 		22174F9A21C923F300F4067C /* TaskManagARUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F9921C923F300F4067C /* TaskManagARUITests.swift */; };
+		2234042422F43AA2007B14A2 /* v2_ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2234042322F43AA2007B14A2 /* v2_ARViewController.swift */; };
 		223BCCF2220B578100B62698 /* MarkerOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BCCF1220B578100B62698 /* MarkerOrigin.swift */; };
 		224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224C07CD220066B50021EBE5 /* Position_estimate.swift */; };
 		225B81D32279ABC000A55C77 /* View_QR_code.png in Resources */ = {isa = PBXBuildFile; fileRef = 225B81D22279ABBF00A55C77 /* View_QR_code.png */; };
@@ -81,6 +82,7 @@
 		22174F9521C923F300F4067C /* TaskManagARUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskManagARUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22174F9921C923F300F4067C /* TaskManagARUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagARUITests.swift; sourceTree = "<group>"; };
 		22174F9B21C923F300F4067C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2234042322F43AA2007B14A2 /* v2_ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = v2_ARViewController.swift; sourceTree = "<group>"; };
 		223BCCF1220B578100B62698 /* MarkerOrigin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerOrigin.swift; sourceTree = "<group>"; };
 		224781542239302500AACBA3 /* TaskManagAR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskManagAR.entitlements; sourceTree = "<group>"; };
 		224C07CD220066B50021EBE5 /* Position_estimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position_estimate.swift; sourceTree = "<group>"; };
@@ -88,7 +90,7 @@
 		225EBC62223697E3000D7F11 /* Vision.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Vision.framework; path = System/Library/Frameworks/Vision.framework; sourceTree = SDKROOT; };
 		225EBC642236981F000D7F11 /* BarcodeScanner.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BarcodeScanner.swift; sourceTree = "<group>"; };
 		225EBC6622369D58000D7F11 /* VideoToolbox.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = VideoToolbox.framework; path = System/Library/Frameworks/VideoToolbox.framework; sourceTree = SDKROOT; };
-		225EBC7122391BF1000D7F11 /* EventTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventTableViewController.swift; path = TaskManagAR/EventTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		225EBC7122391BF1000D7F11 /* EventTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = EventTableViewController.swift; path = TaskManagAR/View_controllers/EventTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		227EE02521C94D87006B19F0 /* TaskManagAR-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "TaskManagAR-Bridging-Header.h"; sourceTree = "<group>"; };
 		227EE02C21C94E3A006B19F0 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
 		227EE02E21C94E42006B19F0 /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
@@ -104,7 +106,7 @@
 		2293238822429F2C00D66A90 /* tick_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_ios.png; path = ../../../../../Downloads/tick_ios.png; sourceTree = "<group>"; };
 		229CE69622D60B6D00C3F3EC /* InstructionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionView.swift; sourceTree = "<group>"; };
 		22C584F821E64C9600ADEAB6 /* Tray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tray.swift; sourceTree = "<group>"; };
-		22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TaskTableViewController.swift; path = TaskManagAR/TaskTableViewController.swift; sourceTree = SOURCE_ROOT; };
+		22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TaskTableViewController.swift; path = TaskManagAR/View_controllers/TaskTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMarkerViewController.swift; sourceTree = "<group>"; };
 		22DBA4B4229D49F9007DDF42 /* opencv2.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = opencv2.framework; path = ../../../../OpenCV/Frameworks/Current/opencv2.framework; sourceTree = "<group>"; };
 		22E25AE3220B21BB00860734 /* OpenCVWrapper .mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = "OpenCVWrapper .mm"; sourceTree = "<group>"; };
@@ -185,25 +187,16 @@
 				22F7E304222805710029BAC1 /*  Database-Interface.swift */,
 				22F7E2FA2227F76C0029BAC1 /* OpenCV */,
 				22174F7721C923F000F4067C /* AppDelegate.swift */,
+				2234041C22F30941007B14A2 /* Archive */,
 				22F753BE22AFE92600FEA5F7 /* layout.png */,
 				22F753C222AFF3B300FEA5F7 /* tray.png */,
 				22174F7921C923F000F4067C /* art.scnassets */,
-				22174F7B21C923F000F4067C /* ARViewController.swift */,
-				22FEB53E2243C88700BB3BB0 /* Validation.swift */,
 				2293238822429F2C00D66A90 /* tick_ios.png */,
 				225B81D22279ABBF00A55C77 /* View_QR_code.png */,
-				22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */,
-				225EBC642236981F000D7F11 /* BarcodeScanner.swift */,
 				22F7E2FB2227F9A50029BAC1 /* AR-Database.xcdatamodeld */,
-				22F7E2F82227F6960029BAC1 /* Utilities.swift */,
-				223BCCF1220B578100B62698 /* MarkerOrigin.swift */,
-				224C07CD220066B50021EBE5 /* Position_estimate.swift */,
-				22C584F821E64C9600ADEAB6 /* Tray.swift */,
+				2234041E22F3099F007B14A2 /* Utilities */,
+				2234041D22F3096D007B14A2 /* View_controllers */,
 				22174F7D21C923F000F4067C /* Main.storyboard */,
-				225EBC7122391BF1000D7F11 /* EventTableViewController.swift */,
-				22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */,
-				229CE69622D60B6D00C3F3EC /* InstructionView.swift */,
-				225EBC6C22391B54000D7F11 /* ViewControl */,
 				22174F8021C923F200F4067C /* Assets.xcassets */,
 				22174F8221C923F200F4067C /* LaunchScreen.storyboard */,
 				22174F8521C923F200F4067C /* Info.plist */,
@@ -230,11 +223,37 @@
 			path = TaskManagARUITests;
 			sourceTree = "<group>";
 		};
-		225EBC6C22391B54000D7F11 /* ViewControl */ = {
+		2234041C22F30941007B14A2 /* Archive */ = {
 			isa = PBXGroup;
 			children = (
+				22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */,
+				225EBC642236981F000D7F11 /* BarcodeScanner.swift */,
 			);
-			path = ViewControl;
+			path = Archive;
+			sourceTree = "<group>";
+		};
+		2234041D22F3096D007B14A2 /* View_controllers */ = {
+			isa = PBXGroup;
+			children = (
+				22174F7B21C923F000F4067C /* ARViewController.swift */,
+				2234042322F43AA2007B14A2 /* v2_ARViewController.swift */,
+				225EBC7122391BF1000D7F11 /* EventTableViewController.swift */,
+				22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */,
+				229CE69622D60B6D00C3F3EC /* InstructionView.swift */,
+			);
+			path = View_controllers;
+			sourceTree = "<group>";
+		};
+		2234041E22F3099F007B14A2 /* Utilities */ = {
+			isa = PBXGroup;
+			children = (
+				22FEB53E2243C88700BB3BB0 /* Validation.swift */,
+				22F7E2F82227F6960029BAC1 /* Utilities.swift */,
+				223BCCF1220B578100B62698 /* MarkerOrigin.swift */,
+				224C07CD220066B50021EBE5 /* Position_estimate.swift */,
+				22C584F821E64C9600ADEAB6 /* Tray.swift */,
+			);
+			path = Utilities;
 			sourceTree = "<group>";
 		};
 		227EE02921C94E2E006B19F0 /* Frameworks */ = {
@@ -425,6 +444,7 @@
 				224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */,
 				22F7E305222805710029BAC1 /*  Database-Interface.swift in Sources */,
 				225EBC7222391BF1000D7F11 /* EventTableViewController.swift in Sources */,
+				2234042422F43AA2007B14A2 /* v2_ARViewController.swift in Sources */,
 				225EBC652236981F000D7F11 /* BarcodeScanner.swift in Sources */,
 				229CE69722D60B6D00C3F3EC /* InstructionView.swift in Sources */,
 			);
