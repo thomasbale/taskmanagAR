@@ -59,12 +59,8 @@ class Validator{
         relative_position.rotation = SCNVector4(relative_position.rotation.y, relative_position.rotation.x, relative_position.rotation.z, relative_position.rotation.w)
         
         let degree_rot = eulerToDegrees(euler: relative_position.eulerAngles.x)
-        
-        
-        
-        
-        
-        
+
+        // Here we add nodes to the candidate to demonstrate instruction to path
         if (degree_rot > 360.0 - rotation_deg_tollerance || degree_rot < rotation_deg_tollerance) && distance < Float(distance_m_tollerance) {
             // accurate
             candidate.addChildNode(tickDone())

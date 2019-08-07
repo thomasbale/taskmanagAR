@@ -25,6 +25,7 @@ class Tray{
     private var marker_3 = 3
     
     var geometry = SCNBox(width: 0.297, height: 0.84, length: 0.005, chamferRadius: 0)
+
     var colour = SCNMaterial()
     private var node = SCNNode()
     

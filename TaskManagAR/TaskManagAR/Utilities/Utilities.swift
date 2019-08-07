@@ -348,7 +348,7 @@ func varianceTonorm(vectorEstimates: [SCNVector3])-> Float{
                 SCNVector3.distanceFrom(vector: vectorEstimates[vectorEstimates.count-3], toVector: vectorEstimates[vectorEstimates.count-1])
                 +
                 SCNVector3.distanceFrom(vector: vectorEstimates[vectorEstimates.count-4], toVector: vectorEstimates[vectorEstimates.count-1])
-        
+        print(variance)
         return variance
     }
     return 1.0
@@ -365,12 +365,15 @@ func markersFoundAimateDisplay(found: Int, level: Int, mark1: UIImageView, mark2
     return false
 }
     
-func updateMarkerPositions(rootNode: SCNNode, markers: [Int: marker_seen]){
-    
+func updateMarkerPositions(rootNode: SCNNode, markers: [Int: marker_seen], current_task: Task, primary_m: Int){
     for id in markers {
         rootNode.enumerateChildNodes { (node, stop) in
             if (node.name == String(id.key)) {
-                print("updating scene")
+                if isSpaceMarker(id: id.key, current_task: current_task){
+                    // just the position
+                    node.position = positionFromTransform(simd_float4x4(id.value.transform))
+                    return
+                }
                 node.transform = id.value.transform
             }
         }

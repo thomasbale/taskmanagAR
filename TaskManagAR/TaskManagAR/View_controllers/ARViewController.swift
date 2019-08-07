@@ -51,7 +51,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var dispatchProcesscomplete = true; //for threading main que
     // Framerate limiting and localisations settings
     private var frameCounter = 0
-    private var MarkerframeRate = 5 // runs every n frames
+    private var MarkerframeRate = 20 // runs every n frames
     private var NumberofMarkersFound = 0 // Total for a confidence level on the scene
     private var ConfirmationMarkerLevel = 5 // how many times do I need to markers?
     // for the validation process
@@ -66,6 +66,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var assetMark_2 = 6
     // Creating a dictionary
     var frame_ids_positions: [Int: marker_seen] = [:]
+    var primary_marker = 99
     // Space localisation
     private var visibleSpaceTarget = [SCNVector3]()
     // Activity indicator for the validation process
@@ -90,31 +91,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     //////////////////////////////////////////////////////////
     // main code base
     //////////////////////////////////////////////////////////
-    
-    // function called when a 'load model' request from user
-    @IBAction func buttonloadmodel(_ sender: Any){
-        
-        
-        if(isLocalized == false){
-            
-            return}
-        // remove existing nodes from tray
-       TrayCentrepoint.enumerateChildNodes { (node, stop) in
-            node.removeFromParentNode() }
-        // add an anchor to the scene for stablisation
-        let anchor = ARAnchor(transform: simd_float4x4(targTransform))
-        sceneView.session.add(anchor:anchor)
-        
-        let mat_0 = SCNMaterial()
-        mat_0.diffuse.contents = status_0
-        mat_0.transparency = 0.8
-        
-        // render based on task
-        let node0 = RenderNode() // returns the model within the task as a node
-        node0.position = SCNVector3(0.15, 0, activeTasks[taskIndex].objects.first?.height as! Float)
-        TrayCentrepoint.addChildNode(node0)
-        
-    }
     
     // function called on validate request from user
     @IBAction func Validate(_ sender: Any) {
@@ -259,57 +235,56 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         }
                     }
                  
-            }
+                }else{
+                    updateMarkerPositions(rootNode: self.sceneView.scene.rootNode, markers: self.frame_ids_positions, current_task: self.currentTask, primary_m: self.primary_marker)
+                    Validate(self)
+                }
         // only nodes with names will get called by this function
-        updateMarkerPositions(rootNode: self.sceneView.scene.rootNode, markers: self.frame_ids_positions)
         return
         }
     }
   
     private func localiseTray(targTransform: SCNMatrix4, markerid: Int) {
-        localizedContentNode.transform = targTransform // apply new transform to node
-        localizedContentNode.name = String(markerid)
-        // Calculate the centre of the tray and make child of marker
-        let marker = SCNNode()
-        let node = SCNNode()
-        marker.transform = targTransform
-        marker.addChildNode(node)
-        node.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
-        var transform = simd_float4x4(node.worldTransform)
-        self.visibleSpaceTarget.append(SCNVector3(transform.columns.3.x,transform.columns.3.y,transform.columns.3.z))
-        
-        // does the marker match a trend?
-        if (varianceTonorm(vectorEstimates: self.visibleSpaceTarget) < 0.01){
-            self.NumberofMarkersFound = NumberofMarkersFound + 1
-        }
-
-        TrayCentrepoint = loadedtray.TrayCentreNode()
-        localizedContentNode.addChildNode(TrayCentrepoint)
-        TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
-        
-        self.activityWait.startAnimating()
-        
-        if markersFoundAimateDisplay(found: self.NumberofMarkersFound, level: self.ConfirmationMarkerLevel, mark1: self.markerFound1, mark2: self.markerFound2, mark3: self.markerFound3){
-            sceneView.scene.rootNode.addChildNode(localizedContentNode)
-            self.activityWait.stopAnimating()
-            // Fade the UI
-            DispatchQueue.main.async{
-                UIView.animate(withDuration: 0.5, delay: 0.5, options: [], animations: {
-                    self.findMarkerLayer.alpha = 0.0
-                    self.markerFound1.alpha = 0.0
-                    self.markerFound2.alpha = 0.0
-                    self.markerFound3.alpha = 0.0
-                    
-                }) { (finished: Bool) in
-                    self.findMarkerLayer.isHidden = true
-                    self.markerFound1.isHidden = true
-                    self.markerFound2.isHidden = true
-                    self.markerFound3.isHidden = true
+        if self.primary_marker == 99 || self.primary_marker == markerid{
+            self.primary_marker = markerid
+            localizedContentNode.transform = targTransform // apply new transform to node
+            localizedContentNode.name = String(markerid) // prevents updating of position
+            // Calculate the centre of the tray and make child of marker
+            let marker = SCNNode()
+            let node = SCNNode()
+            marker.transform = targTransform
+            marker.addChildNode(node)
+            node.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
+            var transform = simd_float4x4(node.worldTransform)
+            self.visibleSpaceTarget.append(SCNVector3(transform.columns.3.x,transform.columns.3.y,transform.columns.3.z))
+            // does the marker match a trend?
+            if (varianceTonorm(vectorEstimates: self.visibleSpaceTarget) < 0.01){
+                TrayCentrepoint = loadedtray.TrayCentreNode()
+                localizedContentNode.addChildNode(TrayCentrepoint)
+                TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
+                self.primary_marker = markerid
+                sceneView.scene.rootNode.addChildNode(localizedContentNode)
+                
+                DispatchQueue.main.async{
+                    UIView.animate(withDuration: 0.5, delay: 0.5, options: [], animations: {
+                        self.findMarkerLayer.alpha = 0.0
+                        self.markerFound1.alpha = 0.0
+                        self.markerFound2.alpha = 0.0
+                        self.markerFound3.alpha = 0.0
+                        
+                    }) { (finished: Bool) in
+                        self.findMarkerLayer.isHidden = true
+                        self.markerFound1.isHidden = true
+                        self.markerFound2.isHidden = true
+                        self.markerFound3.isHidden = true
                     }
                 }
-            self.isLocalized = true
+                self.isLocalized = true
             }
         }
+    }
+
+
         
         func renderer(_ renderer: SCNSceneRenderer,
                                nodeFor anchor: ARAnchor) -> SCNNode?{

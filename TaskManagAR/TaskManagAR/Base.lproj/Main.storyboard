@@ -88,18 +88,6 @@
                                 <rect key="frame" x="0.0" y="913" width="768" height="111"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <subviews>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="WXw-1p-RzN">
-                                        <rect key="frame" x="204" y="13" width="175" height="49"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Load task">
-                                            <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="buttonloadmodel:" destination="BV1-FR-VrT" eventType="touchUpInside" id="lDq-9h-TFO"/>
-                                            <action selector="loadmodel:" destination="BV1-FR-VrT" eventType="touchDragInside" id="WZu-ay-AeF"/>
-                                        </connections>
-                                    </button>
                                     <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FYC-2y-dMP">
                                         <rect key="frame" x="665" y="20" width="82" height="36"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -111,15 +99,6 @@
                                             <action selector="nextTask:" destination="BV1-FR-VrT" eventType="touchUpInside" id="m2n-ir-0H6"/>
                                         </connections>
                                     </button>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="KDj-aU-gHe">
-                                        <rect key="frame" x="0.0" y="13" width="170" height="50"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Find marker"/>
-                                        <connections>
-                                            <action selector="pressed:" destination="BV1-FR-VrT" eventType="touchUpInside" id="et4-ua-edL"/>
-                                        </connections>
-                                    </button>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="center" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="kbI-2Z-2ra">
                                         <rect key="frame" x="543" y="82" width="146" height="21"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -127,19 +106,6 @@
                                         <nil key="textColor"/>
                                         <nil key="highlightedColor"/>
                                     </label>
-                                    <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="ZaT-LT-ydo">
-                                        <rect key="frame" x="417" y="13" width="175" height="49"/>
-                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                        <fontDescription key="fontDescription" type="system" pointSize="20"/>
-                                        <state key="normal" title="Validate task">
-                                            <color key="titleShadowColor" cocoaTouchSystemColor="darkTextColor"/>
-                                        </state>
-                                        <connections>
-                                            <action selector="Validate:" destination="BV1-FR-VrT" eventType="touchUpInside" id="1cD-RF-cJ0"/>
-                                            <action selector="buttonloadmodel:" destination="BV1-FR-VrT" eventType="touchUpInside" id="sv7-zO-iOA"/>
-                                            <action selector="loadmodel:" destination="BV1-FR-VrT" eventType="touchDragInside" id="1hz-rb-ac5"/>
-                                        </connections>
-                                    </button>
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
@@ -190,18 +156,15 @@
                     </view>
                     <connections>
                         <outlet property="Debuggingop" destination="kbI-2Z-2ra" id="D43-8R-P3k"/>
-                        <outlet property="ValidateButton" destination="ZaT-LT-ydo" id="2r6-ZR-Von"/>
                         <outlet property="activityWait" destination="4Fh-OJ-S8z" id="i00-vw-hdG"/>
                         <outlet property="backButton" destination="0fN-wK-36g" id="ofs-Vp-DVp"/>
                         <outlet property="completeTick" destination="SJu-lW-vIm" id="NjI-tO-g3G"/>
                         <outlet property="findMarkerLayer" destination="QcJ-Dx-hL3" id="FPf-vb-AeF"/>
-                        <outlet property="loadmodelbutton" destination="WXw-1p-RzN" id="3UG-TX-XHd"/>
                         <outlet property="markerFound1" destination="lga-Oh-x1r" id="cdf-FL-OWE"/>
                         <outlet property="markerFound2" destination="cYe-nv-rY0" id="qlZ-EO-aTw"/>
                         <outlet property="markerFound3" destination="xpQ-p8-Cfb" id="xe7-N2-phC"/>
                         <outlet property="nextButton" destination="FYC-2y-dMP" id="PbZ-1w-FUr"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
-                        <outletCollection property="buttonpress" destination="KDj-aU-gHe" collectionClass="NSMutableArray" id="mzf-kb-hj7"/>
                         <segue destination="tcg-Mm-Gbg" kind="popoverPresentation" identifier="showInstruction" popoverAnchorView="BrB-h1-WRS" id="0ZK-Jb-T3q">
                             <popoverArrowDirection key="popoverArrowDirection" up="YES" down="YES" left="YES" right="YES"/>
                         </segue>
