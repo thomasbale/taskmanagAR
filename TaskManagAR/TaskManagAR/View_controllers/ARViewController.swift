@@ -15,6 +15,8 @@ import CoreVideo
 
 //let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically med marker in meters
 
+typealias marker_seen = (transform: SCNMatrix4, visible_in_frame: Bool)
+
 protocol DisplayViewControllerDelegate : NSObjectProtocol{
      func updateEvent(activeEvents: [Task])
 }
@@ -62,11 +64,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var assetMark_0 = 6
     private var assetMark_1 = 6
     private var assetMark_2 = 6
-    // validation poperties
-    private var visibleSpaceIds = [Int]()
-    private var visibleSpacePos = [SCNMatrix4]()
     // Creating a dictionary
-    var frame_ids_positions: [Int: SCNMatrix4] = [:]
+    var frame_ids_positions: [Int: marker_seen] = [:]
     // Space localisation
     private var visibleSpaceTarget = [SCNVector3]()
     // Activity indicator for the validation process
@@ -77,8 +76,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     let loadedtray = Tray()
     // transform to detected target
     var targTransform = SCNMatrix4()
-    
-    var box1 = SCNNode(geometry: SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0 ))
     
     @IBOutlet var sceneView: ARSCNView!
     
@@ -91,6 +88,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     
     //////////////////////////////////////////////////////////
+    // main code base
     //////////////////////////////////////////////////////////
     
     // function called when a 'load model' request from user
@@ -187,19 +185,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // Hide the completion tick
         self.completeTick.isHidden = true
-        //self.findMarkerLayer.isHidden = false
         self.findMarkerLayer.alpha = 0.7
         self.currentTask = activeTasks[taskIndex]
-        // Limit FPS
-        //sceneView.preferredFramesPerSecond = 30
         Debuggingop.text = "localising"
         // Set the view's delegate
         sceneView.delegate = self
         sceneView.session.delegate = self
-        
-        // Show statistics such as fps and timing information
         sceneView.showsStatistics = true
-        //sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
+        sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -243,9 +236,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // This should probably only be called when a plane is detected?
         if (self.frameCounter % self.MarkerframeRate == 0)
         {
-            
                 self.findMarkers(frame: frame)
-            
         }
         self.frameCounter = self.frameCounter + 1
     }
@@ -258,58 +249,30 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // If ready go ahead and pass
             if (currentstatus == "") {
                 let pixelBuffer = frame.capturedImage
-                // Create a new frame struct for detection
-                
                 let newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(activeTasks[taskIndex].space.marker_height_m))
-
-                    // convert c++ to swift
+                    // convert c++ to swift  and place detections in VC hash map
                     self.frame_ids_positions = tupleMatrixToDict(tuple: newframe.all_extrinsics, camera: SCNMatrix4.init(frame.camera.transform), last_frame: self.frame_ids_positions, count: Int(newframe.no_markers))
         
-                         detectionQueue.sync {
-   
-                    if self.frame_ids_positions[Int(3)] != nil {
-                        box1.transform = self.frame_ids_positions[3]!
-                        sceneView.scene.rootNode.addChildNode(box1)
-                    }
-                }
-                    
-    //// DEBUGGING
-
-        
-
-                if(self.frame_ids_positions.count == 0) {
-                    return;
-                }
-                /*
                 // Is this a first localisation? Can a space marker be seen in shot?
                 if(self.isLocalized == false){
                     self.frame_ids_positions.forEach { id in
-                        if isSpaceMarker(id: id.key){
-                            self.targTransform = id.value
-                        updateContentNode(targTransform: self.targTransform, markerid: Int(id.key))
+                        if isSpaceMarker(id: id.key, current_task: self.currentTask){
+                        localiseTray(targTransform: id.value.transform, markerid: Int(id.key))
                         }
                     }
-            }*/
+            }
         return
         }
     }
     
     
-    private func isSpaceMarker(id: Int) -> Bool {
-    
-         if id == self.currentTask.space.boom_id || id == self.currentTask.space.datum_id || id == self.currentTask.space.boom_face_id || id == self.currentTask.space.datum_face_id{
-            return true
-    
-    }
-        return false
-    }
+
     
     
-    private func updateContentNode(targTransform: SCNMatrix4, markerid: Int) {
+    private func localiseTray(targTransform: SCNMatrix4, markerid: Int) {
             localizedContentNode.opacity = 0.5
             localizedContentNode.transform = targTransform // apply new transform to node
             // Calculate the centre of the tray and make child of marker
-        
         
         var marker = SCNNode()
         var node = SCNNode()
@@ -369,7 +332,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.markerFound3.isHidden = false
         }
         
-        if self.NumberofMarkersFound >= self.ConfirmationMarkerLevel && (self.visibleSpaceIds.count > 1)
+        if self.NumberofMarkersFound >= self.ConfirmationMarkerLevel && (self.frame_ids_positions.count > 1)
         {
 
             sceneView.scene.rootNode.addChildNode(localizedContentNode)
@@ -426,7 +389,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             return validationState.aligned
         }
         
-        if let position = self.frame_ids_positions[Int(object.object_marker.id)] {
+        if let position = self.frame_ids_positions[Int(object.object_marker.id)]?.transform {
             // now val is not nil and the Optional has been unwrapped, so use it
             
             let object_position = SCNNode()

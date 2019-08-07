@@ -246,11 +246,9 @@ func tupleIdToArray(tuple: (Int32, Int32, Int32, Int32, Int32, Int32, Int32, Int
 }
 
 
-func tupleMatrixToDict(tuple: (FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker), camera: SCNMatrix4, last_frame: [Int: SCNMatrix4], count: Int)->[Int: SCNMatrix4]{
+func tupleMatrixToDict(tuple: (FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker, FoundMarker), camera: SCNMatrix4, last_frame: [Int: marker_seen], count: Int)->[Int: marker_seen]{
 
-    var previous = [Int: SCNMatrix4] ()
-    
-    previous = last_frame
+    var previous = last_frame
     
     var mat = [SCNMatrix4]()
     var mark_ids = [Int]()
@@ -284,20 +282,20 @@ func tupleMatrixToDict(tuple: (FoundMarker, FoundMarker, FoundMarker, FoundMarke
     
     mark_ids = number_of_markers(array: mark_ids, no: count)
     
+    previous.keys.forEach { previous[$0]?.visible_in_frame = false }
+    
     var i = 0
     while (i < mark_ids.count) {
-        
-        if mark_ids[i] > 20{
-            return previous
-        }
-        
+
         // if it's in the previous frame
         if previous[mark_ids[i]] != nil {
-            previous[mark_ids[i]] = mat[i]
+            previous[mark_ids[i]]?.transform = mat[i]
+            previous[mark_ids[i]]?.visible_in_frame = true
             //print("id " + String(mark_ids[i]) + "position updated")
         }else{
         // else add it as new
-            previous.updateValue(mat[i], forKey: mark_ids[i])
+            let _t = marker_seen(transform: mat[i], visible_in_frame: true)
+            previous.updateValue(_t, forKey: mark_ids[i])
             //print("id " + String(mark_ids[i]) + "position added as new")
             }
         i = i + 1
@@ -327,4 +325,14 @@ func removeChildrenNamed(name: String, parent: SCNNode){
     }
     
 }
+
+// helper func to check whether ID is a location marker
+func isSpaceMarker(id: Int, current_task: Task) -> Bool {
+    if id == current_task.space.boom_id || id == current_task.space.datum_id || id == current_task.space.boom_face_id || id == current_task.space.datum_face_id{
+        return true
+        
+    }
+    return false
+}
+
 
