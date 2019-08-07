@@ -33,7 +33,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     @IBOutlet weak var markerFound1: UIImageView!
     @IBOutlet weak var markerFound2: UIImageView!
     @IBOutlet weak var markerFound3: UIImageView!
-    
+
     // All the tasks in the set - this allows progression backwards and forwards
     var activeTasks = [Task()]
     var currentTask = Task()
@@ -250,10 +250,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             if (currentstatus == "") {
                 let pixelBuffer = frame.capturedImage
                 let newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(activeTasks[taskIndex].space.marker_height_m))
-                    // convert c++ to swift  and place detections in VC hash map
-                    self.frame_ids_positions = tupleMatrixToDict(tuple: newframe.all_extrinsics, camera: SCNMatrix4.init(frame.camera.transform), last_frame: self.frame_ids_positions, count: Int(newframe.no_markers))
-        
-                // Is this a first localisation? Can a space marker be seen in shot?
+                // convert c++ to swift  and place detections in VC hash map
+                self.frame_ids_positions = tupleMatrixToDict(tuple: newframe.all_extrinsics, camera: SCNMatrix4.init(frame.camera.transform), last_frame: self.frame_ids_positions, count: Int(newframe.no_markers))
                 if(self.isLocalized == false){
                     self.frame_ids_positions.forEach { id in
                         if isSpaceMarker(id: id.key, current_task: self.currentTask){
@@ -264,77 +262,30 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return
         }
     }
-    
-    
-
-    
-    
+  
     private func localiseTray(targTransform: SCNMatrix4, markerid: Int) {
-            localizedContentNode.opacity = 0.5
-            localizedContentNode.transform = targTransform // apply new transform to node
-            // Calculate the centre of the tray and make child of marker
-        
-        var marker = SCNNode()
-        var node = SCNNode()
+        localizedContentNode.transform = targTransform // apply new transform to node
+        // Calculate the centre of the tray and make child of marker
+        let marker = SCNNode()
+        let node = SCNNode()
         marker.transform = targTransform
-        var box = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
-        let material = SCNMaterial()
-        material.diffuse.contents = UIColor.red
-        box.materials = [material]
-        
         marker.addChildNode(node)
         node.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
-        self.sceneView.scene.rootNode.addChildNode(marker)
-        
         var transform = simd_float4x4(node.worldTransform)
-        
         self.visibleSpaceTarget.append(SCNVector3(transform.columns.3.x,transform.columns.3.y,transform.columns.3.z))
-
         
-        if (self.visibleSpaceTarget.count > 10) {
-            
-            // find the total distance between the current and last 4 points and add them together
-            var variance =
-                
-                SCNVector3.distanceFrom(vector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-2], toVector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-1])
-                
-                +
-                
-                SCNVector3.distanceFrom(vector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-3], toVector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-1])
-            
-                +
-            
-                SCNVector3.distanceFrom(vector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-4], toVector: self.visibleSpaceTarget[self.visibleSpaceTarget.count-1])
-            
-            // if variance is less than 10mm :
-            if variance < 0.01{
-                self.NumberofMarkersFound = self.NumberofMarkersFound + 1
-                // original marker position is good
-                self.localizedContentNode.transform = marker.transform
-            }
+        // does the marker match a trend?
+        if (varianceTonorm(vectorEstimates: self.visibleSpaceTarget) < 0.01){
+            self.NumberofMarkersFound = NumberofMarkersFound + 1
         }
-        
+
         TrayCentrepoint = loadedtray.TrayCentreNode()
         localizedContentNode.addChildNode(TrayCentrepoint)
         TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
         
         self.activityWait.startAnimating()
         
-        if (self.NumberofMarkersFound >= self.ConfirmationMarkerLevel/3){
-            self.markerFound1.isHidden = false
-        }
-        
-        if (self.NumberofMarkersFound >= self.ConfirmationMarkerLevel/2){
-            self.markerFound2.isHidden = false
-        }
-        
-        if (self.NumberofMarkersFound >= (self.ConfirmationMarkerLevel/2 + self.ConfirmationMarkerLevel/4)){
-            self.markerFound3.isHidden = false
-        }
-        
-        if self.NumberofMarkersFound >= self.ConfirmationMarkerLevel && (self.frame_ids_positions.count > 1)
-        {
-
+        if markersFoundAimateDisplay(found: self.NumberofMarkersFound, level: self.ConfirmationMarkerLevel, mark1: self.markerFound1, mark2: self.markerFound2, mark3: self.markerFound3){
             sceneView.scene.rootNode.addChildNode(localizedContentNode)
             self.activityWait.stopAnimating()
             // Fade the UI
@@ -350,13 +301,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     self.markerFound1.isHidden = true
                     self.markerFound2.isHidden = true
                     self.markerFound3.isHidden = true
+                    }
                 }
-            }
             self.isLocalized = true
-            // load the model
-            //self.buttonloadmodel(self)
-        }
-        
+            }
         }
         
         func renderer(_ renderer: SCNSceneRenderer,

@@ -335,4 +335,36 @@ func isSpaceMarker(id: Int, current_task: Task) -> Bool {
     return false
 }
 
+// work out the variance in estimations on the same model. Returns the number of estimates within 1mm
+
+func varianceTonorm(vectorEstimates: [SCNVector3])-> Float{
+    if (vectorEstimates.count > 10) {
+        
+        // find the total distance between the current and last 4 points and add them together
+        let variance =
+            
+            SCNVector3.distanceFrom(vector: vectorEstimates[vectorEstimates.count-2], toVector: vectorEstimates[vectorEstimates.count-1])
+                +
+                SCNVector3.distanceFrom(vector: vectorEstimates[vectorEstimates.count-3], toVector: vectorEstimates[vectorEstimates.count-1])
+                +
+                SCNVector3.distanceFrom(vector: vectorEstimates[vectorEstimates.count-4], toVector: vectorEstimates[vectorEstimates.count-1])
+        
+        return variance
+    }
+    return 1.0
+}
+
+func markersFoundAimateDisplay(found: Int, level: Int, mark1: UIImageView, mark2: UIImageView, mark3: UIImageView )->Bool{
+    
+    if (found >= level/3){mark1.isHidden = false}
+    if (found >= level/2){mark2.isHidden = false}
+    if (found >= (level/2 + level/4)){mark3.isHidden = false}
+    if found >= level
+    {
+        return true}
+    return false
+}
+    
+
+
 
