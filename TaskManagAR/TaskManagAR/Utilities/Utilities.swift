@@ -365,6 +365,17 @@ func markersFoundAimateDisplay(found: Int, level: Int, mark1: UIImageView, mark2
     return false
 }
     
-
+func updateMarkerPositions(rootNode: SCNNode, markers: [Int: marker_seen]){
+    
+    for id in markers {
+        rootNode.enumerateChildNodes { (node, stop) in
+            if (node.name == String(id.key)) {
+                print("updating scene")
+                node.transform = id.value.transform
+            }
+        }
+    }
+    
+}
 
 

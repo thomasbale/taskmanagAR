@@ -258,13 +258,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                         localiseTray(targTransform: id.value.transform, markerid: Int(id.key))
                         }
                     }
+                 
             }
+        // only nodes with names will get called by this function
+        updateMarkerPositions(rootNode: self.sceneView.scene.rootNode, markers: self.frame_ids_positions)
         return
         }
     }
   
     private func localiseTray(targTransform: SCNMatrix4, markerid: Int) {
         localizedContentNode.transform = targTransform // apply new transform to node
+        localizedContentNode.name = String(markerid)
         // Calculate the centre of the tray and make child of marker
         let marker = SCNNode()
         let node = SCNNode()
