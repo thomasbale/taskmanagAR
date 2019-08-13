@@ -102,6 +102,14 @@ func getLightNode() -> SCNNode {
     return lightnode
 }
 
+func eulerToDegrees(euler: Float) -> Float{
+    var euler_deg = euler * 180 / Float.pi
+    if( euler_deg < 0 ){
+        euler_deg = euler_deg + 360.0
+    }
+    return euler_deg
+}
+
 
 
 func leftArrow()-> SCNNode {
@@ -381,4 +389,14 @@ func updateMarkerPositions(rootNode: SCNNode, markers: [Int: marker_seen], curre
     
 }
 
+func setTargetPosition(task: Task, task_id: Int, tray_centre: SCNNode)->SCNNode{
+    let node = SCNNode()
+    return node
+}
+
+func object_to_Node(object: Object, action: String)->SCNNode{
+    let Node = SCNNode()
+    Node.name = action + String(object.object_marker.id)
+    return Node
+}
 

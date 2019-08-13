@@ -37,14 +37,6 @@
     return [NSString stringWithFormat:@"OpenCV Version %s",  CV_VERSION];
 }
 
-// Returns ARUCO marker for id requested using specified dict
-+(UIImage*) getMarkerForId:(int)id {
-    cv::Mat markerImage;
-    cv::Ptr<cv::aruco::Dictionary> dictionary = cv::aruco::getPredefinedDictionary(cv::aruco::DICT_ARUCO_ORIGINAL);
-    cv::aruco::drawMarker(dictionary, id, 400, markerImage);
-    UIImage *finalImage = MatToUIImage(markerImage);
-    return finalImage;
-}
 
 // Note that in openCV z goes away the camera (in openGL goes into the camera)
 // and y points down and on openGL point up

@@ -35,6 +35,9 @@
 		227EE03F21C94E82006B19F0 /* Accelerate.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 227EE03E21C94E82006B19F0 /* Accelerate.framework */; };
 		2293238922429F2D00D66A90 /* tick_ios.png in Resources */ = {isa = PBXBuildFile; fileRef = 2293238822429F2C00D66A90 /* tick_ios.png */; };
 		229CE69722D60B6D00C3F3EC /* InstructionView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 229CE69622D60B6D00C3F3EC /* InstructionView.swift */; };
+		22A006B12301946A00177613 /* line_paths.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A006B02301946A00177613 /* line_paths.swift */; };
+		22A006B32302BF3000177613 /* InstructionNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A006B22302BF3000177613 /* InstructionNode.swift */; };
+		22A006B52302C76100177613 /* waypoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22A006B42302C76100177613 /* waypoint.swift */; };
 		22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22C584F821E64C9600ADEAB6 /* Tray.swift */; };
 		22DA32C6223BD56700E72AB6 /* TaskTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */; };
 		22DA32CA22410A6D00E72AB6 /* ARMarkerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */; };
@@ -105,6 +108,9 @@
 		227EE04021C94F07006B19F0 /* PrefixHeader.pch */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = PrefixHeader.pch; sourceTree = "<group>"; };
 		2293238822429F2C00D66A90 /* tick_ios.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = tick_ios.png; path = ../../../../../Downloads/tick_ios.png; sourceTree = "<group>"; };
 		229CE69622D60B6D00C3F3EC /* InstructionView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionView.swift; sourceTree = "<group>"; };
+		22A006B02301946A00177613 /* line_paths.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = line_paths.swift; sourceTree = "<group>"; };
+		22A006B22302BF3000177613 /* InstructionNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InstructionNode.swift; sourceTree = "<group>"; };
+		22A006B42302C76100177613 /* waypoint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = waypoint.swift; sourceTree = "<group>"; };
 		22C584F821E64C9600ADEAB6 /* Tray.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tray.swift; sourceTree = "<group>"; };
 		22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = TaskTableViewController.swift; path = TaskManagAR/View_controllers/TaskTableViewController.swift; sourceTree = SOURCE_ROOT; };
 		22DA32C922410A6D00E72AB6 /* ARMarkerViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ARMarkerViewController.swift; sourceTree = "<group>"; };
@@ -249,8 +255,11 @@
 			children = (
 				22FEB53E2243C88700BB3BB0 /* Validation.swift */,
 				22F7E2F82227F6960029BAC1 /* Utilities.swift */,
+				22A006B22302BF3000177613 /* InstructionNode.swift */,
+				22A006B42302C76100177613 /* waypoint.swift */,
 				223BCCF1220B578100B62698 /* MarkerOrigin.swift */,
 				224C07CD220066B50021EBE5 /* Position_estimate.swift */,
+				22A006B02301946A00177613 /* line_paths.swift */,
 				22C584F821E64C9600ADEAB6 /* Tray.swift */,
 			);
 			path = Utilities;
@@ -438,10 +447,13 @@
 				22C584F921E64C9600ADEAB6 /* Tray.swift in Sources */,
 				22F7E2FD2227F9A50029BAC1 /* AR-Database.xcdatamodeld in Sources */,
 				22FEB53F2243C88700BB3BB0 /* Validation.swift in Sources */,
+				22A006B52302C76100177613 /* waypoint.swift in Sources */,
 				22DA32CA22410A6D00E72AB6 /* ARMarkerViewController.swift in Sources */,
+				22A006B32302BF3000177613 /* InstructionNode.swift in Sources */,
 				22DA32C6223BD56700E72AB6 /* TaskTableViewController.swift in Sources */,
 				22174F7821C923F000F4067C /* AppDelegate.swift in Sources */,
 				224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */,
+				22A006B12301946A00177613 /* line_paths.swift in Sources */,
 				22F7E305222805710029BAC1 /*  Database-Interface.swift in Sources */,
 				225EBC7222391BF1000D7F11 /* EventTableViewController.swift in Sources */,
 				2234042422F43AA2007B14A2 /* v2_ARViewController.swift in Sources */,

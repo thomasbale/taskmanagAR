@@ -15,9 +15,6 @@
 #import <GLKit/GLKit.h>
 #import <simd/types.h>
 
-
-
-
 typedef struct MarkerPose {
     bool found;
     SCNVector3 tvec;

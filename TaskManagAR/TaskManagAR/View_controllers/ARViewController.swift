@@ -21,6 +21,8 @@ protocol DisplayViewControllerDelegate : NSObjectProtocol{
      func updateEvent(activeEvents: [Task])
 }
 
+
+
 class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     weak var delegate : DisplayViewControllerDelegate?
@@ -248,7 +250,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if self.primary_marker == 99 || self.primary_marker == markerid{
             self.primary_marker = markerid
             localizedContentNode.transform = targTransform // apply new transform to node
-            localizedContentNode.name = String(markerid) // prevents updating of position
+            localizedContentNode.name = "tray" + String(markerid) // prevents updating of position
+            
+            // add anchor to aid positioning
+            let anchor = ARAnchor(transform: simd_float4x4(localizedContentNode.transform))
+            sceneView.session.add(anchor:anchor)
             // Calculate the centre of the tray and make child of marker
             let marker = SCNNode()
             let node = SCNNode()
@@ -257,12 +263,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             node.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
             var transform = simd_float4x4(node.worldTransform)
             self.visibleSpaceTarget.append(SCNVector3(transform.columns.3.x,transform.columns.3.y,transform.columns.3.z))
-            // does the marker match a trend?
+            // does the marker match a trend? This function looks for consecutive estimates
             if (varianceTonorm(vectorEstimates: self.visibleSpaceTarget) < 0.01){
                 TrayCentrepoint = loadedtray.TrayCentreNode()
                 localizedContentNode.addChildNode(TrayCentrepoint)
                 TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
                 self.primary_marker = markerid
+                
+                
+                
                 sceneView.scene.rootNode.addChildNode(localizedContentNode)
                 
                 DispatchQueue.main.async{
@@ -310,46 +319,30 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // Validates an object relative to the current scene
     func validateObject(object: Object) -> validationState?{
-
-        // is the object already aligned? Assumed that once validated not checked again
-        if(self.ObjectsPlacedDone.contains(object.object_marker.id)){
-            return validationState.aligned
-        }
-        
-        if let position = self.frame_ids_positions[Int(object.object_marker.id)]?.transform {
+        if let transform = self.frame_ids_positions[Int(object.object_marker.id)]?.transform {
             // now val is not nil and the Optional has been unwrapped, so use it
             
-            let object_position = SCNNode()
-            var direction_line = SCNNode()
-            
-            object_position.name = "object_position" + String(object.object_marker.id)
-            direction_line.name = "direction_line" + String(object.object_marker.id)
-            
-            // remove prevoius instruction
+            // remove prevoius instruction for this object
             sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-                if (node.name == object_position.name || node.name == direction_line.name) {
+                if (node.name == "instruction" + String(object.object_marker.id)) {
                     node.removeFromParentNode()
                 }
             }
             
-            sceneView.scene.rootNode.addChildNode(object_position)
-            object_position.transform = position
-            sceneView.scene.rootNode.addChildNode(direction_line)
-            direction_line.geometry = addLineBetween(start: object_position.worldPosition, end: TrayCentrepoint.worldPosition)
+            // Create the instructions
+            let obj_instruction = InstructionNode()
+            // Pass argumentes needed to construct instructions
+            obj_instruction.addInstructionsForObject(transform: transform, task: self.currentTask, id: object.object_marker.id, target: TrayCentrepoint.worldTransform, rootNode: self.sceneView.scene.rootNode)
+            // Add instructions to the root view
+            sceneView.scene.rootNode.addChildNode(obj_instruction)
             
-            return valid.nodeTonodePath(candidate: object_position, target: TrayCentrepoint)
+            return obj_instruction.validationstate
         }
         return validationState.not_visible
     }
 
     
-    func eulerToDegrees(euler: Float) -> Float{
-        var euler_deg = euler * 180 / Float.pi
-        if( euler_deg < 0 ){
-            euler_deg = euler_deg + 360.0
-        }
-        return euler_deg
-    }
+
 
     
 

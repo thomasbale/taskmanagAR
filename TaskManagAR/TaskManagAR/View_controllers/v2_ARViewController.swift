@@ -527,7 +527,7 @@ class ARViewController2: UIViewController, ARSCNViewDelegate, ARSessionDelegate 
             sceneView.scene.rootNode.addChildNode(direction_line)
             direction_line.geometry = addLineBetween(start: object_position.worldPosition, end: TrayCentrepoint.worldPosition)
             
-            return valid.nodeTonodePath(candidate: object_position, target: TrayCentrepoint)
+            return valid.nodeTonodePath(candidate: object_position, target: TrayCentrepoint, object: object)
         }
         return validationState.not_visible
     }

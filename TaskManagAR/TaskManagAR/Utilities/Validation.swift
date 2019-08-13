@@ -48,75 +48,47 @@ class Validator{
     }
     
     // how to get from one node to the other
-    func nodeTonodePath(candidate: SCNNode, target: SCNNode) -> validationState{
+    func nodeTonodePath(candidate: SCNNode, target: SCNNode, object: Object) -> validationState{
         
-        var relative_position = SCNNode()
+        var relative_position = calculate_relative_position(target: target, candidate: candidate)
+        let degree_rot = eulerToDegrees(euler: relative_position.eulerAngles.x)
+        let distance = SCNVector3.distanceFrom(vector: target.worldPosition, toVector: candidate.worldPosition)
+        
+        add_Candidate_Label(candidate: candidate, target: target)
+        add_Route_to_Target(candidate: candidate, target: target)
+        
+        return validationState.aligned
+    }
+    
+    func calculate_relative_position(target: SCNNode, candidate: SCNNode)->SCNNode{
+        
+        let relative_position = SCNNode()
         
         relative_position.transform = SCNMatrix4Mult(SCNMatrix4Invert(target.worldTransform),candidate.worldTransform)
-        // calculate the distance
-        let distance = SCNVector3.distanceFrom(vector: target.worldPosition, toVector: candidate.worldPosition)
+        
         // flip axis as per openGL issue
         relative_position.rotation = SCNVector4(relative_position.rotation.y, relative_position.rotation.x, relative_position.rotation.z, relative_position.rotation.w)
         
-        let degree_rot = eulerToDegrees(euler: relative_position.eulerAngles.x)
-
-        // Here we add nodes to the candidate to demonstrate instruction to path
-        if (degree_rot > 360.0 - rotation_deg_tollerance || degree_rot < rotation_deg_tollerance) && distance < Float(distance_m_tollerance) {
-            // accurate
-            candidate.addChildNode(tickDone())
-            
-            let destination_marker = TrayWaypoint(colour: UIColor.green)
-            candidate.addChildNode(destination_marker)
-            destination_marker.worldPosition = target.worldPosition
-            
-            return validationState.aligned
-        }
-        
-        if (degree_rot > 180.0) {
-            // left turn
-            if distance < Float(0.4){
-                candidate.addChildNode(Arrow(degrees: degree_rot, direction: "left"))
-                let destination_marker = TrayWaypoint(colour: UIColor.red)
-                candidate.addChildNode(destination_marker)
-                destination_marker.worldPosition = target.worldPosition
-                AddFloatingInstruction(message: "move  " + String(distance) + "m closer", parent: destination_marker)
-                
-                AddFloatingInstruction(message: "rotate  " + String(360.0 - degree_rot) + " degrees", parent: candidate)
-                
-            }else{
-                AddFloatingInstruction(message: "Move to Tray", parent: candidate)
-                let destination_marker = TrayWaypoint(colour: UIColor.red)
-                candidate.addChildNode(destination_marker)
-                destination_marker.worldPosition = target.worldPosition
-                AddFloatingInstruction(message: "move  " + String(distance) + " closer", parent: destination_marker)
-            }
-            return validationState.turn_left
-        }
-        
-        
-        if distance < Float(0.4){
-            candidate.addChildNode(Arrow(degrees: degree_rot, direction: "right"))
-            AddFloatingInstruction(message: "rotate  " + String(degree_rot) + " degrees", parent: candidate)
-            
-            let destination_marker = TrayWaypoint(colour: UIColor.red)
-            candidate.addChildNode(destination_marker)
-            destination_marker.worldPosition = target.worldPosition
-            AddFloatingInstruction(message: "move  " + String(distance) + "m closer", parent: destination_marker)
-        }
-        else{
-            AddFloatingInstruction(message: "Move to Tray", parent: candidate)
-            
-            let destination_marker = TrayWaypoint(colour: UIColor.red)
-            candidate.addChildNode(destination_marker)
-            destination_marker.worldPosition = target.worldPosition
-            AddFloatingInstruction(message: "move  " + String(distance) + "m closer", parent: destination_marker)
-        }
-        return validationState.turn_right
+        return relative_position
     }
     
+
+    func add_Candidate_Label(candidate: SCNNode, target: SCNNode){
+        
+    }
     
+    func add_Target_Label(candidate: SCNNode, target: SCNNode){
+        // remove previous start & finishes
+    }
     
+    func add_Route_to_Target(candidate: SCNNode, target: SCNNode){
+        candidate.addChildNode(addArrowBetween(start: candidate.position, end: target.worldPosition))
+        
+    }
     
+    func add_Rotation_to_Target(candidate: SCNNode, target: SCNNode){
+        // remove previous start & finishes
+    }
     
     
     func AllObjectsValidated(currentTask: Task) -> Bool{
@@ -145,6 +117,11 @@ func addArrowBetween(start: SCNVector3, end: SCNVector3) -> SCNNode {
             euler_deg = euler_deg + 360.0
         }
         return euler_deg
+    }
+    
+    private func animatePath(from: SCNNode, to: SCNNode) {
+        let line = CylinderLine(parent: from, v1: from.worldPosition, v2: to.worldPosition, radius: 0.01, radSegmentCount: 10, color: .red)
+        from.addChildNode(line)
     }
     
 }
