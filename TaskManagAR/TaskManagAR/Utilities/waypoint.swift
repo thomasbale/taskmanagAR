@@ -12,8 +12,42 @@ class WaypointModel: SCNNode {
     
     
     func GetWaypoint()->SCNNode{
-        let Node = self.GetModel(model_name: "waypoint", scene_name: "art.scnassets/Base.lproj/waypoint.scn")
-        Node.scale = SCNVector3Make(0.1, 0.1, 0.1)
+        let Node = self.GetModel(model_name: "pin", scene_name: "art.scnassets/Base.lproj/pin.scn")
+        Node.scale = SCNVector3Make(0.04, 0.04, 0.04)
+        Node.eulerAngles = SCNVector3Make(Float(Double.pi/2), 0, Float(Double.pi))
+        Node.position = SCNVector3(0, 0, 0.1)
+        let mat = SCNMaterial()
+        mat.diffuse.contents = UIColor.green
+        Node.geometry?.materials = [mat]
+        //let yFreeConstraint = SCNBillboardConstraint()
+        //yFreeConstraint.freeAxes = .Y // optionally
+        //Node.constraints = [yFreeConstraint] // apply the constraint to the parent node
+        
+        //Node.eulerAngles.y = Float(Double.pi/3)
+        let action : SCNAction = SCNAction.rotate(by: 20, around: SCNVector3(0, 0, 1), duration: 3)
+        let forever = SCNAction.repeatForever(action)
+        Node.runAction(forever)
+       
+        return Node
+    }
+    
+    func GetEndPoint()->SCNNode{
+        let Node = self.GetModel(model_name: "pin", scene_name: "art.scnassets/Base.lproj/pin.scn")
+        Node.scale = SCNVector3Make(0.04, 0.04, 0.04)
+        Node.eulerAngles = SCNVector3Make(Float(Double.pi/2), 0, Float(Double.pi))
+        Node.position = SCNVector3(0, 0, 0)
+        let mat = SCNMaterial()
+        mat.diffuse.contents = UIColor.green
+        Node.geometry?.materials = [mat]
+        //let yFreeConstraint = SCNBillboardConstraint()
+        //yFreeConstraint.freeAxes = .Y // optionally
+        //Node.constraints = [yFreeConstraint] // apply the constraint to the parent node
+        
+        //Node.eulerAngles.y = Float(Double.pi/3)
+        //let action : SCNAction = SCNAction.rotate(by: 20, around: SCNVector3(0, 0, 1), duration: 3)
+        //let forever = SCNAction.repeatForever(action)
+        //Node.runAction(forever)
+        
         return Node
     }
 
@@ -23,7 +57,6 @@ class WaypointModel: SCNNode {
         if let assetScene = SCNScene(named: scene_name) {
 
             if let node_ = assetScene.rootNode.childNode(withName: model_name, recursively: true) {
-                print("loaded")
                 node.name = "waypoint"
                 node = node_
             }

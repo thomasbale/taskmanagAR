@@ -15,7 +15,6 @@
 		22174F8421C923F200F4067C /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 22174F8221C923F200F4067C /* LaunchScreen.storyboard */; };
 		22174F8F21C923F300F4067C /* TaskManagARTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F8E21C923F300F4067C /* TaskManagARTests.swift */; };
 		22174F9A21C923F300F4067C /* TaskManagARUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 22174F9921C923F300F4067C /* TaskManagARUITests.swift */; };
-		2234042422F43AA2007B14A2 /* v2_ARViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 2234042322F43AA2007B14A2 /* v2_ARViewController.swift */; };
 		223BCCF2220B578100B62698 /* MarkerOrigin.swift in Sources */ = {isa = PBXBuildFile; fileRef = 223BCCF1220B578100B62698 /* MarkerOrigin.swift */; };
 		224C07CE220066B50021EBE5 /* Position_estimate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 224C07CD220066B50021EBE5 /* Position_estimate.swift */; };
 		225B81D32279ABC000A55C77 /* View_QR_code.png in Resources */ = {isa = PBXBuildFile; fileRef = 225B81D22279ABBF00A55C77 /* View_QR_code.png */; };
@@ -85,7 +84,6 @@
 		22174F9521C923F300F4067C /* TaskManagARUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = TaskManagARUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		22174F9921C923F300F4067C /* TaskManagARUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TaskManagARUITests.swift; sourceTree = "<group>"; };
 		22174F9B21C923F300F4067C /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		2234042322F43AA2007B14A2 /* v2_ARViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = v2_ARViewController.swift; sourceTree = "<group>"; };
 		223BCCF1220B578100B62698 /* MarkerOrigin.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = MarkerOrigin.swift; sourceTree = "<group>"; };
 		224781542239302500AACBA3 /* TaskManagAR.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = TaskManagAR.entitlements; sourceTree = "<group>"; };
 		224C07CD220066B50021EBE5 /* Position_estimate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Position_estimate.swift; sourceTree = "<group>"; };
@@ -242,7 +240,6 @@
 			isa = PBXGroup;
 			children = (
 				22174F7B21C923F000F4067C /* ARViewController.swift */,
-				2234042322F43AA2007B14A2 /* v2_ARViewController.swift */,
 				225EBC7122391BF1000D7F11 /* EventTableViewController.swift */,
 				22DA32C5223BD56700E72AB6 /* TaskTableViewController.swift */,
 				229CE69622D60B6D00C3F3EC /* InstructionView.swift */,
@@ -456,7 +453,6 @@
 				22A006B12301946A00177613 /* line_paths.swift in Sources */,
 				22F7E305222805710029BAC1 /*  Database-Interface.swift in Sources */,
 				225EBC7222391BF1000D7F11 /* EventTableViewController.swift in Sources */,
-				2234042422F43AA2007B14A2 /* v2_ARViewController.swift in Sources */,
 				225EBC652236981F000D7F11 /* BarcodeScanner.swift in Sources */,
 				229CE69722D60B6D00C3F3EC /* InstructionView.swift in Sources */,
 			);

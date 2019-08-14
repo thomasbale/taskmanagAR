@@ -230,6 +230,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 let newframe = OpenCVWrapper.arucodetect(pixelBuffer, withIntrinsics: frame.camera.intrinsics, andMarkerSize: Float64(activeTasks[taskIndex].space.marker_height_m))
                 // convert c++ to swift  and place detections in VC hash map
                 self.frame_ids_positions = tupleMatrixToDict(tuple: newframe.all_extrinsics, camera: SCNMatrix4.init(frame.camera.transform), last_frame: self.frame_ids_positions, count: Int(newframe.no_markers))
+                
                 if(self.isLocalized == false){
                     self.frame_ids_positions.forEach { id in
                         if isSpaceMarker(id: id.key, current_task: self.currentTask){
@@ -250,7 +251,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if self.primary_marker == 99 || self.primary_marker == markerid{
             self.primary_marker = markerid
             localizedContentNode.transform = targTransform // apply new transform to node
-            localizedContentNode.name = "tray" + String(markerid) // prevents updating of position
+            localizedContentNode.name = "tray" // prevents updating of position
             
             // add anchor to aid positioning
             let anchor = ARAnchor(transform: simd_float4x4(localizedContentNode.transform))
@@ -258,6 +259,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // Calculate the centre of the tray and make child of marker
             let marker = SCNNode()
             let node = SCNNode()
+            
             marker.transform = targTransform
             marker.addChildNode(node)
             node.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
@@ -293,8 +295,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
     }
 
-
-        
         func renderer(_ renderer: SCNSceneRenderer,
                                nodeFor anchor: ARAnchor) -> SCNNode?{
             return SCNNode()
@@ -324,7 +324,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             
             // remove prevoius instruction for this object
             sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-                if (node.name == "instruction" + String(object.object_marker.id)) {
+                if (node.name == "instruction" + String(object.object_marker.id) || node.name == "target") {
                     node.removeFromParentNode()
                 }
             }
@@ -333,18 +333,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             let obj_instruction = InstructionNode()
             // Pass argumentes needed to construct instructions
             obj_instruction.addInstructionsForObject(transform: transform, task: self.currentTask, id: object.object_marker.id, target: TrayCentrepoint.worldTransform, rootNode: self.sceneView.scene.rootNode)
+
             // Add instructions to the root view
             sceneView.scene.rootNode.addChildNode(obj_instruction)
-            
+  
             return obj_instruction.validationstate
         }
         return validationState.not_visible
     }
 
-    
-
-
-    
 
     
     func reset(){
@@ -429,6 +426,16 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             print("shaken")
             self.dismiss(animated: true, completion: nil)
         }
+    }
+    
+    func TargetMarker()->SCNNode{
+        var node = SCNNode(geometry: SCNTorus(ringRadius: 0.2, pipeRadius: 0.001))
+        
+        let action : SCNAction = SCNAction.rotate(by: 20, around: SCNVector3(0, 0, 1), duration: 3)
+        let forever = SCNAction.repeatForever(action)
+        node.runAction(forever)
+        node.name = "target"
+        return node
     }
     
     }

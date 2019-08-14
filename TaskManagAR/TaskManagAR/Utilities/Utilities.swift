@@ -125,11 +125,7 @@ func leftArrow()-> SCNNode {
     return modelNode
 }
 
-func tickDone()-> SCNNode {
-    let modelNode = SCNNode()
-    modelNode.geometry = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
-    return modelNode
-}
+
 
 
 func rightArrow()-> SCNNode {
@@ -142,39 +138,7 @@ func rightArrow()-> SCNNode {
     return modelNode
 }
 
-func Arrow(degrees: Float, direction: String)-> SCNNode {
-    let tempScene = SCNScene(named: "art.scnassets/Base.lproj/arrow_scaled.dae")!
-    let modelNode = tempScene.rootNode
-    modelNode.scale = SCNVector3(0.1, 0.1, 0.1)
-    
-    if direction == "right" {
-        modelNode.eulerAngles = SCNVector3Make(Float(Double.pi),0,0)
-    }else{
-        modelNode.eulerAngles = SCNVector3Make(0,0,0)
-    }
-    
-    let up :
-        
-        SCNAction = SCNAction.rotate(by: CGFloat(deg2rad(degrees)), around: SCNVector3(0, 0, 1), duration: 1.5)
-    
-    let down :
-        
-        SCNAction = SCNAction.rotate(by: -CGFloat(deg2rad(degrees)), around: SCNVector3(0, 0, 1), duration: 0.2)
-    
-    var sequence = [SCNAction]()
-    
-    sequence.append(up)
-    sequence.append(down)
-    
-    let actions = SCNAction.sequence(sequence)
-    
-    let forever = SCNAction.repeatForever(actions)
 
-    
-    modelNode.runAction(forever)
-    
-    return modelNode
-}
 
 
 func TrayWaypoint(colour: UIColor)-> SCNNode{
@@ -208,8 +172,8 @@ func createTextNode(string: String) -> SCNNode {
     text.firstMaterial?.diffuse.contents = UIColor.white
     
     let textNode = SCNNode(geometry: text)
-    
-    let fontSize = Float(0.02)
+    textNode.position = SCNVector3(0, 0, 0)
+    let fontSize = Float(0.04)
     textNode.scale = SCNVector3(fontSize, fontSize, fontSize)
     //textNode.position = SCNVector3Zero
     
@@ -376,14 +340,15 @@ func markersFoundAimateDisplay(found: Int, level: Int, mark1: UIImageView, mark2
 func updateMarkerPositions(rootNode: SCNNode, markers: [Int: marker_seen], current_task: Task, primary_m: Int){
     for id in markers {
         rootNode.enumerateChildNodes { (node, stop) in
-            if (node.name == String(id.key)) {
+            if (node.name == String(id.key)/* || node.name == "tray"*/) {
                 if isSpaceMarker(id: id.key, current_task: current_task){
                     // just the position
-                    node.position = positionFromTransform(simd_float4x4(id.value.transform))
+                    node.transform = id.value.transform
                     return
                 }
-                node.transform = id.value.transform
+                
             }
+            
         }
     }
     
