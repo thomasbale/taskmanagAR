@@ -16,7 +16,8 @@ class InstructionNode: SCNNode {
     func addInstructionsForObject(transform: SCNMatrix4, task: Task, id: Int, target: SCNMatrix4, rootNode: SCNNode){
         // attach to self to attach to object
         self.name = "instruction" + String(id)
-        self.geometry = SCNBox(width: 0.03, height: 0.03, length: 0.03, chamferRadius: 0)
+        //self.geometry = SCNBox(width: 0.03, height: 0.03, length: 0.03, chamferRadius: 0)
+        AddFloatingInstruction(message: "Standard Tile Assembly", parent: self)
         self.transform = transform
         let target_node = SCNNode()
         let valid = Validator()

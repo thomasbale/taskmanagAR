@@ -22,18 +22,21 @@ class Validator{
         let degree_rot = eulerToDegrees(euler: relative_position.eulerAngles.x)
         let distance = SCNVector3.distanceFrom(vector: target.worldPosition, toVector: candidate.worldPosition)
         
-        print(distance)
+        print(degree_rot)
         
-        if distance < 0.09 && degree_rot > 5 && degree_rot < 355{
-            candidate.addChildNode(tickDone())
-            return validationState.aligned
+        if distance < 0.09 {
+            if degree_rot < 5 || degree_rot > 355 {
+                candidate.addChildNode(tickDone())
+                return validationState.aligned
+            }
+            
         }
-        
         
         if distance > 0.05 {
             AddFloatingInstruction(message: "Place Here", parent: target)
             candidate.addChildNode(addWaypoint())
             target.addChildNode(addDestination())
+            target.addChildNode(addLandingTarget())
         }
         
         if degree_rot > 5 && degree_rot < 355 {
@@ -45,7 +48,10 @@ class Validator{
     
     func addDestination()->SCNNode{
         let way = WaypointModel()
-        return way.GetEndPoint()
+        let dest = way.GetEndPoint()
+        dest.position = SCNVector3(0, 0, 0.1)
+    
+        return dest
     }
     
     func addWaypoint()->SCNNode{
@@ -58,9 +64,23 @@ class Validator{
         return way.GetEndPoint()
     }
     
+    func addLandingTarget()->SCNNode{
+        // this is the zone of the tray
+        var geometry = SCNBox(width: 0.15, height: 0.15, length: 0.005, chamferRadius: 0)
+        let node = SCNNode(geometry: geometry)
+        let material = SCNMaterial()
+        material.diffuse.contents = UIColor.yellow
+        material.transparency = 0.5
+        node.geometry?.materials = [material]
+        return node
+    }
+    
     func tickDone()-> SCNNode {
         let modelNode = SCNNode()
         modelNode.geometry = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
+        //let material = SCNMaterial()
+        //material.diffuse.contents = UIImage(named: "tick_ios.png")
+        //modelNode.geometry?.materials = [material]
         return modelNode
     }
     

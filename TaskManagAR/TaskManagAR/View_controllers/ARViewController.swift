@@ -56,10 +56,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     private var MarkerframeRate = 20 // runs every n frames
     private var NumberofMarkersFound = 0 // Total for a confidence level on the scene
     private var ConfirmationMarkerLevel = 5 // how many times do I need to markers?
-    // for the validation process
-    private var status_0 = UIColor.red
-    private var status_1 = UIColor.red
-    private var status_2 = UIColor.red
+    private var tickInitiated = Bool()
     // running session log of objects that are marked as validated in the current scene
     private var ObjectsPlacedDone = [Int]()
     // Object properties
@@ -96,33 +93,40 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // function called on validate request from user
     @IBAction func Validate(_ sender: Any) {
-        //self.segue() //debugging
         // if not ready return
         if(isLocalized == false) || (self.activeTasks[self.taskIndex].validation == nil){
             print("Not localised or no validation available for this task")
             return
         }
-        // capture a frame
-        self.activityWait.startAnimating()
+        
+        //self.activityWait.startAnimating()
         self.validateTask(task: &self.activeTasks[self.taskIndex])
-        //self.captureNextFrameForCV = true
-        // check whether the ID is present & orientation
-        DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(1), execute: {
-            // pass by reference
-            if self.valid.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
-                // Check the task as complete
-                self.activeTasks[self.taskIndex].complete = true
-                self.completeTick.isHidden = false
-                self.completeTick.alpha = 1.0
+        
+        if self.valid.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
+            // Check the task as complete
+            self.activeTasks[self.taskIndex].complete = true
+            self.completeTick.isHidden = false
+            self.completeTick.alpha = 1.0
+            self.dismiss(animated: true, completion: nil)
+            self.nextTask(self)
+            
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
+                
                 // Fade the tick
                 UIView.animate(withDuration: 1.5, delay: 1.5, options: [], animations: {
                     self.completeTick.alpha = 0.0
                 }) { (finished: Bool) in
                     self.completeTick.isHidden = true
+                    // show the next instruction
+                    self.segue()
                 }
-            }
-            self.activityWait.stopAnimating()
-        })
+            })
+            
+        }
+        //self.captureNextFrameForCV = true
+        // check whether the ID is present & orientation
+        
+        
     }
     // function called on back request (unwind segue)
     @IBAction func backToPrevious(_ sender: Any) {
@@ -163,14 +167,14 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // Hide the completion tick
         self.completeTick.isHidden = true
-        self.findMarkerLayer.alpha = 0.7
+        self.findMarkerLayer.alpha = 0.0
         self.currentTask = activeTasks[taskIndex]
         Debuggingop.text = "localising"
         // Set the view's delegate
         sceneView.delegate = self
         sceneView.session.delegate = self
         sceneView.showsStatistics = true
-        sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
+        //sceneView.debugOptions = [.showWireframe, .showBoundingBoxes, .showFeaturePoints]
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -232,6 +236,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 self.frame_ids_positions = tupleMatrixToDict(tuple: newframe.all_extrinsics, camera: SCNMatrix4.init(frame.camera.transform), last_frame: self.frame_ids_positions, count: Int(newframe.no_markers))
                 
                 if(self.isLocalized == false){
+                    self.segue()
                     self.frame_ids_positions.forEach { id in
                         if isSpaceMarker(id: id.key, current_task: self.currentTask){
                         localiseTray(targTransform: id.value.transform, markerid: Int(id.key))
@@ -271,10 +276,11 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 localizedContentNode.addChildNode(TrayCentrepoint)
                 TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
                 self.primary_marker = markerid
-                
-                
-                
                 sceneView.scene.rootNode.addChildNode(localizedContentNode)
+                
+                self.dismiss(animated: true, completion: nil)
+                self.nextTask(self)
+                self.segue()
                 
                 DispatchQueue.main.async{
                     UIView.animate(withDuration: 0.5, delay: 0.5, options: [], animations: {
@@ -291,6 +297,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     }
                 }
                 self.isLocalized = true
+                self.activeTasks[self.taskIndex].complete = true
             }
         }
     }
@@ -424,7 +431,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     override func motionEnded(_ motion: UIEvent.EventSubtype, with event: UIEvent?) {
         if motion == .motionShake {
             print("shaken")
-            self.dismiss(animated: true, completion: nil)
+            //self.dismiss(animated: true, completion: nil)
         }
     }
     

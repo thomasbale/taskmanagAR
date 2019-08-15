@@ -340,13 +340,8 @@ func markersFoundAimateDisplay(found: Int, level: Int, mark1: UIImageView, mark2
 func updateMarkerPositions(rootNode: SCNNode, markers: [Int: marker_seen], current_task: Task, primary_m: Int){
     for id in markers {
         rootNode.enumerateChildNodes { (node, stop) in
-            if (node.name == String(id.key)/* || node.name == "tray"*/) {
-                if isSpaceMarker(id: id.key, current_task: current_task){
-                    // just the position
-                    node.transform = id.value.transform
-                    return
-                }
-                
+            if (node.name == String(id.key)) {
+                node.transform = id.value.transform
             }
             
         }
