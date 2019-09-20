@@ -57,6 +57,7 @@ struct Object{
     // Object offset from the centre of the tray: defaults to centre
     var x_offset: Float?
     var y_offset: Float?
+    var colour: UIColor?
 }
 
 struct Task{
@@ -90,20 +91,22 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     // create the tasks
     let findTray = Task(name: "Find Tray", description: "Locate correct task module tray", objects: [Object()], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/demo.001.png")
     
+    // CREATE THE OBJECTS
     var tray1_Objects = [Object]()
+    var object1 = Object(object_marker: Marker(id: 6), name: "Object 6", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.magenta)
     
-    var object1 = Object(object_marker: Marker(id: 6), name: "Object 6", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0)
-    
-    var object2 = Object(object_marker: Marker(id: 3), name: "Object 3", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0)
+    var object2 = Object(object_marker: Marker(id: 3), name: "Object 3", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.green)
     
     tray1_Objects.append(object1)
     tray1_Objects.append(object2)
+    calculateTrayOffset(objects: &tray1_Objects, space: taskModuleTray)
     
+    // BUILD THE TRAYS
     var tray1 = Task(name: "object6 and object 3", description: "Locate LBSRP Plate", objects: tray1_Objects, space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/demo.002.png")
     
-    var tray2 = Task(name: "object4", description: "Locate LBSRP Plate", objects: [Object(object_marker: Marker(id: 4), name: "Object 4", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0)], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/demo.002.png")
+    var tray2 = Task(name: "object4", description: "Locate LBSRP Plate", objects: [Object(object_marker: Marker(id: 4), name: "Object 4", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.green)], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/demo.002.png")
     
-    var tray3 = Task(name: "object8", description: "Locate LBSRP Plate", objects: [Object(object_marker: Marker(id: 8), name: "Object 8", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0)], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/demo.002.png")
+    var tray3 = Task(name: "object8", description: "Locate LBSRP Plate", objects: [Object(object_marker: Marker(id: 8), name: "Object 8", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.green)], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/demo.002.png")
     
     
     // clean then add tasks to events
@@ -120,6 +123,22 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     eventArray.append(testTCFevent)
     
     return eventArray
+}
+
+func calculateTrayOffset(objects: inout [Object], space: Space){
+    
+    if objects.count == 0 {
+        return
+    }
+    
+    let spacing = space.width / (Double(objects.count) + 1)
+    let centrepoint = Float(space.width / 2)
+    var positionOffset = Float(spacing)
+    
+    for index in objects.indices {
+        objects[index].x_offset = positionOffset - centrepoint
+        positionOffset = positionOffset + Float(spacing)
+    }
 }
 
 

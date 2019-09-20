@@ -11,13 +11,13 @@ import UIKit
 class WaypointModel: SCNNode {
     
     
-    func GetWaypoint()->SCNNode{
+    func GetWaypoint(colour: UIColor)->SCNNode{
         let Node = self.GetModel(model_name: "pin", scene_name: "art.scnassets/Base.lproj/pin.scn")
         Node.scale = SCNVector3Make(0.04, 0.04, 0.04)
         Node.eulerAngles = SCNVector3Make(Float(Double.pi/2), 0, Float(Double.pi))
         Node.position = SCNVector3(0, 0, 0.1)
         let mat = SCNMaterial()
-        mat.diffuse.contents = UIColor.green
+        mat.diffuse.contents = colour
         Node.geometry?.materials = [mat]
         //let yFreeConstraint = SCNBillboardConstraint()
         //yFreeConstraint.freeAxes = .Y // optionally
@@ -31,13 +31,13 @@ class WaypointModel: SCNNode {
         return Node
     }
     
-    func GetEndPoint()->SCNNode{
+    func GetEndPoint(colour: UIColor)->SCNNode{
         let Node = self.GetModel(model_name: "pin", scene_name: "art.scnassets/Base.lproj/pin.scn")
         Node.scale = SCNVector3Make(0.04, 0.04, 0.04)
         Node.eulerAngles = SCNVector3Make(Float(Double.pi/2), 0, Float(Double.pi))
         Node.position = SCNVector3(0, 0, 0)
         let mat = SCNMaterial()
-        mat.diffuse.contents = UIColor.green
+        mat.diffuse.contents = colour
         Node.geometry?.materials = [mat]
         //let yFreeConstraint = SCNBillboardConstraint()
         //yFreeConstraint.freeAxes = .Y // optionally

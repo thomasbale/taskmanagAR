@@ -12,11 +12,9 @@ class Validator{
     
     let rotation_deg_tollerance = Float(10.0)
     let distance_m_tollerance = 0.05
-
-
     
     // how to get from one node to the other
-    func nodeTonodePath(candidate: SCNNode, target: SCNNode) -> validationState{
+    func nodeTonodePath(candidate: SCNNode, target: SCNNode, object: Object) -> validationState{
         
         var relative_position = calculate_relative_position(target: target, candidate: candidate)
         let degree_rot = eulerToDegrees(euler: relative_position.eulerAngles.x)
@@ -34,8 +32,8 @@ class Validator{
         
         if distance > 0.05 {
             AddFloatingInstruction(message: "Place Here", parent: target)
-            candidate.addChildNode(addWaypoint())
-            target.addChildNode(addDestination())
+            candidate.addChildNode(addWaypoint(colour: object.colour!))
+            target.addChildNode(addDestination(colour: object.colour!))
             target.addChildNode(addLandingTarget())
         }
         
@@ -46,23 +44,23 @@ class Validator{
         return validationState.misaligned
     }
     
-    func addDestination()->SCNNode{
+    func addDestination(colour: UIColor)->SCNNode{
         let way = WaypointModel()
-        let dest = way.GetEndPoint()
+        let dest = way.GetEndPoint(colour: colour)
         // dest position is an offset from the tray centrepoint
         dest.position = SCNVector3(0, 0, 0.1)
     
         return dest
     }
     
-    func addWaypoint()->SCNNode{
+    func addWaypoint(colour: UIColor)->SCNNode{
         let way = WaypointModel()
-        return way.GetWaypoint()
+        return way.GetWaypoint(colour: colour)
     }
     
     func addComplete()->SCNNode{
         let way = WaypointModel()
-        return way.GetEndPoint()
+        return way.GetEndPoint(colour: UIColor.green)
     }
     
     func addLandingTarget()->SCNNode{

@@ -77,6 +77,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     // transform to detected target
     var targTransform = SCNMatrix4()
     
+    // ready state
+    var readyForNext = Bool(true)
+    
     @IBOutlet var sceneView: ARSCNView!
     
     // Button press used to prevent process overload & button for loading a tray scene
@@ -319,7 +322,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         // Check validation for each object in turn
         for object in task.objects {
             // Add the result of each object validation to the array
-            validatedStates.append(validateObject(object: object)!)
+            
+                let currentState = validateObject(object: object)!
+                validatedStates.append(currentState)
+            
         }
         // Record the validation state back against the task
         task.validation?.objectStates = validatedStates
@@ -328,6 +334,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // Validates an object relative to the current scene
     func validateObject(object: Object) -> validationState?{
+    
         if let transform = self.frame_ids_positions[Int(object.object_marker.id)]?.transform {
             // now val is not nil and the Optional has been unwrapped, so use it
             
@@ -344,16 +351,17 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // this is where the target is defined
             
             let offset = SCNNode()
-            offset.position = SCNVector3(0, 0, 0)
+            offset.position = SCNVector3(0, object.x_offset!, 0)
             TrayCentrepoint.addChildNode(offset)
             
-            obj_instruction.addInstructionsForObject(transform: transform, task: self.currentTask, id: object.object_marker.id, target: offset.worldTransform, rootNode: self.sceneView.scene.rootNode)
+            obj_instruction.addInstructionsForObject(transform: transform, task: self.currentTask, id: object.object_marker.id, target: offset.worldTransform, rootNode: self.sceneView.scene.rootNode, object: object)
 
             // Add instructions to the root view
             sceneView.scene.rootNode.addChildNode(obj_instruction)
   
             return obj_instruction.validationstate
         }
+
         return validationState.not_visible
     }
 
