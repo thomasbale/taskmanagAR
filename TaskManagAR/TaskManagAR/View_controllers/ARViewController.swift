@@ -106,12 +106,27 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         self.validateTask(task: &self.activeTasks[self.taskIndex])
         
         if self.valid.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
+            
+            sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
+                
+                if let name = node.name{
+                    if (name.contains("instruction")) {
+                        node.removeFromParentNode()
+                    }
+                }
+            }
+            
             // Check the task as complete
             self.activeTasks[self.taskIndex].complete = true
             self.completeTick.isHidden = false
             self.completeTick.alpha = 1.0
             self.dismiss(animated: true, completion: nil)
             self.nextTask(self)
+            
+            
+            //todo remove all instruction nodes
+            
+            
             
             DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
                 
@@ -278,6 +293,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             if (varianceTonorm(vectorEstimates: self.visibleSpaceTarget) < 0.01){
                 TrayCentrepoint = loadedtray.TrayCentreNode()
                 localizedContentNode.addChildNode(TrayCentrepoint)
+                TrayCentrepoint.name = "traylayout"
                 TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
                 
                 self.primary_marker = markerid

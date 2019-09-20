@@ -106,6 +106,7 @@ class Tray{
     func TrayCentreNode () -> SCNNode{
         //node.transform = self.transform
         node.geometry = geometry
+        node.name = "traypattern"
         colour.diffuse.contents = UIImage(named: "tray.png")
         //colour.transparency = 0.1
         geometry.materials = [colour]
