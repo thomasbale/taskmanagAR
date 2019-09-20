@@ -49,6 +49,7 @@ class Validator{
     func addDestination()->SCNNode{
         let way = WaypointModel()
         let dest = way.GetEndPoint()
+        // dest position is an offset from the tray centrepoint
         dest.position = SCNVector3(0, 0, 0.1)
     
         return dest

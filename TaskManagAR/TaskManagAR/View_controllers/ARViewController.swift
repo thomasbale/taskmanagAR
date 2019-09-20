@@ -257,6 +257,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.primary_marker = markerid
             localizedContentNode.transform = targTransform // apply new transform to node
             localizedContentNode.name = "tray" // prevents updating of position
+            //localizedContentNode.name = String(markerid)
             
             // add anchor to aid positioning
             let anchor = ARAnchor(transform: simd_float4x4(localizedContentNode.transform))
@@ -275,6 +276,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 TrayCentrepoint = loadedtray.TrayCentreNode()
                 localizedContentNode.addChildNode(TrayCentrepoint)
                 TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
+                
                 self.primary_marker = markerid
                 sceneView.scene.rootNode.addChildNode(localizedContentNode)
                 
@@ -339,7 +341,13 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // Create the instructions
             let obj_instruction = InstructionNode()
             // Pass argumentes needed to construct instructions
-            obj_instruction.addInstructionsForObject(transform: transform, task: self.currentTask, id: object.object_marker.id, target: TrayCentrepoint.worldTransform, rootNode: self.sceneView.scene.rootNode)
+            // this is where the target is defined
+            
+            let offset = SCNNode()
+            offset.position = SCNVector3(0, 0, 0)
+            TrayCentrepoint.addChildNode(offset)
+            
+            obj_instruction.addInstructionsForObject(transform: transform, task: self.currentTask, id: object.object_marker.id, target: offset.worldTransform, rootNode: self.sceneView.scene.rootNode)
 
             // Add instructions to the root view
             sceneView.scene.rootNode.addChildNode(obj_instruction)
@@ -437,7 +445,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func TargetMarker()->SCNNode{
         var node = SCNNode(geometry: SCNTorus(ringRadius: 0.2, pipeRadius: 0.001))
-        
         let action : SCNAction = SCNAction.rotate(by: 20, around: SCNVector3(0, 0, 1), duration: 3)
         let forever = SCNAction.repeatForever(action)
         node.runAction(forever)
