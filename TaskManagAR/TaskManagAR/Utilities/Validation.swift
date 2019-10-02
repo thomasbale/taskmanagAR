@@ -20,9 +20,8 @@ class Validator{
         let degree_rot = eulerToDegrees(euler: relative_position.eulerAngles.x)
         let distance = SCNVector3.distanceFrom(vector: target.worldPosition, toVector: candidate.worldPosition)
         
-        print(degree_rot)
         
-        if distance < 0.09 {
+        if distance < 0.05 {
             if degree_rot < 5 || degree_rot > 355 {
                 candidate.addChildNode(tickDone())
                 return validationState.aligned
@@ -32,7 +31,10 @@ class Validator{
         
         if distance > 0.05 {
             AddFloatingInstruction(message: "Place Here", parent: target)
-            candidate.addChildNode(addWaypoint(colour: object.colour!))
+            
+            let waypoint = addWaypoint(colour: object.colour!)
+            candidate.addChildNode(waypoint)
+            
             target.addChildNode(addDestination(colour: object.colour!))
             target.addChildNode(addLandingTarget())
         }
@@ -65,7 +67,7 @@ class Validator{
     
     func addLandingTarget()->SCNNode{
         // this is the zone of the tray
-        var geometry = SCNBox(width: 0.15, height: 0.15, length: 0.005, chamferRadius: 0)
+        var geometry = SCNBox(width: 0.05, height: 0.05, length: 0.005, chamferRadius: 0)
         let node = SCNNode(geometry: geometry)
         let material = SCNMaterial()
         material.diffuse.contents = UIColor.yellow
@@ -76,6 +78,7 @@ class Validator{
     
     func tickDone()-> SCNNode {
         let modelNode = SCNNode()
+        modelNode.name = "done"
         modelNode.geometry = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
         //let material = SCNMaterial()
         //material.diffuse.contents = UIImage(named: "tick_ios.png")
@@ -89,8 +92,6 @@ class Validator{
         let modelNode = tempScene.rootNode
         
         var factor = Float()
-        
-        print(factor)
         
         if degrees < 180 {
             factor = 180 - (180 - degrees)

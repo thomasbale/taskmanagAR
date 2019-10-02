@@ -27,6 +27,7 @@ class WaypointModel: SCNNode {
         let action : SCNAction = SCNAction.rotate(by: 20, around: SCNVector3(0, 0, 1), duration: 3)
         let forever = SCNAction.repeatForever(action)
         Node.runAction(forever)
+        
        
         return Node
     }

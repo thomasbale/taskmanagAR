@@ -103,6 +103,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         }
         
         //self.activityWait.startAnimating()
+    
+        
         self.validateTask(task: &self.activeTasks[self.taskIndex])
         
         if self.valid.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
@@ -123,7 +125,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.dismiss(animated: true, completion: nil)
             self.nextTask(self)
             
-            
+            self.frame_ids_positions.removeAll()
             //todo remove all instruction nodes
             
             
@@ -262,7 +264,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     }
                  
                 }else{
-                    updateMarkerPositions(rootNode: self.sceneView.scene.rootNode, markers: self.frame_ids_positions, current_task: self.currentTask, primary_m: self.primary_marker)
+                    //updateMarkerPositions_(rootNode: self.sceneView.scene.rootNode, markers: self.frame_ids_positions, current_task: self.currentTask, primary_m: self.primary_marker)
                     Validate(self)
                 }
         // only nodes with names will get called by this function
@@ -350,32 +352,37 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     // Validates an object relative to the current scene
     func validateObject(object: Object) -> validationState?{
+
     
         if let transform = self.frame_ids_positions[Int(object.object_marker.id)]?.transform {
             // now val is not nil and the Optional has been unwrapped, so use it
             
             // remove prevoius instruction for this object
-            sceneView.scene.rootNode.enumerateChildNodes { (node, stop) in
-                if (node.name == "instruction" + String(object.object_marker.id) || node.name == "target") {
+            object.instruction.enumerateChildNodes { (node, stop) in
+                
+                if node.name == "done"{
+                    return
+                }else{
                     node.removeFromParentNode()
                 }
+                    
             }
             
-            // Create the instructions
-            let obj_instruction = InstructionNode()
             // Pass argumentes needed to construct instructions
             // this is where the target is defined
             
             let offset = SCNNode()
-            offset.position = SCNVector3(0, object.x_offset!, 0)
+            offset.position = SCNVector3(0,object.x_offset!,0)
+
             TrayCentrepoint.addChildNode(offset)
             
-            obj_instruction.addInstructionsForObject(transform: transform, task: self.currentTask, id: object.object_marker.id, target: offset.worldTransform, rootNode: self.sceneView.scene.rootNode, object: object)
+            object.instruction.addInstructionsForObject(transform: transform, task: self.currentTask, id: object.object_marker.id, target: offset.worldTransform, rootNode: self.sceneView.scene.rootNode, object: object)
+            
 
             // Add instructions to the root view
-            sceneView.scene.rootNode.addChildNode(obj_instruction)
+            sceneView.scene.rootNode.addChildNode(object.instruction)
   
-            return obj_instruction.validationstate
+            return object.instruction.validationstate
         }
 
         return validationState.not_visible
@@ -476,5 +483,29 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         return node
     }
     
+    func updateMarkerPositions_(rootNode: SCNNode, markers: [Int: marker_seen], current_task: Task, primary_m: Int){
+        for id in markers {
+            
+            rootNode.enumerateChildNodes { (node, stop) in
+                if (node.name == String(id.key)) {
+                    node.transform = id.value.transform
+                }
+                if (id.key == primary_m){
+                    rootNode.enumerateChildNodes { (node, stop) in
+                    if (node.name == "tray") {
+                        node.transform = id.value.transform
+                    }
+                }
+                
+        }
+        
     }
-
+    }
+    
+    func addWaypoint(colour: UIColor)->SCNNode{
+        let way = WaypointModel()
+        return way.GetWaypoint(colour: colour)
+    }
+    
+    }
+}
