@@ -344,17 +344,18 @@ func updateMarkerPositions(rootNode: SCNNode, markers: [Int: marker_seen], curre
             if (node.name == String(id.key) && id.key != primary_m) {
                 node.transform = id.value.transform
             }
-            /*
+            
             if (id.key == primary_m) {
                 rootNode.enumerateChildNodes { (node, stop) in
                     if (node.name == "tray") {
                         let node1 = SCNNode()
                         node1.transform = id.value.transform
                         node.position = node1.position
+    
                     }
             }
             
-        }*/
+        }
     }
     
 }

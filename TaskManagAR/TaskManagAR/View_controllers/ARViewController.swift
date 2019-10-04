@@ -68,6 +68,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     var primary_marker = 99
     // Space localisation
     private var visibleSpaceTarget = [SCNVector3]()
+    private var visibleSpaceTarget_transactional = [SCNVector3]()
     // Activity indicator for the validation process
     @IBOutlet weak var activityWait: UIActivityIndicatorView!
     // Validation class object
@@ -106,6 +107,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
         
         self.validateTask(task: &self.activeTasks[self.taskIndex])
+        self.relocaliseTray()
         
         if self.valid.AllObjectsValidated(currentTask: self.activeTasks[self.taskIndex]){
             
@@ -162,6 +164,15 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // Load in current space
             //buttonloadmodel(self)
         }
+        // change the current task
+        self.currentTask = activeTasks[taskIndex]
+        // reset the alignment of objects
+        
+        for object in self.currentTask.objects {
+            object.instruction.validationstate = validationState.not_visible
+        }
+        
+        
         
     }
     @IBOutlet weak var Debuggingop: UILabel!
@@ -264,7 +275,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     }
                  
                 }else{
-                    //updateMarkerPositions_(rootNode: self.sceneView.scene.rootNode, markers: self.frame_ids_positions, current_task: self.currentTask, primary_m: self.primary_marker)
+                    //updatespacepos(rootNode: self.sceneView.scene.rootNode, markers: self.frame_ids_positions, current_task: self.currentTask, primary_m: self.primary_marker)
                     Validate(self)
                 }
         // only nodes with names will get called by this function
@@ -292,8 +303,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             var transform = simd_float4x4(node.worldTransform)
             self.visibleSpaceTarget.append(SCNVector3(transform.columns.3.x,transform.columns.3.y,transform.columns.3.z))
             // does the marker match a trend? This function looks for consecutive estimates
-            if (varianceTonorm(vectorEstimates: self.visibleSpaceTarget) < 0.01){
+            if (varianceTonorm(vectorEstimates: self.visibleSpaceTarget) < 0.05){
                 TrayCentrepoint = loadedtray.TrayCentreNode()
+                
+                let trayanchor = ARAnchor(transform: simd_float4x4(TrayCentrepoint.transform))
+                sceneView.session.add(anchor:trayanchor)
+                
                 localizedContentNode.addChildNode(TrayCentrepoint)
                 TrayCentrepoint.name = "traylayout"
                 TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
@@ -357,6 +372,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if let transform = self.frame_ids_positions[Int(object.object_marker.id)]?.transform {
             // now val is not nil and the Optional has been unwrapped, so use it
             
+            /*
             // remove prevoius instruction for this object
             object.instruction.enumerateChildNodes { (node, stop) in
                 
@@ -367,6 +383,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 }
                     
             }
+            */
             
             // Pass argumentes needed to construct instructions
             // this is where the target is defined
@@ -485,22 +502,37 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     
     func updateMarkerPositions_(rootNode: SCNNode, markers: [Int: marker_seen], current_task: Task, primary_m: Int){
         for id in markers {
-            
-            rootNode.enumerateChildNodes { (node, stop) in
-                if (node.name == String(id.key)) {
-                    node.transform = id.value.transform
-                }
-                if (id.key == primary_m){
-                    rootNode.enumerateChildNodes { (node, stop) in
-                    if (node.name == "tray") {
-                        node.transform = id.value.transform
-                    }
-                }
+                if (id.key == primary_m) {
+                            rootNode.enumerateChildNodes { (node, stop) in
+                                if (node.name == "tray") {
+                                    let node1 = SCNNode()
+                                    node1.transform = id.value.transform
+                                    node.position = node1.position
                 
-        }
+                                }
+                        }
+                        
+                    }
         
     }
     }
+    
+    
+    func relocaliseTray(){
+        
+        if let transform = self.frame_ids_positions[self.primary_marker]?.transform{
+            
+            var transform_ = simd_float4x4(transform)
+            self.visibleSpaceTarget_transactional.append(SCNVector3(transform_.columns.3.x,transform_.columns.3.y,transform_.columns.3.z))
+            // does the marker match a trend? This function looks for consecutive estimates
+            if (varianceTonorm(vectorEstimates: self.visibleSpaceTarget_transactional) < 0.01){
+                self.localizedContentNode.transform = transform
+                self.visibleSpaceTarget_transactional.removeAll()
+        }
+        
+        return
+    }
+    
     
     func addWaypoint(colour: UIColor)->SCNNode{
         let way = WaypointModel()
@@ -508,4 +540,5 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
     }
     
     }
+
 }

@@ -60,7 +60,14 @@ struct Object{
     var colour: UIColor?
     // instruction
     var instruction = InstructionNode()
+    // this is the offset to the tray
     var offsetNode = SCNNode()
+    // this is the offset to the marker
+    // (0, left and right, up and down)
+    var marker_offsetNode = SCNNode()
+    var x_marker_offset = 0.0
+    var y_marker_offset = 0.0
+    var done_on_tray = false
 }
 
 struct Task{
@@ -97,19 +104,13 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     // CREATE THE OBJECTS
     
     
-    var object1 = Object(object_marker: Marker(id: 7), name: "Object 6", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.magenta)
+    var object1 = Object(object_marker: Marker(id: 7), name: "Object 6", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.magenta, x_marker_offset: -0.051, y_marker_offset: 0.025)
     
-    var object2 = Object(object_marker: Marker(id: 8), name: "Object 3", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.green)
+    var object2 = Object(object_marker: Marker(id: 8), name: "Object 3", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.green, x_marker_offset: -0.035, y_marker_offset: 0.039)
     
     var object3 = Object(object_marker: Marker(id: 6), name: "Object 3", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.green)
     
     var object4 = Object(object_marker: Marker(id: 8), name: "Object 3", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.green)
-    
-    
-    
-    
-    
-    
     
     
     // Object to tray configs
@@ -179,6 +180,10 @@ func calculateTrayOffset(objects: inout [Object], space: Space){
         objects[index].x_offset = positionOffset - centrepoint
         positionOffset = positionOffset + Float(spacing)
         objects[index].offsetNode.position = SCNVector3(0, objects[index].x_offset!, 0)
+        // (0, left and right, up and down)
+        
+        // marker offset
+        objects[index].marker_offsetNode.position = SCNVector3(0,objects[index].x_marker_offset,objects[index].y_marker_offset)
         
     }
     

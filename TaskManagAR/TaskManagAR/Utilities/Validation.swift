@@ -23,6 +23,7 @@ class Validator{
         
         if distance < 0.05 {
             if degree_rot < 5 || degree_rot > 355 {
+                // this is the complete state
                 candidate.addChildNode(tickDone())
                 return validationState.aligned
             }
@@ -130,6 +131,10 @@ class Validator{
             if object_state != validationState.aligned{
                 return false
             }
+        }
+        
+        for object in currentTask.objects{
+            object.instruction.validationstate = validationState.not_visible
         }
         
         return true

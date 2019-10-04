@@ -15,7 +15,9 @@ class InstructionNode: SCNNode {
     
     func addInstructionsForObject(transform: SCNMatrix4, task: Task, id: Int, target: SCNMatrix4, rootNode: SCNNode, object: Object){
         
-        
+        if validationstate == validationState.aligned {
+            return
+        }
         
         // attach to self to attach to object
         self.name = "instruction" + String(id)
@@ -24,11 +26,12 @@ class InstructionNode: SCNNode {
         self.transform = transform
         print(self.rotation)
         
- 
-        
         self.enumerateChildNodes { (node, stop) in
             node.removeFromParentNode()
         }
+        
+        // calculate marker offset
+        self.addChildNode(object.marker_offsetNode)
 
         AddFloatingInstruction(message: "Standard Tile Assembly", parent: self)
         let target_node = SCNNode()
@@ -37,9 +40,6 @@ class InstructionNode: SCNNode {
         
         target_node.transform = target_node.convertTransform(target, to: nil)
         target_node.name = "instruction" + String(id)
-        
-        
-        
         
         
         rootNode.enumerateChildNodes { (node, stop) in
@@ -51,11 +51,9 @@ class InstructionNode: SCNNode {
         
         rootNode.addChildNode(target_node)
         
-        validationstate = valid.nodeTonodePath(candidate: self, target: target_node, object: object)
+        validationstate = valid.nodeTonodePath(candidate: object.marker_offsetNode, target: target_node, object: object)
+        
+        
     }
-    
-   
-    
-    
     
 }
