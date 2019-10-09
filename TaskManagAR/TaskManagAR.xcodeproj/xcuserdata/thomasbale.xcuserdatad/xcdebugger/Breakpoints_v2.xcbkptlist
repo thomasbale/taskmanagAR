@@ -14,8 +14,8 @@
             filePath = "TaskManagAR/Utilities/Utilities.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "350"
-            endingLineNumber = "350"
+            startingLineNumber = "349"
+            endingLineNumber = "349"
             landmarkName = "updateMarkerPositions(rootNode:markers:current_task:primary_m:)"
             landmarkType = "9">
          </BreakpointContent>

@@ -53,6 +53,9 @@ struct Object{
     var apply_rotation = SCNVector3()
     var scale = SCNVector3()
     var height = Float()
+    
+    var width = CGFloat()
+    var depth = CGFloat()
     let istool = Bool()
     // Object offset from the centre of the tray: defaults to centre
     var x_offset: Float?
@@ -97,20 +100,23 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     /// Create the event
     var testTCFevent = Event(name: "Load LBSRP plate", description: "Tile Carrier Facility", tasks: [Task()], location: 000)
     /// Here the tasks and events are defined
-    let taskModuleTray = Space(spaceId: 1, width: 0.84, height: 0.01, depth: 0.297, marker_height_m: 0.0282, anchor_marker_id: 99, boom_id: 99, boom_face_id: 99, datum_id: 99, datum_face_id: 0)
+    let taskModuleTray = Space(spaceId: 1, width: 0.84, height: 0.01, depth: 0.40, marker_height_m: 0.0282, anchor_marker_id: 99, boom_id: 99, boom_face_id: 99, datum_id: 99, datum_face_id: 1)
     // create the tasks
     let findTray = Task(name: "Find Tray", description: "Locate correct task module tray", objects: [Object()], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/demo.001.png")
     
     // CREATE THE OBJECTS
     
     
-    var object1 = Object(object_marker: Marker(id: 7), name: "Object 6", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.magenta, x_marker_offset: -0.051, y_marker_offset: 0.025)
+    var object1 = Object(object_marker: Marker(id: 7), name: "ID:7", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.magenta, x_marker_offset: -0.051, y_marker_offset: 0.025)
+
     
-    var object2 = Object(object_marker: Marker(id: 8), name: "Object 3", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.green, x_marker_offset: -0.035, y_marker_offset: 0.039)
+    var object2 = Object(object_marker: Marker(id: 2), name: "ID:7", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemPink, x_marker_offset: -0.051, y_marker_offset: 0.025)
     
-    var object3 = Object(object_marker: Marker(id: 6), name: "Object 3", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.green)
+    var object3 = Object(object_marker: Marker(id: 3), name: "ID:7", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemBlue, x_marker_offset: -0.051, y_marker_offset: 0.025)
     
-    var object4 = Object(object_marker: Marker(id: 8), name: "Object 3", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, x_offset: 0.0, y_offset: 0.0, colour: UIColor.green)
+    var object4 = Object(object_marker: Marker(id: 4), name: "ID:7", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemOrange, x_marker_offset: -0.051, y_marker_offset: 0.025)
+    
+    var object5 = Object(object_marker: Marker(id: 1), name: "ID:7", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.0, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.051, y_marker_offset: 0.025)
     
     
     // Object to tray configs
@@ -124,9 +130,9 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     
     tray1_Objects += [object1,object2]
     calculateTrayOffset(objects: &tray1_Objects, space: taskModuleTray)
-    tray2_Objects += [object1,object2,object3]
+    tray2_Objects += [object1,object2,object3,object4,object5]
     calculateTrayOffset(objects: &tray2_Objects, space: taskModuleTray)
-    tray3_Objects += [object1,object2]
+    tray3_Objects += [object2,object4]
     calculateTrayOffset(objects: &tray3_Objects, space: taskModuleTray)
     tray4_Objects += [object1,object2]
     calculateTrayOffset(objects: &tray4_Objects, space: taskModuleTray)
@@ -136,7 +142,7 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     calculateTrayOffset(objects: &tray6_Objects, space: taskModuleTray)
     
     // BUILD THE TRAYS WITH INSTRUCTIONS
-    var tray1 = Task(name: "Tray 1", description: "Locate LBSRP Plate", objects: tray1_Objects, space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/demo.002.png")
+    var tray1 = Task(name: "Tray 1", description: "Locate LBSRP Plate", objects: tray1_Objects, space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/ins.png")
     
     var tray2 = Task(name: "Tray 2", description: "Locate LBSRP Plate", objects: tray2_Objects, space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/demo.002.png")
     
@@ -168,24 +174,84 @@ func getEventsForLocation(locationID: Int) -> [Event]{
 
 func calculateTrayOffset(objects: inout [Object], space: Space){
     
-    if objects.count == 0 {
+    if objects.count == 0 || objects.count > 8 {
         return
     }
     
-    let spacing = space.width / (Double(objects.count) + 1)
+    var count = objects.count
+    
+    if count > 4{
+        count = 4
+    }
+    
+    let spacing = space.width / (Double(count) + 1)
+    let verticalSpacing = space.depth / 3
     let centrepoint = Float(space.width / 2)
     var positionOffset = Float(spacing)
     
-    for index in objects.indices {
-        objects[index].x_offset = positionOffset - centrepoint
-        positionOffset = positionOffset + Float(spacing)
-        objects[index].offsetNode.position = SCNVector3(0, objects[index].x_offset!, 0)
-        // (0, left and right, up and down)
+    
+    // rack height / 3 = spacing
+    // + half, - spacing (10 - 15 = -5) assume 30. 10, 20.
+    // (15 - 10 = + 5)
+    // R1 = verticalSpacing - half way
+    // R2 = half way - vertical spacing
+    
+    let rack1 = Float(verticalSpacing - (space.depth / 2))
+    let rack2 = Float((space.depth / 2) - verticalSpacing)
+    
+    if objects.count < 5 {
         
-        // marker offset
-        objects[index].marker_offsetNode.position = SCNVector3(0,objects[index].x_marker_offset,objects[index].y_marker_offset)
+        for index in objects.indices {
+            objects[index].x_offset = positionOffset - centrepoint
+            objects[index].y_offset = 0
+            positionOffset = positionOffset + Float(spacing)
+            
+            objects[index].offsetNode.position = SCNVector3(objects[index].y_offset!, objects[index].x_offset!, 0)
+            // (0, left and right, up and down)
+            
+            // marker offset
+            objects[index].marker_offsetNode.position = SCNVector3(0,objects[index].x_marker_offset,objects[index].y_marker_offset)
+            
+        }
+        return
+    }else{
+        
+        for index in objects.indices {
+            
+            
+            // if there are more than 4 objects use two tacks
+            
+            if index > 3 {
+                objects[index].y_offset = Float(rack1)
+                
+            }
+            else{
+                objects[index].y_offset = Float(rack2)
+            }
+            
+            objects[index].x_offset = positionOffset - centrepoint
+            positionOffset = positionOffset + Float(spacing)
+            
+            objects[index].offsetNode.position = SCNVector3(objects[index].y_offset!, objects[index].x_offset!, 0)
+            
+            
+            // marker offset
+            objects[index].marker_offsetNode.position = SCNVector3(0,objects[index].x_marker_offset,objects[index].y_marker_offset)
+            
+            if index == 3 {
+                positionOffset = Float(spacing)
+            }
+            
+        }
+        
+        // 5 or more objects
+        
         
     }
+    
+    
+    
+    
     
     
 }

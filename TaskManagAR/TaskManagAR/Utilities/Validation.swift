@@ -24,7 +24,7 @@ class Validator{
         if distance < 0.05 {
             if degree_rot < 5 || degree_rot > 355 {
                 // this is the complete state
-                candidate.addChildNode(tickDone())
+                candidate.addChildNode(tickDone(object: object))
                 return validationState.aligned
             }
             
@@ -37,7 +37,7 @@ class Validator{
             candidate.addChildNode(waypoint)
             
             target.addChildNode(addDestination(colour: object.colour!))
-            target.addChildNode(addLandingTarget())
+            target.addChildNode(addLandingTarget(object: object, complete: false))
         }
         
         if degree_rot > 5 && degree_rot < 355 {
@@ -66,25 +66,25 @@ class Validator{
         return way.GetEndPoint(colour: UIColor.green)
     }
     
-    func addLandingTarget()->SCNNode{
+    func addLandingTarget(object: Object, complete: Bool)->SCNNode{
         // this is the zone of the tray
-        var geometry = SCNBox(width: 0.05, height: 0.05, length: 0.005, chamferRadius: 0)
+        var geometry = SCNBox(width: object.depth, height: object.width, length: 0.005, chamferRadius: 0)
         let node = SCNNode(geometry: geometry)
         let material = SCNMaterial()
         material.diffuse.contents = UIColor.yellow
-        material.transparency = 0.5
+        
+        if complete{
+            material.diffuse.contents = UIColor.green
+        }
+        
+        material.transparency = 0.8
         node.geometry?.materials = [material]
         return node
     }
     
-    func tickDone()-> SCNNode {
-        let modelNode = SCNNode()
-        modelNode.name = "done"
-        modelNode.geometry = SCNBox(width: 0.01, height: 0.01, length: 0.01, chamferRadius: 0)
-        //let material = SCNMaterial()
-        //material.diffuse.contents = UIImage(named: "tick_ios.png")
-        //modelNode.geometry?.materials = [material]
-        return modelNode
+    func tickDone(object: Object)-> SCNNode {
+        
+        return addLandingTarget(object: object, complete: true)
     }
     
     func Arrow(degrees: Float)-> SCNNode {

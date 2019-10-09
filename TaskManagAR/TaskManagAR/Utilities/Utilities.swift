@@ -167,13 +167,13 @@ func AddFloatingInstruction(message: String, parent: SCNNode){
 
 func createTextNode(string: String) -> SCNNode {
     let text = SCNText(string: string, extrusionDepth: 0.1)
-    text.font = UIFont.systemFont(ofSize: 0.5)
+    text.font = UIFont.systemFont(ofSize: 0.45)
     text.flatness = 0.01
-    text.firstMaterial?.diffuse.contents = UIColor.white
+    text.firstMaterial?.diffuse.contents = UIColor.red
     
     let textNode = SCNNode(geometry: text)
-    textNode.position = SCNVector3(0, 0, 0)
-    let fontSize = Float(0.04)
+    textNode.position = SCNVector3(0, 0, 0.05)
+    let fontSize = Float(0.03)
     textNode.scale = SCNVector3(fontSize, fontSize, fontSize)
     //textNode.position = SCNVector3Zero
     
@@ -320,7 +320,6 @@ func varianceTonorm(vectorEstimates: [SCNVector3])-> Float{
                 SCNVector3.distanceFrom(vector: vectorEstimates[vectorEstimates.count-3], toVector: vectorEstimates[vectorEstimates.count-1])
                 +
                 SCNVector3.distanceFrom(vector: vectorEstimates[vectorEstimates.count-4], toVector: vectorEstimates[vectorEstimates.count-1])
-        print(variance)
         return variance
     }
     return 1.0

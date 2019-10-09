@@ -290,9 +290,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             localizedContentNode.name = "tray" // prevents updating of position
             //localizedContentNode.name = String(markerid)
             
-            // add anchor to aid positioning
-            let anchor = ARAnchor(transform: simd_float4x4(localizedContentNode.transform))
-            sceneView.session.add(anchor:anchor)
+            
             // Calculate the centre of the tray and make child of marker
             let marker = SCNNode()
             let node = SCNNode()
@@ -314,6 +312,12 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 TrayCentrepoint.position = loadedtray.CentrePoint(withid: markerid, task: self.currentTask)
                 
                 self.primary_marker = markerid
+                
+                // add anchor to aid positioning
+                let anchor = ARAnchor(name: "tray0", transform: simd_float4x4(localizedContentNode.transform))
+                sceneView.session.add(anchor:anchor)
+
+                
                 sceneView.scene.rootNode.addChildNode(localizedContentNode)
                 
                 self.dismiss(animated: true, completion: nil)
@@ -342,6 +346,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
         func renderer(_ renderer: SCNSceneRenderer,
                                nodeFor anchor: ARAnchor) -> SCNNode?{
+            
+            
             return SCNNode()
         }
     
@@ -389,7 +395,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // this is where the target is defined
             
             let offset = SCNNode()
-            offset.position = SCNVector3(0,object.x_offset!,0)
+            offset.position = SCNVector3(object.y_offset!,object.x_offset!,0)
 
             TrayCentrepoint.addChildNode(offset)
             
@@ -438,6 +444,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
                 let anchor = ARAnchor(transform: simd_float4x4(targTransform))
                 sceneView.session.add(anchor:anchor)
+                
                 l_node.transform = TrayCentrepoint.transform
                 node1 = l_node
                 node1.eulerAngles = activeTasks[taskIndex].objects.first?.apply_rotation as! SCNVector3
@@ -523,9 +530,18 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         if let transform = self.frame_ids_positions[self.primary_marker]?.transform{
             
             var transform_ = simd_float4x4(transform)
+            
             self.visibleSpaceTarget_transactional.append(SCNVector3(transform_.columns.3.x,transform_.columns.3.y,transform_.columns.3.z))
+            
             // does the marker match a trend? This function looks for consecutive estimates
             if (varianceTonorm(vectorEstimates: self.visibleSpaceTarget_transactional) < 0.01){
+                
+                var node = SCNNode()
+                node.transform = transform
+                if node.rotation.x > 0 || node.rotation.z < 0{
+                    return
+                }
+                
                 self.localizedContentNode.transform = transform
                 self.visibleSpaceTarget_transactional.removeAll()
         }

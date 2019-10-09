@@ -24,7 +24,6 @@ class InstructionNode: SCNNode {
         //self.geometry = SCNBox(width: 0.03, height: 0.03, length: 0.03, chamferRadius: 0)
         
         self.transform = transform
-        print(self.rotation)
         
         self.enumerateChildNodes { (node, stop) in
             node.removeFromParentNode()
@@ -33,7 +32,7 @@ class InstructionNode: SCNNode {
         // calculate marker offset
         self.addChildNode(object.marker_offsetNode)
 
-        AddFloatingInstruction(message: "Standard Tile Assembly", parent: self)
+        AddFloatingInstruction(message: object.name, parent: self)
         let target_node = SCNNode()
         let valid = Validator()
         
