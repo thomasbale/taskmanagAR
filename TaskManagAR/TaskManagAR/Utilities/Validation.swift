@@ -21,8 +21,9 @@ class Validator{
         let distance = SCNVector3.distanceFrom(vector: target.worldPosition, toVector: candidate.worldPosition)
         
         
-        if distance < 0.05 {
-            if degree_rot < 5 || degree_rot > 355 {
+        if distance < 0.04 {
+            target.addChildNode(addLandingTarget(object: object, complete: false))
+            if degree_rot < 4 || degree_rot > 354 {
                 // this is the complete state
                 candidate.addChildNode(tickDone(object: object))
                 return validationState.aligned
@@ -30,7 +31,7 @@ class Validator{
             
         }
         
-        if distance > 0.05 {
+        if distance > 0.04 {
             AddFloatingInstruction(message: "Place Here", parent: target)
             
             let waypoint = addWaypoint(colour: object.colour!)
@@ -40,7 +41,7 @@ class Validator{
             target.addChildNode(addLandingTarget(object: object, complete: false))
         }
         
-        if degree_rot > 5 && degree_rot < 355 {
+        if degree_rot > 4 && degree_rot < 354 {
             candidate.addChildNode(Arrow(degrees: degree_rot))
         }
         
@@ -75,6 +76,7 @@ class Validator{
         
         if complete{
             material.diffuse.contents = UIColor.green
+            node.position = SCNVector3(0, 0, 0.01)
         }
         
         material.transparency = 0.8

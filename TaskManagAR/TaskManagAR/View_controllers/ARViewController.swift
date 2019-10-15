@@ -13,6 +13,7 @@ import GLKit
 import CoreData
 import CoreVideo
 
+
 //let MARKER_SIZE_IN_METERS : CGFloat = 0.0282; //set this to size of physically med marker in meters
 
 typealias marker_seen = (transform: SCNMatrix4, visible_in_frame: Bool)
@@ -123,26 +124,37 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // Check the task as complete
             self.activeTasks[self.taskIndex].complete = true
             self.completeTick.isHidden = false
-            self.completeTick.alpha = 1.0
-            self.dismiss(animated: true, completion: nil)
-            self.nextTask(self)
+            self.completeTick.alpha = 0.9
+            
+           
+           
             
             self.frame_ids_positions.removeAll()
             //todo remove all instruction nodes
             
             
             
-            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(3), execute: {
+            DispatchQueue.main.asyncAfter(deadline: .now() + .seconds(10), execute: {
                 
                 // Fade the tick
                 UIView.animate(withDuration: 1.5, delay: 1.5, options: [], animations: {
                     self.completeTick.alpha = 0.0
                 }) { (finished: Bool) in
                     self.completeTick.isHidden = true
+                    
+                    
+                    
                     // show the next instruction
                     self.segue()
                 }
             })
+            
+            if (self.taskIndex == activeTasks.count-1) {
+                           self.dismiss(animated: true, completion: nil)
+                       }
+                       
+                       //self.dismiss(animated: true, completion: nil)
+                       self.nextTask(self)
             
         }
         //self.captureNextFrameForCV = true
@@ -395,7 +407,9 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             // this is where the target is defined
             
             let offset = SCNNode()
-            offset.position = SCNVector3(object.y_offset!,object.x_offset!,0)
+            offset.position = SCNVector3(object.y_offset!,object.x_offset!,object.height)
+            // this takes the rotation from the object specification
+            offset.eulerAngles = object.apply_rotation
 
             TrayCentrepoint.addChildNode(offset)
             

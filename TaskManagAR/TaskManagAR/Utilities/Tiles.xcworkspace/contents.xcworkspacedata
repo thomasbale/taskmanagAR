@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <FileRef
+      location = "group:tile (2).stl">
+   </FileRef>
+   <FileRef
+      location = "group:tile.scn">
+   </FileRef>
+   <FileRef
+      location = "group:Tray1.scn">
+   </FileRef>
+</Workspace>
