@@ -32,10 +32,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
 
     // UI interface for marker detection work
     @IBOutlet weak var completeTick: UIImageView!
-    @IBOutlet weak var findMarkerLayer: UIImageView!
-    @IBOutlet weak var markerFound1: UIImageView!
-    @IBOutlet weak var markerFound2: UIImageView!
-    @IBOutlet weak var markerFound3: UIImageView!
 
     // All the tasks in the set - this allows progression backwards and forwards
     var activeTasks = [Task()]
@@ -126,9 +122,6 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
             self.completeTick.isHidden = false
             self.completeTick.alpha = 0.9
             
-           
-           
-            
             self.frame_ids_positions.removeAll()
             //todo remove all instruction nodes
             
@@ -141,9 +134,8 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     self.completeTick.alpha = 0.0
                 }) { (finished: Bool) in
                     self.completeTick.isHidden = true
-                    
-                    
-                    
+                    // clear the scene
+                    self.frame_ids_positions.removeAll()
                     // show the next instruction
                     self.segue()
                 }
@@ -210,7 +202,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
         
         // Hide the completion tick
         self.completeTick.isHidden = true
-        self.findMarkerLayer.alpha = 0.0
+        
         self.currentTask = activeTasks[taskIndex]
         Debuggingop.text = "localising"
         // Set the view's delegate
@@ -287,7 +279,7 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                     }
                  
                 }else{
-                    //updatespacepos(rootNode: self.sceneView.scene.rootNode, markers: self.frame_ids_positions, current_task: self.currentTask, primary_m: self.primary_marker)
+        
                     Validate(self)
                 }
         // only nodes with names will get called by this function
@@ -338,16 +330,10 @@ class ARViewController: UIViewController, ARSCNViewDelegate, ARSessionDelegate {
                 
                 DispatchQueue.main.async{
                     UIView.animate(withDuration: 0.5, delay: 0.5, options: [], animations: {
-                        self.findMarkerLayer.alpha = 0.0
-                        self.markerFound1.alpha = 0.0
-                        self.markerFound2.alpha = 0.0
-                        self.markerFound3.alpha = 0.0
+                        
                         
                     }) { (finished: Bool) in
-                        self.findMarkerLayer.isHidden = true
-                        self.markerFound1.isHidden = true
-                        self.markerFound2.isHidden = true
-                        self.markerFound3.isHidden = true
+   
                     }
                 }
                 self.isLocalized = true

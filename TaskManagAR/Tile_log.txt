@@ -1,0 +1,51 @@
+Tile log
+
+LARGE TILE
+
+34, UMT/AE/035/41, dimensions: 
+35, UMT/AC/035/44, dimensions:
+36, UMT/XM/034/11
+37, UMT/UK/035/92
+38, UMT/XE/035/63
+
+MEDIUM TILE
+
+33, UMT/XM/035/83
+
+DEFLECTOR TILE
+
+3, UMT/XC/035/11
+30, UMT/XA/035/52
+2, UMR/CC/055/01
+4, UMT/CF/035/01
+
+SYMMETRICAL TILES
+
+7, UMT/CD/121/01
+5, UMT/XX/035/92
+6, UMT/CE/035/01
+8, UMR/CC/988/01
+
+TODO
+1. Differentiated colours
+2. Instruction panels
+3. Recording script
+
+
+4. Tray 3 includes a correction of the last tile
+5. Check deflector tile size - seems too small
+
+
+height: 0.025, width: 0.12, depth: 0.1 small tile
+height: 0.04, width: 0.26, depth: 0.165 large tile
+height: 0.04, width: 0.245, depth: 0.15 med tile
+
+height: 0.025, width: 0.151, depth: 0.1 small tile Deflector tile
+
+height: 0.025, width: 0.171, depth: 0.12 small tile symmetrical tile
+
+Radical decisions - something regression analysis will never be able to do?
+
+The average of everything - an algorithm fails to distinguish between which patterns are meaningful and which aren’t – an additional foundational element of creativity. 
+
+Societal context - algorithms do not understand outside context, they are unable to make adjustments based on social norms and interactions beyond the realm of their specific purpose and data set.

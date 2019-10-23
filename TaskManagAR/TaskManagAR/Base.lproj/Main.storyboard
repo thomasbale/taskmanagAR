@@ -1,10 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14868" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES" initialViewController="BzV-9h-Uqo">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="15400" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BzV-9h-Uqo">
     <device id="ipad9_7" orientation="landscape" layout="fullscreen" appearance="light"/>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14824"/>
-        <capability name="Safe area layout guides" minToolsVersion="9.0"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="15404"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
     <scenes>
@@ -75,9 +74,12 @@
         <scene sceneID="tXr-a1-R10">
             <objects>
                 <viewController id="BV1-FR-VrT" customClass="ARViewController" customModule="TaskManagAR" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="U0K-SW-4ec">
-                        <rect key="frame" x="0.0" y="0.0" width="712" height="728"/>
-                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="MZn-ev-qjG"/>
+                        <viewControllerLayoutGuide type="bottom" id="QIs-md-Rr3"/>
+                    </layoutGuides>
+                    <view key="view" contentMode="center" horizontalHuggingPriority="1" placeholderIntrinsicWidth="1024" placeholderIntrinsicHeight="768" translatesAutoresizingMaskIntoConstraints="NO" id="U0K-SW-4ec">
+                        <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <subviews>
                             <view contentMode="scaleToFill" fixedFrame="YES" translatesAutoresizingMaskIntoConstraints="NO" id="hT7-Sj-g6J">
                                 <rect key="frame" x="-20" y="827" width="768" height="111"/>
@@ -104,8 +106,8 @@
                                 </subviews>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </view>
-                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
-                                <rect key="frame" x="0.0" y="0.0" width="712" height="728"/>
+                            <arscnView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" misplaced="YES" translatesAutoresizingMaskIntoConstraints="NO" id="BrB-h1-WRS">
+                                <rect key="frame" x="0.0" y="0.0" width="1004" height="760"/>
                             </arscnView>
                             <button opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="0fN-wK-36g">
                                 <rect key="frame" x="24" y="20" width="39" height="30"/>
@@ -122,45 +124,25 @@
                                 <rect key="contentStretch" x="0.20000000000000001" y="0.20000000000000001" width="1" height="1"/>
                                 <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </activityIndicatorView>
-                            <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="View_QR_code.png" translatesAutoresizingMaskIntoConstraints="NO" id="QcJ-Dx-hL3">
-                                <rect key="frame" x="-129" y="170" width="1027" height="547"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick_ios.png" translatesAutoresizingMaskIntoConstraints="NO" id="cYe-nv-rY0">
-                                <rect key="frame" x="151" y="203" width="103" height="117"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick_ios.png" translatesAutoresizingMaskIntoConstraints="NO" id="lga-Oh-x1r">
-                                <rect key="frame" x="150" y="570" width="104" height="117"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <imageView hidden="YES" clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick_ios.png" translatesAutoresizingMaskIntoConstraints="NO" id="xpQ-p8-Cfb">
-                                <rect key="frame" x="517" y="203" width="105" height="118"/>
-                                <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                            </imageView>
-                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" image="tick_ios.png" translatesAutoresizingMaskIntoConstraints="NO" id="SJu-lW-vIm">
-                                <rect key="frame" x="-443" y="-453" width="1871" height="1635"/>
+                            <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" insetsLayoutMarginsFromSafeArea="NO" image="tick_ios.png" id="SJu-lW-vIm">
+                                <rect key="frame" x="-219" y="-278" width="1403" height="1338"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                             </imageView>
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="fQZ-KI-GVf" secondAttribute="leading" id="GsS-dJ-CKf"/>
-                            <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="fQZ-KI-GVf" secondAttribute="bottom" id="VpT-BR-CcM"/>
-                            <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="fQZ-KI-GVf" secondAttribute="trailing" id="XyZ-9z-H8e"/>
+                            <constraint firstItem="BrB-h1-WRS" firstAttribute="leading" secondItem="U0K-SW-4ec" secondAttribute="leading" id="GsS-dJ-CKf"/>
+                            <constraint firstItem="BrB-h1-WRS" firstAttribute="bottom" secondItem="QIs-md-Rr3" secondAttribute="top" id="VpT-BR-CcM"/>
+                            <constraint firstItem="BrB-h1-WRS" firstAttribute="trailing" secondItem="U0K-SW-4ec" secondAttribute="trailing" id="XyZ-9z-H8e"/>
                             <constraint firstItem="BrB-h1-WRS" firstAttribute="top" secondItem="U0K-SW-4ec" secondAttribute="top" id="rJc-2c-zQA"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="fQZ-KI-GVf"/>
                     </view>
+                    <size key="freeformSize" width="1024" height="768"/>
                     <connections>
                         <outlet property="Debuggingop" destination="kbI-2Z-2ra" id="D43-8R-P3k"/>
                         <outlet property="activityWait" destination="4Fh-OJ-S8z" id="i00-vw-hdG"/>
                         <outlet property="backButton" destination="0fN-wK-36g" id="ofs-Vp-DVp"/>
                         <outlet property="completeTick" destination="SJu-lW-vIm" id="NjI-tO-g3G"/>
-                        <outlet property="findMarkerLayer" destination="QcJ-Dx-hL3" id="FPf-vb-AeF"/>
-                        <outlet property="markerFound1" destination="lga-Oh-x1r" id="cdf-FL-OWE"/>
-                        <outlet property="markerFound2" destination="cYe-nv-rY0" id="qlZ-EO-aTw"/>
-                        <outlet property="markerFound3" destination="xpQ-p8-Cfb" id="xe7-N2-phC"/>
                         <outlet property="nextButton" destination="FYC-2y-dMP" id="PbZ-1w-FUr"/>
                         <outlet property="sceneView" destination="BrB-h1-WRS" id="5nT-qQ-ynl"/>
                         <segue destination="tcg-Mm-Gbg" kind="popoverPresentation" identifier="showInstruction" popoverAnchorView="BrB-h1-WRS" id="0ZK-Jb-T3q">
@@ -177,6 +159,10 @@
         <scene sceneID="h0h-hn-4sX">
             <objects>
                 <viewController id="MsM-3j-B41" customClass="ARViewController2" customModule="TaskManagAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="bZ6-Hc-DiD"/>
+                        <viewControllerLayoutGuide type="bottom" id="kM1-ne-49f"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="9RM-kd-QU4">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -282,12 +268,11 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="I6L-YD-eCf" firstAttribute="bottom" secondItem="5e7-Bg-6kP" secondAttribute="bottom" id="Kyh-5f-C20"/>
+                            <constraint firstItem="I6L-YD-eCf" firstAttribute="bottom" secondItem="kM1-ne-49f" secondAttribute="top" id="Kyh-5f-C20"/>
                             <constraint firstItem="I6L-YD-eCf" firstAttribute="top" secondItem="9RM-kd-QU4" secondAttribute="top" id="YTn-aR-LJ5"/>
-                            <constraint firstItem="I6L-YD-eCf" firstAttribute="leading" secondItem="5e7-Bg-6kP" secondAttribute="leading" id="cx0-Jz-cHt"/>
-                            <constraint firstItem="I6L-YD-eCf" firstAttribute="trailing" secondItem="5e7-Bg-6kP" secondAttribute="trailing" id="shr-MZ-B5D"/>
+                            <constraint firstItem="I6L-YD-eCf" firstAttribute="leading" secondItem="9RM-kd-QU4" secondAttribute="leading" id="cx0-Jz-cHt"/>
+                            <constraint firstItem="I6L-YD-eCf" firstAttribute="trailing" secondItem="9RM-kd-QU4" secondAttribute="trailing" id="shr-MZ-B5D"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="5e7-Bg-6kP"/>
                     </view>
                     <connections>
                         <outlet property="Debuggingop" destination="8Jw-d6-cNl" id="FKi-sq-NG1"/>
@@ -314,6 +299,10 @@
         <scene sceneID="yfJ-B1-apa">
             <objects>
                 <viewController id="NTg-4V-lMn" customClass="ARMarkerViewController" customModule="TaskManagAR" customModuleProvider="target" sceneMemberID="viewController">
+                    <layoutGuides>
+                        <viewControllerLayoutGuide type="top" id="BuG-oj-YlD"/>
+                        <viewControllerLayoutGuide type="bottom" id="C9d-EL-cQl"/>
+                    </layoutGuides>
                     <view key="view" contentMode="scaleToFill" id="Hnc-XW-TU0">
                         <rect key="frame" x="0.0" y="0.0" width="1024" height="768"/>
                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
@@ -349,12 +338,11 @@
                         </subviews>
                         <color key="backgroundColor" white="0.0" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
-                            <constraint firstItem="drp-Ky-pps" firstAttribute="trailing" secondItem="43d-db-Ycp" secondAttribute="trailing" id="B3m-IF-wU0"/>
+                            <constraint firstItem="drp-Ky-pps" firstAttribute="trailing" secondItem="Hnc-XW-TU0" secondAttribute="trailing" id="B3m-IF-wU0"/>
                             <constraint firstItem="drp-Ky-pps" firstAttribute="top" secondItem="Hnc-XW-TU0" secondAttribute="top" id="E3d-74-3ea"/>
-                            <constraint firstItem="drp-Ky-pps" firstAttribute="leading" secondItem="43d-db-Ycp" secondAttribute="leading" id="V5M-NM-amA"/>
-                            <constraint firstItem="drp-Ky-pps" firstAttribute="bottom" secondItem="43d-db-Ycp" secondAttribute="bottom" id="fj0-MU-mzq"/>
+                            <constraint firstItem="drp-Ky-pps" firstAttribute="leading" secondItem="Hnc-XW-TU0" secondAttribute="leading" id="V5M-NM-amA"/>
+                            <constraint firstItem="drp-Ky-pps" firstAttribute="bottom" secondItem="C9d-EL-cQl" secondAttribute="top" id="fj0-MU-mzq"/>
                         </constraints>
-                        <viewLayoutGuide key="safeArea" id="43d-db-Ycp"/>
                     </view>
                     <connections>
                         <outlet property="Skip" destination="z8R-SQ-9RG" id="YnY-Ah-kzp"/>

@@ -25,14 +25,14 @@ class Validator{
             target.addChildNode(addLandingTarget(object: object, complete: false))
             if degree_rot < 4 || degree_rot > 354 {
                 // this is the complete state
-                candidate.addChildNode(tickDone(object: object))
+                target.addChildNode(tickDone(object: object))
                 return validationState.aligned
             }
             
         }
         
         if distance > 0.04 {
-            AddFloatingInstruction(message: "Place Here", parent: target)
+            AddFloatingInstruction(message: object.name, parent: target)
             
             let waypoint = addWaypoint(colour: object.colour!)
             candidate.addChildNode(waypoint)

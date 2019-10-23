@@ -105,42 +105,89 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     let findTray = Task(name: "Find Tray", description: "Locate correct task module tray", objects: [Object()], space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/demo.001.png")
     
     // CREATE THE OBJECTS
+    // objects 1 - 10 are small tiles
     
     
-    var object1 = Object(object_marker: Marker(id: 34), name: "UTM/AE/035/41", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.magenta, x_marker_offset: -0.051, y_marker_offset: 0.025)
+    var object1 = Object(object_marker: Marker(id: 34), name: "UTM/AE/035/41", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.132, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.magenta, x_marker_offset: -0.041, y_marker_offset: 0.025)
 
     
-    var object2 = Object(object_marker: Marker(id: 35), name: "UTM/AC/035/44", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemPink, x_marker_offset: -0.051, y_marker_offset: 0.025)
+    var object2 = Object(object_marker: Marker(id: 35), name: "UTM/AC/035/44", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.132, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemPink, x_marker_offset: -0.041, y_marker_offset: 0.025)
     
-    var object3 = Object(object_marker: Marker(id: 36), name: "UTM/XM/034/11", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemBlue, x_marker_offset: -0.051, y_marker_offset: 0.025)
+    var object3 = Object(object_marker: Marker(id: 36), name: "UTM/XM/034/11", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.132, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemBlue, x_marker_offset: -0.041, y_marker_offset: 0.025)
     
-    var object4 = Object(object_marker: Marker(id: 37), name: "UTM/UK/035/92", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemOrange, x_marker_offset: -0.051, y_marker_offset: 0.025)
+    var object4 = Object(object_marker: Marker(id: 37), name: "UTM/UK/035/92", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.132, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemOrange, x_marker_offset: -0.041, y_marker_offset: 0.025)
     
-    var object5 = Object(object_marker: Marker(id: 38), name: "UTM/XE/035/63", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.051, y_marker_offset: 0.025)
+    var object5 = Object(object_marker: Marker(id: 38), name: "UTM/XE/035/63", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.132, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.041, y_marker_offset: 0.025)
     
-    var object6 = Object(object_marker: Marker(id: 34), name: "UTM/AE/035/41", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.magenta, x_marker_offset: -0.051, y_marker_offset: 0.025)
+    var object1_R = Object(object_marker: Marker(id: 34), name: "UTM/AE/035/41", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.132, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.magenta, x_marker_offset: -0.041, y_marker_offset: 0.025)
 
     
-    var object7 = Object(object_marker: Marker(id: 35), name: "UTM/AC/035/44", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemPink, x_marker_offset: -0.051, y_marker_offset: 0.025)
+    var object2_R = Object(object_marker: Marker(id: 35), name: "UTM/AC/035/44", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.132, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemPink, x_marker_offset: -0.041, y_marker_offset: 0.025)
     
-    var object8 = Object(object_marker: Marker(id: 36), name: "UTM/XM/034/11", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemBlue, x_marker_offset: -0.051, y_marker_offset: 0.025)
+    var object3_R = Object(object_marker: Marker(id: 36), name: "UTM/XM/034/11", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.132, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemBlue, x_marker_offset: -0.041, y_marker_offset: 0.025)
     
-    var object9 = Object(object_marker: Marker(id: 37), name: "UTM/UK/035/92", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemOrange, x_marker_offset: -0.051, y_marker_offset: 0.025)
+    var object4_R = Object(object_marker: Marker(id: 37), name: "UTM/UK/035/92", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.132, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemOrange, x_marker_offset: -0.041, y_marker_offset: 0.025)
     
-    var object10 = Object(object_marker: Marker(id: 38), name: "UMT/XE/035/63", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.03, width: 0.12, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.031, y_marker_offset: 0.025)
+    var object5_R = Object(object_marker: Marker(id: 38), name: "UMT/XE/035/63", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.132, depth: 0.1, x_offset: 0.0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.041, y_marker_offset: 0.025)
+    
     /// y marker offset is height
     
-    var l_tile_1 = Object(object_marker: Marker(id: 39), name: "UMT/XR/035/42", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.26, depth: 0.165, x_offset: 0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.02, y_marker_offset: 0.025)
+    var l_tile_1 = Object(object_marker: Marker(id: 39), name: "UMT/XR/035/42", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.265, depth: 0.17, x_offset: 0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.035, y_marker_offset: 0.045)
     
-    var m_tile_1 = Object(object_marker: Marker(id: 33), name: "UMT/XM/035/83", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.245, depth: 0.15, x_offset: 0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.02, y_marker_offset: 0.025)
+    var m_tile_1 = Object(object_marker: Marker(id: 33), name: "UMT/XM/035/83", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.245, depth: 0.15, x_offset: 0, y_offset: 0.0, colour: UIColor.systemTeal, x_marker_offset: -0.02, y_marker_offset: 0.025)
     
-    var l_tile_2 = Object(object_marker: Marker(id: 10), name: "UMT/XM/035/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.26, depth: 0.165, x_offset: 0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.02, y_marker_offset: 0.025)
+    var l_tile_2 = Object(object_marker: Marker(id: 10), name: "UMT/XM/035/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.26, depth: 0.165, x_offset: 0, y_offset: 0.0, colour: UIColor.systemYellow, x_marker_offset: -0.02, y_marker_offset: 0.025)
     
-    var l_tile_3 = Object(object_marker: Marker(id: 31), name: "UMT/XM/066/01R", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.26, depth: 0.165, x_offset: 0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.02, y_marker_offset: 0.025)
+    var l_tile_3 = Object(object_marker: Marker(id: 31), name: "UMT/XM/066/01R", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.26, depth: 0.165, x_offset: 0, y_offset: 0.0, colour: UIColor.white, x_marker_offset: -0.02, y_marker_offset: 0.025)
     
-    var l_tile_4 = Object(object_marker: Marker(id: 32), name: "UMT/XM/025/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.26, depth: 0.165, x_offset: 0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.02, y_marker_offset: 0.025)
+    var l_tile_4 = Object(object_marker: Marker(id: 32), name: "UMT/XM/025/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.26, depth: 0.165, x_offset: 0, y_offset: 0.0, colour: UIColor.red, x_marker_offset: -0.02, y_marker_offset: 0.025)
     
-    var l_tile_4_R = Object(object_marker: Marker(id: 32), name: "UMT/XM/025/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.26, depth: 0.165, x_offset: 0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.02, y_marker_offset: 0.025)
+    var l_tile_1_R = Object(object_marker: Marker(id: 39), name: "UMT/XR/035/42", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.26, depth: 0.165, x_offset: 0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.02, y_marker_offset: 0.025)
+    
+    var l_tile_4_R = Object(object_marker: Marker(id: 32), name: "UMT/XM/025/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.04, width: 0.26, depth: 0.165, x_offset: 0, y_offset: 0.0, colour: UIColor.red, x_marker_offset: -0.02, y_marker_offset: 0.025)
+    
+    // deflector tile non-symetrical
+    
+    var d_tile_1 = Object(object_marker: Marker(id: 3), name: "UMT/XC/035/11", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.03, width: 0.17, depth: 0.1, x_offset: 0, y_offset: 0.0, colour: UIColor.systemYellow, x_marker_offset: -0.045, y_marker_offset: 0.025)
+    
+    var d_tile_2 = Object(object_marker: Marker(id: 30), name: "UMT/XA/035/52", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.003, width: 0.17, depth: 0.1, x_offset: 0, y_offset: 0.0, colour: UIColor.systemRed, x_marker_offset: -0.045, y_marker_offset: 0.025)
+    
+    var d_tile_3 = Object(object_marker: Marker(id: 2), name: "UMR/CC/055/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.03, width: 0.17, depth: 0.1, x_offset: 0, y_offset: 0.0, colour: UIColor.systemGray, x_marker_offset: -0.045, y_marker_offset: 0.025)
+    
+    var d_tile_4 = Object(object_marker: Marker(id: 4), name: "UMT/CF/035/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.03, width: 0.17, depth: 0.1, x_offset: 0, y_offset: 0.0, colour: UIColor.systemBlue, x_marker_offset: -0.045, y_marker_offset: 0.025)
+    
+    var d_tile_1_R = Object(object_marker: Marker(id: 3), name: "UMT/XC/035/11", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.03, width: 0.17, depth: 0.1, x_offset: 0, y_offset: 0.0, colour: UIColor.systemYellow, x_marker_offset: -0.045, y_marker_offset: 0.025)
+    
+    var d_tile_2_R = Object(object_marker: Marker(id: 30), name: "UMT/XA/035/52", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.03, width: 0.17, depth: 0.1, x_offset: 0, y_offset: 0.0, colour: UIColor.systemRed, x_marker_offset: -0.045, y_marker_offset: 0.025)
+    
+    var d_tile_3_R = Object(object_marker: Marker(id: 2), name: "UMR/CC/055/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.03, width: 0.17, depth: 0.1, x_offset: 0, y_offset: 0.0, colour: UIColor.systemGray, x_marker_offset: -0.045, y_marker_offset: 0.025)
+    
+    var d_tile_4_R = Object(object_marker: Marker(id: 4), name: "UMT/CF/035/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.03, width: 0.17, depth: 0.1, x_offset: 0, y_offset: 0.0, colour: UIColor.systemBlue, x_marker_offset: -0.045, y_marker_offset: 0.025)
+    
+    // Symmetrical tiles / no more than 3 per tray load
+    var s_tile_1 = Object(object_marker: Marker(id: 7), name: "UMT/CD/121/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemYellow, x_marker_offset: -0.03, y_marker_offset: 0.03)
+    
+    var s_tile_1_R = Object(object_marker: Marker(id: 7), name: "UMT/CD/121/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemYellow, x_marker_offset: -0.03, y_marker_offset: 0.03)
+    
+    var s_tile_1_RR = Object(object_marker: Marker(id: 7), name: "UMT/CD/121/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemYellow, x_marker_offset: -0.03, y_marker_offset: 0.03)
+    
+    var s_tile_2 = Object(object_marker: Marker(id: 5), name: "UMT/XX/035/92", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemTeal, x_marker_offset: -0.03, y_marker_offset: 0.03)
+    
+    var s_tile_2_R = Object(object_marker: Marker(id: 5), name: "UMT/XX/035/92", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemTeal, x_marker_offset: -0.03, y_marker_offset: 0.03)
+    
+    var s_tile_2_RR = Object(object_marker: Marker(id: 5), name: "UMT/XX/035/92", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemTeal, x_marker_offset: -0.03, y_marker_offset: 0.03)
+    
+    var s_tile_3 = Object(object_marker: Marker(id: 6), name: "UMT/CE/035/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.03, y_marker_offset: 0.03)
+    
+    var s_tile_3_R = Object(object_marker: Marker(id: 6), name: "UMT/CE/035/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.03, y_marker_offset: 0.03)
+    
+    var s_tile_3_RR = Object(object_marker: Marker(id: 6), name: "UMT/CE/035/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemPurple, x_marker_offset: -0.03, y_marker_offset: 0.03)
+    
+    var s_tile_4 = Object(object_marker: Marker(id: 8), name: "UMR/CC/988/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, 0), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemOrange, x_marker_offset: -0.03, y_marker_offset: 0.03)
+    
+    var s_tile_4_R = Object(object_marker: Marker(id: 8), name: "UMR/CC/988/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi/2)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemOrange, x_marker_offset: -0.03, y_marker_offset: 0.03)
+    
+    var s_tile_4_RR = Object(object_marker: Marker(id: 8), name: "UMR/CC/988/01", file_name: "RX180-RXC080_Carrier_Subframe_W-Bulk_LBSRP_Adapter_without_Tool_ParkFBXASC032-FBXASC032Vessel_Left", description: "LBSRP Adaptor Plate", parent_scene: "art.scnassets/Base.lproj/Tiles_on_Tyne.scn", apply_rotation: SCNVector3Make(0, 0, Float(Double.pi)), scale: SCNVector3(1.0, 1.0, 1.0), height: 0.025, width: 0.19, depth: 0.12, x_offset: 0, y_offset: 0.0, colour: UIColor.systemOrange, x_marker_offset: -0.03, y_marker_offset: 0.03)
     
     
     // Object to tray configs
@@ -158,33 +205,35 @@ func getEventsForLocation(locationID: Int) -> [Event]{
     var tray12_Objects = [Object]()
     
     
-    tray1_Objects += [object10,l_tile_1]
+    tray1_Objects += [d_tile_1, d_tile_2, d_tile_3]
     calculateTrayOffset(objects: &tray1_Objects, space: taskModuleTray)
-    tray2_Objects += [object2, l_tile_1,l_tile_2,l_tile_3]
+    tray2_Objects += [d_tile_1_R, d_tile_2, d_tile_3_R, d_tile_4]
     calculateTrayOffset(objects: &tray2_Objects, space: taskModuleTray)
-    tray3_Objects += [object3,m_tile_1]
+    tray3_Objects += [object1,object2,object3,object5]
     calculateTrayOffset(objects: &tray3_Objects, space: taskModuleTray)
-    tray4_Objects += [l_tile_3,l_tile_2,l_tile_1,l_tile_4]
-    calculateTrayOffset(objects: &tray4_Objects, space: taskModuleTray)
-    tray5_Objects += [l_tile_4_R]
-    calculateTrayOffset(objects: &tray5_Objects, space: taskModuleTray)
-    tray6_Objects += [object6]
-    calculateTrayOffset(objects: &tray6_Objects, space: taskModuleTray)
-    tray7_Objects += [object7]
-    calculateTrayOffset(objects: &tray1_Objects, space: taskModuleTray)
-    tray8_Objects += [object8]
-    calculateTrayOffset(objects: &tray2_Objects, space: taskModuleTray)
-    tray9_Objects += [object9]
+    tray3_Objects += [object4,object4_R]
     calculateTrayOffset(objects: &tray3_Objects, space: taskModuleTray)
-    tray10_Objects += [object10]
+    tray4_Objects += [object3_R,object4_R,d_tile_1_R]
     calculateTrayOffset(objects: &tray4_Objects, space: taskModuleTray)
-    tray11_Objects += [object1]
+    tray5_Objects += [d_tile_4, d_tile_3, d_tile_2, d_tile_1]
     calculateTrayOffset(objects: &tray5_Objects, space: taskModuleTray)
-    tray12_Objects += [object2]
+    tray6_Objects += [d_tile_1, d_tile_2, d_tile_3, d_tile_4]
     calculateTrayOffset(objects: &tray6_Objects, space: taskModuleTray)
+    tray7_Objects += [d_tile_2_R, d_tile_1, d_tile_4, d_tile_3]
+    calculateTrayOffset(objects: &tray7_Objects, space: taskModuleTray)
+    tray8_Objects += [s_tile_1, s_tile_2, s_tile_3]
+    calculateTrayOffset(objects: &tray8_Objects, space: taskModuleTray)
+    tray9_Objects += [s_tile_4_RR, s_tile_3_RR, s_tile_1_RR]
+    calculateTrayOffset(objects: &tray9_Objects, space: taskModuleTray)
+    tray10_Objects += [s_tile_1_R, d_tile_2_R, d_tile_1]
+    calculateTrayOffset(objects: &tray10_Objects, space: taskModuleTray)
+    tray11_Objects += [l_tile_4_R,l_tile_3]
+    calculateTrayOffset(objects: &tray11_Objects, space: taskModuleTray)
+    tray12_Objects += [m_tile_1,l_tile_2]
+    calculateTrayOffset(objects: &tray12_Objects, space: taskModuleTray)
     
     // BUILD THE TRAYS WITH INSTRUCTIONS
-    var tray1 = Task(name: "Tray 1", description: "Locate LBSRP Plate", objects: tray1_Objects, space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/ins.png")
+    var tray1 = Task(name: "Tray 1", description: "Locate LBSRP Plate", objects: tray1_Objects, space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/Tray1.png")
     
     var tray2 = Task(name: "Tray 2", description: "Locate LBSRP Plate", objects: tray2_Objects, space: taskModuleTray, complete: false, validation: Validation(isValidated: false, objectStates: nil), instruction: "art.scnassets/Base.lproj/demo/demo.002.png")
     
@@ -233,8 +282,27 @@ func getEventsForLocation(locationID: Int) -> [Event]{
 
     eventArray.removeAll()
     eventArray.append(testTCFevent)
+
+    printObjectOrientationsforEvent(event: testTCFevent)
     
     return eventArray
+}
+
+func printObjectOrientationsforEvent(event: Event){
+    
+    for task in event.tasks{
+        print(task.name)
+        print(String(task.objects.count) + "Objects \n")
+        for object in task.objects{
+            print("\n")
+            print(object.name)
+            print(object.x_offset)
+            print(object.y_offset)
+            print("\n")
+            
+        }
+        
+    }
 }
 
 func calculateTrayOffset(objects: inout [Object], space: Space){
@@ -245,8 +313,8 @@ func calculateTrayOffset(objects: inout [Object], space: Space){
     
     var count = objects.count
     
-    if count > 4{
-        count = 4
+    if count > 3{
+        count = 3
     }
     
     let spacing = space.width / (Double(count) + 1)
@@ -264,7 +332,7 @@ func calculateTrayOffset(objects: inout [Object], space: Space){
     let rack1 = Float(verticalSpacing - (space.depth / 2))
     let rack2 = Float((space.depth / 2) - verticalSpacing)
     
-    if objects.count < 5 {
+    if objects.count < 4 {
         
         for index in objects.indices {
             objects[index].x_offset = positionOffset - centrepoint
@@ -284,9 +352,9 @@ func calculateTrayOffset(objects: inout [Object], space: Space){
         for index in objects.indices {
             
             
-            // if there are more than 4 objects use two tacks
+            // if there are more than 3 objects use two tacks
             
-            if index > 3 {
+            if index > 2 {
                 objects[index].y_offset = Float(rack1)
                 
             }
@@ -303,13 +371,13 @@ func calculateTrayOffset(objects: inout [Object], space: Space){
             // marker offset
             objects[index].marker_offsetNode.position = SCNVector3(0,objects[index].x_marker_offset,objects[index].y_marker_offset)
             
-            if index == 3 {
+            if index == 2 {
                 positionOffset = Float(spacing)
             }
             
         }
         
-        // 5 or more objects
+        // 4 or more objects
         
         
     }

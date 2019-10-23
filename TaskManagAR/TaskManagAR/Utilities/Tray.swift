@@ -15,7 +15,7 @@ import SceneKit
 class Tray{
     // Based on A3 dimensions 29.7 x 42.0cm
     // Total tray size is 29.7 x 84.0cm
-    private var markerVerticalSeparation = 0.297 //metres
+    private var markerVerticalSeparation = 0.4 //metres
     private var markerHorizontalSeparation = 0.84
     private var trayState = "pending" // pending or ready
     // Marker IDs
